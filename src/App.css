@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+:root {
+  --navbarWidth: 200px;
+  --toolbarFootHeight: 60px;
+  --mobileTBFootHeight: 50px;
+
+  --btnRadius: 5px;
+  --defaultRadius: 10px;
+
+  --defaultShadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  --border: .1rem solid gray; 
+  --darkGrey: #16161D;
+  --eigen: #16161d;
+  --darkGreen: #2b3b31;
+  --green: #3BCB56;
+  --red: rgba(255,0,0,.5);
+}
+
+select {
+
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.App {
+  max-height: 100vh;
+  overflow: scroll;
+}
+
+input {
+  border: none !important;
+}
+
+.mainbody {
+  min-width: calc(100vw - var(--navbarWidth));
+  height: auto;
+  min-height: 100%;
+  max-height: 100vh;
+
+  margin-left: var(--navbarWidth);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+
+.page {
+  max-width: calc(100vw - var(--navbarWidth));
+  margin-left: var(--navbarWidth);
+  padding: 10px;
+}
+
+div.more-wrapper.page {
+  overflow-y: scroll;
+}
+
+
+.error-message {
+  text-align: center;
+  color: red;
+  font-size: 1rem;
+}
+
+input {
+  border: none;
+  background-color: rgba(255,255,255,.5);
+  border-radius: 5px;
+  box-shadow: var(--defaultShadow);
+  padding: .2rem .5rem;
+  font-size: 1rem;;
+  color: white;
+  letter-spacing: .25ch;
+}
+
+input:focus {
+  background-color: var(--darkGreen);
+  outline: none;
+  color: white;
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 102;
+
+
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(255,255,255,.3);
+  backdrop-filter: blur(5px);
+}
+
+.modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  transform: translate(-50%, -50%);
+  background-color: var(--eigen);
+
+  height: auto;
+  width: clamp(360px, 25%, 1080px);
+  padding: 2rem;
+  color: white;
+  border-radius: 10px;
+}
+
+.modal-header {
+  text-align: center;
+
+}
+
+.modal-body {
+
+}
+
+.modal-buttons {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+}
+.modal-buttons > button {
+  margin: 0 1.5rem;
+  border-radius: var(--btnRadius);
+  border: none;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+button.confirm {
+  background-color: rgba(255,0,0,.5);
+}
+button.confirm:hover {
+  background-color: rgba(255,0,0,.3);
+}
+
+button.delete {
+  background-color: gray;
+}
+
+button.delete:hover {
+  background-color: rgba(255,255,255,.3);
+}
+
+
+.small-modal-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 150;
+  height: 100%;
+  width: 100%;
+}
+
+.small-modal-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+  background-color: black;
+
+  flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.small-modal-container > * {
+  margin: 0 5%;
+}
+
+.small-modal-message {
+  font-size: 16px;
+}
+
+.small-modal-buttons {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.small-modal-buttons > button {
+  margin: 0 .2rem;
+  padding: .4rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  width: auto;
+  
+  display: flex;
+  flex-direction: center;
+  align-items: center;
+  background-color: var(--darkGreen);
+  color: white;
+}
+
+.small-modal-buttons > button:hover {
+  background-color: rgba(255,255,255,.5);
+  color: black;
+}
+
+@media (max-width: 1250px) {
+  div.App, div.mainbody {
+  }
+  .navbar-wrapper {
+    display: none;
+  }
+  div.navbar-icon {
+    display: block;
+  }
+  .mainbody {
+    margin: 0;
+  }
+  div.game-wrapper {
+    height: 100%;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 20px;
+    padding-top: 10px;
+    flex: 1 1 0;
+}
+
+
+  div.toolbar-container {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    height: 100%;
+  }
+  div.toolbar-wrapper {
+    padding-top:10px;
+    height: calc(100vh - 40px) !important;
+    margin-bottom: 20px;
+  }
+
+
+  div.page {
+    margin-left: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;
+  }
+  div.more-blob {
+    width: 100% ;
+  }
+
+}
+
+@media (max-width: 768px) {
+  div.App {
+    max-height: none;
+    width: auto !important;
+  }
+  .mainbody {
+    flex-direction: column;
+    height: auto;
+    min-height: none;
+    max-height: none;
+  }
+  div.navbar-icon {
+    margin-top: 5px;
+    margin-left: 20px;
+  }
+  div.toolbar-container {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    height: 100% !important;
+  }
+
+  div.toolbar-wrapper {
+    width: 360px;
+    min-height: none;
+    height: auto !important;
+    max-height: 100%;
+    padding: 0 20px !important; 
+
+    width: 100%;
+    max-width: 100%;
+    min-width: none;
+    flex: 1 1 0;
+}
+div.toolbar-container > div.toolbar-body {
+  max-height: 400px;
+}
+div.game-wrapper {
+    height: auto;
+    width: 100vw;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 20px;
+    flex: 1 1 0;
+    padding-top: 10px;
+}
+}
+
+@media (max-width: 425px) {
+
+}
