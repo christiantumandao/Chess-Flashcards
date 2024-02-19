@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { EmailAuthProvider, deleteUser, getAuth, reauthenticateWithCredential } from "@firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { deleteDoc, doc, getDoc } from "@firebase/firestore";
+import { updateFirstName, updateLastName } from "../util/users";
 const Profile = () => {
 
     const nav = useNavigate();
@@ -18,6 +19,7 @@ const Profile = () => {
     const [confirmPw, setConfirmPw] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
+    const [user] = useAuthState(auth);
 
 
     useEffect(()=>{
@@ -62,10 +64,6 @@ const Profile = () => {
         }
     }
 
-    const promptPassword = () => {
-
-    }
-
     const deleteAccount = async () => {
         const user = auth.currentUser;
         if (!user) return;
@@ -93,6 +91,29 @@ const Profile = () => {
             }
     }
 
+    const handleFirstNameChange = async () => {
+        try {
+            await updateFirstName(firstName, user);
+            const newData = { ...userData, firstName: firstName };
+            setFirstName("");
+            
+        } catch (e) {
+            console.error(e);
+        }
+        
+    }
+
+    const handleLastNameChange = async () => {
+        try {
+            await updateLastName(lastName, user);
+            const newData = { ...userData, lastName: lastName };
+            setLastName("");
+        } catch (e) {
+            console.error(e);
+        }
+
+    }
+
 
     return (
         <div className="page profile-wrapper">
@@ -116,7 +137,9 @@ const Profile = () => {
                             onChange = { (e)=>setFirstName(e.target.value)}
                         />
                         {
-                            (firstName.length !== 0) ? <button>Change</button> : null
+                            (firstName.length !== 0) ? 
+                                <button onClick = { handleFirstNameChange}>Change</button> 
+                                : null
                         }
                     </div>
                     <div className="profile-field">
@@ -127,7 +150,9 @@ const Profile = () => {
                             onChange = { (e)=>setLastName(e.target.value)}
                         />
                         {
-                            (lastName.length !== 0) ? <button>Change</button> : null
+                            (lastName.length !== 0) ? 
+                                <button onClick = { handleLastNameChange }>Change</button> 
+                                : null
                         }
                     </div>
 
@@ -146,6 +171,10 @@ const Profile = () => {
                     <div className="profile-field">
                         <div>Cards incorrect</div>
                         <div className="stat">{(userData) ? userData.incorrect : null}</div>
+                    </div>
+                    <div className="profile-field">
+                        <div>Accuracy</div>
+                        <div className="stat">{(userData) ? (userData.correct)/(userData.incorrect + userData.correct) : null}</div>
                     </div>
                 </section>
             </div>
