@@ -16,6 +16,10 @@ const Flashcard = (props) => {
     }
     const [user] = useAuthState(auth);
 
+    const handleDeleteFlashcard = async (e) => {
+        e.stopPropagation();
+        await deleteFlashcard(flashcard.eco, flashcard);
+    }
 
     return (
         <div 
@@ -34,7 +38,7 @@ const Flashcard = (props) => {
             {
                 (showDelete && !testMode && user) ?        
                     <button 
-                        onClick = { () => deleteFlashcard(flashcard.eco, flashcard) }
+                        onClick = { handleDeleteFlashcard }
                         className="delete-container">
                     <FaRegTrashAlt />
                     </button>
