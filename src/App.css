@@ -19,7 +19,7 @@
   --darkGrey: #16161D;
   --eigen: #16161d;
   --darkGreen: #2b3b31;
-  --green: #3BCB56;
+  --green: var(--darkGreen);
   --red: rgba(255,0,0,.5);
 }
 
