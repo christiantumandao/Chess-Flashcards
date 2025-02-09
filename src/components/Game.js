@@ -25,7 +25,7 @@ const Game = (props) => {
         testMode, flashcardIdx, 
         setFlashcardIdx, flashcardMoves, setFlashcardMoves,
         playerMoveIdx, setPlayerMoveIdx, parseMoves,
-        onFinishFlashcards, autoPlay } = props;
+        onFinishFlashcards, autoPlay, testingFlashcards } = props;
 
     const [flashGreen, setFlashGreen] = useState(false);
     const [flashRed, setFlashRed] = useState(false);
@@ -125,12 +125,12 @@ const Game = (props) => {
     const onNextFlashcard = () => {
         setTimeout(()=>{
             setFlashGreen(true);
-            if ((flashcardIdx + 1) >= flashcards.length) {
+            if ((flashcardIdx + 1) >= testingFlashcards.length) {
                 onFinishFlashcards();
                 return;
             }
             const idx = flashcardIdx+1;
-            const newFlashcard = flashcards[idx];
+            const newFlashcard = testingFlashcards[idx];
             const newMoves = parseMoves(newFlashcard.moves);
     
             setGame(new Chess());

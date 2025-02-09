@@ -111,12 +111,6 @@ const MainBody = (props) => {
         };
     });
 
-    useEffect(()=> {
-        if (!user) {
-            getDefaultCards(setFlashcards);
-        }
-    },[user]);
-
 
     // useEffect for autoplaying an opening
     useEffect(()=> {
@@ -153,17 +147,19 @@ const MainBody = (props) => {
         setCurrMove(0);
     },[tab])
 
-    const testFlashcards = (color) => {
+    const testFlashcards = (color, flashcardsToTest) => {
         if (flashcards.length === 0) {
             alert("Do not have any flashcards");
             return;
         }
-        const firstMoveSet = parseMoves(flashcards[0].moves);
+        console.log(flashcardsToTest);
+        const firstMoveSet = parseMoves(flashcardsToTest[0].moves);
+        setTestingFlashcards(flashcardsToTest);
         setTestMode(true);
         setFlashcardIdx(0);
         setFlashcardMoves(firstMoveSet);
         setPlayerMoveIdx(0);
-        setCurrOpening(flashcards[0]);
+        setCurrOpening(flashcardsToTest[0]);
         setGame(new Chess());
     }
 
@@ -174,6 +170,7 @@ const MainBody = (props) => {
         setFlashcardMoves([]);
         setPlayerMoveIdx(0);
         setCurrOpening(null);
+        setTestingFlashcards([]);
     }
 
 
@@ -265,6 +262,7 @@ const MainBody = (props) => {
                 onFinishFlashcards = { onFinishFlashcards }
 
                 parseMoves = { parseMoves }
+                testingFlashcards = { testingFlashcards }
             />
             <Toolbar 
                 tab = { tab }
@@ -300,6 +298,8 @@ const MainBody = (props) => {
 
                 testFlashcards = { testFlashcards }
                 onFinishFlashcards = { onFinishFlashcards }
+                testingFlashcards = { testingFlashcards }
+                setTestingFlashcards = { setTestingFlashcards }
 
             />
         </div>

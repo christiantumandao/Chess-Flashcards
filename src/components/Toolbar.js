@@ -37,7 +37,7 @@ const Toolbar = (props) => {
             color, setColor,
             folders, setFolders,
 
-            testFlashcards, onFinishFlashcards,
+            testFlashcards, onFinishFlashcards, testingFlashcards, setTestingFlashcards,
             testMode, 
             flashcardIdx } = props;
 
@@ -348,6 +348,11 @@ const Toolbar = (props) => {
         )
     }
 
+    const handleBegin = () => {
+        if (flashcardsOrFolder === "Folders" && currentFolder && currentFolder.openings.length > 0) testFlashcards(color, currentFolder.openings);
+        else testFlashcards(color, flashcards);
+    }
+
 
     return (
         <div className="toolbar-wrapper">
@@ -406,7 +411,7 @@ const Toolbar = (props) => {
                                         </select>
                                         <button 
                                             className="begin-test" 
-                                            onClick={ () => testFlashcards(color)}>
+                                            onClick={ handleBegin }>
                                                 Begin
                                         </button>
                                     </>
@@ -480,6 +485,7 @@ const Toolbar = (props) => {
                                 flashcardIdx = { flashcardIdx }
                                 deleteFlashcard = { deleteFlashcard }
                                 showDelete = { true }
+
                             />
                         ))
                         :
@@ -489,6 +495,7 @@ const Toolbar = (props) => {
                                 <Folder 
                                     key = { idx }
                                     folder = { folder }
+                                    setTestingFlashcards = { setTestingFlashcards }
                                     deleteFolder = { deleteFolder }
                                     setCurrentFolder = { setCurrentFolder }
                                 />

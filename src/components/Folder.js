@@ -10,7 +10,7 @@ import { auth } from "../firebase.config";
 
 const Folder = (props) => {
 
-    const { folder, deleteFolder, deleteFolderRecursive, setCurrentFolder } = props;
+    const { folder, deleteFolder, deleteFolderRecursive, setCurrentFolder, setTestingFlashcards } = props;
 
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -31,7 +31,10 @@ const Folder = (props) => {
     return (
         (!showDeleteMessage) ?
         <div 
-        onClick = { ()=> setCurrentFolder(folder) }
+        onClick = { ()=> {
+            setCurrentFolder(folder);
+            setTestingFlashcards(folder.openings);
+        } }
         className="flashcard-wrapper">
             <div className="flashcard-body">
                 <h4 className="flashcard-title">
