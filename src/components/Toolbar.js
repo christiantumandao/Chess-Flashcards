@@ -16,6 +16,7 @@ import Flashcard from "./Flashcard";
 import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, setDoc, where } from "@firebase/firestore";
 import MovePair from "./MovePair";
 import { getDefaultCards, parseName, parseQuery, shuffleCards } from "../util/helper";
+import Folder from "./Folder";
 
 const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -23,6 +24,7 @@ const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const Toolbar = (props) => {
     const currPath = useLocation();
     const [user] = useAuthState(auth);
+    const [flashcardsOrFolder, setFlashcardsOrFolder] = useState("Flashcards");
     const nav = useNavigate();
 
     const { tab } = props;
@@ -33,6 +35,7 @@ const Toolbar = (props) => {
             setFlashcards,
             autoPlayOpening, 
             color, setColor,
+            folders, setFolders,
 
             testFlashcards, onFinishFlashcards,
             testMode, 
@@ -42,6 +45,8 @@ const Toolbar = (props) => {
     const [searchResults, setSearchResults] = useState([]);
     const [resultLimit, setResultLimit] = useState(20);
     const [showAddButton, setShowAddButton] = useState(true);
+
+    const [currentFolder, setCurrentFolder] = useState(null);
 
     const [modal, setModal] = useState("");
 
@@ -58,6 +63,22 @@ const Toolbar = (props) => {
         }  
     },[user, setFlashcards])
 
+    const getUserCards_updated = useCallback( async () => {
+        try {
+            const userCards = [];
+            const querySnapshot = await getDocs(collection(db, "userData", user.uid, "flashcards"));
+            querySnapshot.forEach((doc) => {
+                userCards.push(doc.data());
+            });
+            setFlashcards(userCards);
+        } catch (e) {
+            console.error(e);
+        }  
+    },[user, setFlashcards])
+
+    // whenever the component is mounted or login changes, we get the user's cards
+    // TO DO: 
+    // TODO - non urgent: remove setFlashcard
     useEffect(()=> {
         const fetchCards = async () => {
             try {
@@ -76,14 +97,21 @@ const Toolbar = (props) => {
         fetchData();
         setSearchResults([]);
 
+        console.log("Running useEffect");
+
         return () => {
             setSearchResults([]);
         }
     },[user, getUserCards, setFlashcards])
 
+    // if the current position changes, then currOpening will change, and so add showAddButton
     useEffect(()=> {
         setShowAddButton(true);
     },[currOpening])
+
+    useEffect(()=>{
+        if (flashcardsOrFolder === "Flashcards") setCurrentFolder(null);
+    },[flashcardsOrFolder])
 
 
     const search = async () => {
@@ -225,6 +253,13 @@ const Toolbar = (props) => {
         )
     }
 
+    /**
+     TO DO:
+        1. Check if deleting within a folder
+            - if so, ask to delete in folder OR delete in folder and card
+            - if not, check if it exists in any folders,
+                - if it does, show warning and ask to confirm
+     */
     const deleteFlashcard = async (eco, fc) => {
         if (!user) return;
         /**
@@ -272,6 +307,14 @@ const Toolbar = (props) => {
         }
     }
 
+    const deleteFolder = () => {
+        // ask 
+    } 
+
+    const deleteFolderRecursive = async () => {
+
+    }
+
     const getModal = () => {
         return (
             (modal.length <= 0) ? null :
@@ -313,8 +356,6 @@ const Toolbar = (props) => {
                 <div className="toolbar-header">
 
                     <h2 className="toolbar-title">{(tab === 'test') ? "Flashcards" : "Explorer"}</h2>
-
-
                     {
                             (currPath.pathname === "/") ? 
                             <div className="search-container">
@@ -397,7 +438,65 @@ const Toolbar = (props) => {
                 </div>
 
                 <div className="toolbar-body">
-                    <h3>{(flashcards && currPath.pathname === "/flashcards") ? "Flashcards:" : null }</h3>
+
+                    {/** Body Header */}
+                    {
+                    (flashcards && currPath.pathname === "/flashcards") ? 
+                    <div className="toolbar-body-header">
+
+                        {
+                        (flashcardsOrFolder === "Folders" && currentFolder) ? 
+                        <button 
+                        className="flashcards-folders-back-btn"
+                        onClick = { () => setCurrentFolder(null)}>
+                            <FaArrowLeft />
+                        </button>
+                        : null
+                         }
+
+                        <h3>{(flashcardsOrFolder === "Folders") ? (currentFolder) ? currentFolder.name : "Folders" : "Flashcards"}</h3>
+                        <button 
+                            className="flashcards-folders-btn"
+                            onClick = { () => (flashcardsOrFolder === "Folders") ? setFlashcardsOrFolder("Flashcards")  : setFlashcardsOrFolder("Folders")}>
+                                {(flashcardsOrFolder === "Folders") ? "Flashcards" : "Folders" }
+                        </button>
+                    </div> : null
+                    }
+
+
+                    {/** Body Body */}
+                    
+                    {
+                    (flashcardsOrFolder === "Folders") ? 
+                        
+                        (currentFolder) ? 
+                        currentFolder.openings.map((opening, idx)=>(
+                            <Flashcard 
+                                key = { opening.moves + idx }
+                                idx = { idx }
+                                testMode = { testMode }
+                                flashcard = { opening }
+                                autoPlayOpening = { autoPlayOpening }
+                                flashcardIdx = { flashcardIdx }
+                                deleteFlashcard = { deleteFlashcard }
+                                showDelete = { true }
+                            />
+                        ))
+                        :
+                        <div className="flashcards-container"> 
+                        {
+                            folders.map((folder, idx) => (
+                                <Folder 
+                                    key = { idx }
+                                    folder = { folder }
+                                    deleteFolder = { deleteFolder }
+                                    setCurrentFolder = { setCurrentFolder }
+                                />
+                            ))
+                        }
+                        </div> 
+                        
+                    :
                     <div className="flashcards-container">
                     {
                         // if in flashcard mode
@@ -442,9 +541,12 @@ const Toolbar = (props) => {
                         
                     }
                     </div>
+                    }
 
                 </div>
+                
 
+                {/** Footer */}
                 <div className="toolbar-footer">
                     <div className="buttons-container">
                         {

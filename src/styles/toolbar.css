@@ -57,7 +57,7 @@
     background-color: var(--darkGrey);
     border-radius: 5px;
     color: white;
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: bolder;
     padding: .5rem;
     margin: 0 15px;
@@ -229,6 +229,66 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     flex-grow: 1;
     overflow-y: scroll;
 
+}
+
+.toolbar-body-header {
+    height: auto;
+    width: 100%;  
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.toolbar-body-header button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.toolbar-body-header button:hover {
+    background-color: var(--hoverHighlightLight);
+
+}
+
+.toolbar-body-header .flashcards-folders-back-btn {
+    margin-right: 10px;
+    border: var(--border);
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    color: white;
+    font-size: .8rem;
+    font-weight: bolder;
+    padding: .4rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar-body-header h3 {
+    margin-right: auto;
+}
+
+
+
+
+
+.toolbar-body-header .flashcards-folders-btn {
+    border: var(--border);
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    font-weight: bolder;
+    padding: .5rem;
+}
+
+.flashcards-folders-btn > svg {
+    font-weight: bolder;
 }
 
 .toolbar-footer {

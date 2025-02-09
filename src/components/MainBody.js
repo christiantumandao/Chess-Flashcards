@@ -20,8 +20,34 @@ const MainBody = (props) => {
     const [moveHistory, setMoveHistory] = useState([]);
     const [currMove, setCurrMove] = useState(0);
 
+    const [testingFlashcards, setTestingFlashcards] = useState([]);
     const [currOpening, setCurrOpening]= useState(null);
     const [flashcards, setFlashcards] = useState([]);
+    const [folders, setFolders] = useState([
+        {
+            name: "Sicilian",
+            openings: [
+                {
+                    eco: "D53",
+                    fen: "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+                    moves: "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7",
+                    name: "Queen's Gambit Declined"
+                }, 
+                {
+                    eco: "B90",
+                    fen: "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+                    moves: "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6",
+                    name: "Sicilian Defense: Najdorf Variation"
+                },
+                {
+                    eco: "C02",
+                    fen: "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+                    moves: "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6",
+                    name: "French Defense: Advance Variation"
+                },       
+            ]
+        }
+    ])
 
     // auto playing openings
     const [autoPlay, setAutoPlay] = useState(false);
@@ -258,6 +284,9 @@ const MainBody = (props) => {
                 autoPlayOpening = { autoPlayOpening }
                 color = { color }
                 setColor = { setColor }
+
+                folders = { folders }
+                setFolders = { setFolders }
 
                 flashcardIdx = { flashcardIdx }
                 setFlashcardIdx = { setFlashcardIdx }
