@@ -20,8 +20,9 @@
 
 .flashcard-wrapper:hover {
     background-color: var(--hoverHighlightLight);
-
 }
+
+
 
 .flashcard-wrapper > * {
     margin: 2px 0;
@@ -42,6 +43,7 @@
 
 .flashcard-highlight {
     border: .1rem solid var(--darkGreen);
+    box-shadow: none;
 }
 
 
@@ -91,6 +93,6 @@
 }
 
 .edit-container:hover {
-    background-color: var(--lightGrey);
+    background-color: var(--hoverHighlightLight);
 }
 

@@ -5,7 +5,6 @@ import Toolbar from "./Toolbar";
 import { Chess } from "chess.js";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase.config";
-import { getDefaultCards } from "../util/helper";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -152,7 +151,6 @@ const MainBody = (props) => {
             alert("Do not have any flashcards");
             return;
         }
-        console.log(flashcardsToTest);
         const firstMoveSet = parseMoves(flashcardsToTest[0].moves);
         setTestingFlashcards(flashcardsToTest);
         setTestMode(true);

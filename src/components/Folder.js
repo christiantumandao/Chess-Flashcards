@@ -10,7 +10,7 @@ import { auth } from "../firebase.config";
 
 const Folder = (props) => {
 
-    const { folder, deleteFolder, deleteFolderRecursive, setCurrentFolder, setTestingFlashcards } = props;
+    const { folder, deleteFolder, deleteFolderRecursive, setCurrentFolder } = props;
 
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -33,7 +33,6 @@ const Folder = (props) => {
         <div 
         onClick = { ()=> {
             setCurrentFolder(folder);
-            setTestingFlashcards(folder.openings);
         } }
         className="flashcard-wrapper">
             <div className="flashcard-body">
@@ -47,14 +46,22 @@ const Folder = (props) => {
                 <button className="edit-container">
                     <FaEdit />
                 </button>
-                <button className='delete-container'>
+                <button 
+                    className='delete-container'
+                    onClick = { handleDelete }
+                    >
+                    
                     <FaRegTrashAlt />
                 </button>
             </div>
 
         </div> :
-        <>
-        </>
+        <div className = "flashcard-wrapper">
+            Delete openings in folder as well? This will also remove them from other folders!
+
+            <button>Delete Folder</button>
+            <button>Delete Folder and Openings</button>
+        </div>
     );
 }
 

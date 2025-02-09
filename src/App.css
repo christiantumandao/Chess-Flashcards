@@ -16,11 +16,11 @@
 
   --defaultShadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-  --hoverHighlightDark: rgba(0,0,0,.2);
+  --hoverHighlightDark: rgba(0,0,0,.5);
   --hoverHighlightLight: rgba(255,255,255,.04);
 
 
-  --border: 1px solid rgba(68, 68, 74, .5); 
+  --border: 1px solid rgba(68, 68, 74, .4); 
   --darkGrey: rgb(17, 17, 23);
   --lightGrey: rgb(115,115,119);
   --eigen: #16161d;
@@ -87,7 +87,7 @@ input {
 
 }
 
-.search-container > input::placeholder {
+input::placeholder {
   color: rgb(69,69,74);
 }
 

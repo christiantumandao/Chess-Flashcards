@@ -7,6 +7,8 @@ import { FaRedo } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaArrowsAltV } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
+
 
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +19,7 @@ import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, setDoc, wher
 import MovePair from "./MovePair";
 import { getDefaultCards, parseName, parseQuery, shuffleCards } from "../util/helper";
 import Folder from "./Folder";
+import Folders from "./Folders";
 
 const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -37,7 +40,7 @@ const Toolbar = (props) => {
             color, setColor,
             folders, setFolders,
 
-            testFlashcards, onFinishFlashcards, testingFlashcards, setTestingFlashcards,
+            testFlashcards, onFinishFlashcards,
             testMode, 
             flashcardIdx } = props;
 
@@ -47,6 +50,7 @@ const Toolbar = (props) => {
     const [showAddButton, setShowAddButton] = useState(true);
 
     const [currentFolder, setCurrentFolder] = useState(null);
+    const [showAddOpeningInput, setShowAddOpeningInput] = useState(false);
 
     const [modal, setModal] = useState("");
 
@@ -97,8 +101,6 @@ const Toolbar = (props) => {
         fetchData();
         setSearchResults([]);
 
-        console.log("Running useEffect");
-
         return () => {
             setSearchResults([]);
         }
@@ -109,6 +111,7 @@ const Toolbar = (props) => {
         setShowAddButton(true);
     },[currOpening])
 
+    // this is to make sure we test the correct flashcards when we press begin
     useEffect(()=>{
         if (flashcardsOrFolder === "Flashcards") setCurrentFolder(null);
     },[flashcardsOrFolder])
@@ -442,7 +445,7 @@ const Toolbar = (props) => {
                     </div>
                 </div>
 
-                <div className="toolbar-body">
+                <div className={currentFolder ? "toolbar-body toolbar-body-folder-highlight" : "toolbar-body"}>
 
                     {/** Body Header */}
                     {
@@ -474,34 +477,16 @@ const Toolbar = (props) => {
                     {
                     (flashcardsOrFolder === "Folders") ? 
                         
-                        (currentFolder) ? 
-                        currentFolder.openings.map((opening, idx)=>(
-                            <Flashcard 
-                                key = { opening.moves + idx }
-                                idx = { idx }
-                                testMode = { testMode }
-                                flashcard = { opening }
-                                autoPlayOpening = { autoPlayOpening }
-                                flashcardIdx = { flashcardIdx }
-                                deleteFlashcard = { deleteFlashcard }
-                                showDelete = { true }
-
-                            />
-                        ))
-                        :
-                        <div className="flashcards-container"> 
-                        {
-                            folders.map((folder, idx) => (
-                                <Folder 
-                                    key = { idx }
-                                    folder = { folder }
-                                    setTestingFlashcards = { setTestingFlashcards }
-                                    deleteFolder = { deleteFolder }
-                                    setCurrentFolder = { setCurrentFolder }
-                                />
-                            ))
-                        }
-                        </div> 
+                        <Folders 
+                            currentFolder = { currentFolder }
+                            testMode = { testMode }
+                            autoPlayOpening = { autoPlayOpening }
+                            flashcardIdx = { flashcardIdx }
+                            deleteFlashcard = { deleteFlashcard }
+                            folders = { folders }
+                            deleteFolder = { deleteFolder }
+                            setCurrentFolder = { setCurrentFolder }                  
+                        />
                         
                     :
                     <div className="flashcards-container">
