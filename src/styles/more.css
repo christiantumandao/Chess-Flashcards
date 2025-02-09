@@ -9,28 +9,25 @@
 .more-blob {
     width: clamp(360px, 70%, 1080px);
     height: auto;
-    padding: 3rem;
+    padding: 1.7rem;
     border-radius: 10px;
 
     background-color: var(--eigen);
     color: white;
 }
 
-.more-blob > h2 {
-    font-size: 1.75rem;
-    text-align: center;
-    margin-bottom: 1rem;
-}
 
-.more-blob > h3 {
-    font-size: 1.5rem;
+
+.more-blob h4 {
+    font-size: 1.3rem;
     text-align: center;
     margin-bottom: .5rem;
+
 }
 
-.more-blob > p {
-    font-size: 1.5rem;
-    line-height: 2rem;
+.more-blob  p {
+    font-size: 16px;
+    line-height: 1.7rem;
     color: gray;
     text-align: center;
 }

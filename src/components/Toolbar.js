@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "../styles/toolbar.css";
 
 import { FaArrowLeft } from "react-icons/fa";
@@ -13,17 +13,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase.config";
 import Flashcard from "./Flashcard";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, query, setDoc, where } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, setDoc, where } from "@firebase/firestore";
 import MovePair from "./MovePair";
 import { getDefaultCards, parseName, parseQuery, shuffleCards } from "../util/helper";
 
-const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 
 const Toolbar = (props) => {
     const currPath = useLocation();
     const [user] = useAuthState(auth);
     const nav = useNavigate();
+
+    const { tab } = props;
 
     const { game, undo, redo, currMove, restart, moveHistory,
             currOpening, 
@@ -42,6 +44,19 @@ const Toolbar = (props) => {
     const [showAddButton, setShowAddButton] = useState(true);
 
     const [modal, setModal] = useState("");
+
+    const getUserCards = useCallback( async () => {
+        try {
+            const userCards = [];
+            const querySnapshot = await getDocs(collection(db, "userData", user.uid, "flashcards"));
+            querySnapshot.forEach((doc) => {
+                userCards.push(doc.data());
+            });
+            setFlashcards(userCards);
+        } catch (e) {
+            console.error(e);
+        }  
+    },[user, setFlashcards])
 
     useEffect(()=> {
         const fetchCards = async () => {
@@ -64,25 +79,12 @@ const Toolbar = (props) => {
         return () => {
             setSearchResults([]);
         }
-    },[user])
+    },[user, getUserCards, setFlashcards])
 
     useEffect(()=> {
         setShowAddButton(true);
     },[currOpening])
 
-    const getUserCards = async () => {
-        try {
-            console.log("Fetching user's cards");
-            const userCards = [];
-            const querySnapshot = await getDocs(collection(db, "userData", user.uid, "flashcards"));
-            querySnapshot.forEach((doc) => {
-                userCards.push(doc.data());
-            });
-            setFlashcards(userCards);
-        } catch (e) {
-            console.error(e);
-        }
-    }
 
     const search = async () => {
         try {
@@ -131,7 +133,6 @@ const Toolbar = (props) => {
                         newFlashcards.push(currOpening);
                         setFlashcards(newFlashcards);
 
-                        console.log("Added successfully");
                         setShowAddButton(false);    
                 }).catch((e)=>{
                     console.error(e);
@@ -153,7 +154,6 @@ const Toolbar = (props) => {
                         const newFlashcards = [...flashcards];
                         newFlashcards.push(newOpening);
                         setFlashcards(newFlashcards);
-                        console.log("Added successfully");
                         setShowAddButton(false);
                 }).catch((e)=>{
                     console.error(e);
@@ -184,10 +184,8 @@ const Toolbar = (props) => {
     }
 
     const checkIfAdded = async () => {
-
         const name = (currOpening) ? currOpening.moves : formatMoveHistory();
         const q = query(collection(db, "userData", user.uid, "flashcards"), where("moves", "==", name));
-
 
         const querySnapshot = await getDocs(q);
         const cards = [];
@@ -204,7 +202,7 @@ const Toolbar = (props) => {
             <div className="">
                 {
                     moveHistory.map((move, idx)=> (
-                       (idx % 2 === 0) ? <MovePair key = {move} moveHistory = { moveHistory } idx = { idx } currMove = { currMove } /> : null
+                       (idx % 2 === 0) ? <MovePair key = { move } moveHistory = { moveHistory } idx = { idx } currMove = { currMove } /> : null
                     ))
                 }
             </div>
@@ -235,7 +233,6 @@ const Toolbar = (props) => {
          */
 
         try {
-            console.log("deleteting " + eco);
             if (eco === 'usr') {
                 // get the id of the opening from firebase
                 // delete with id
@@ -254,7 +251,6 @@ const Toolbar = (props) => {
                 
             }
             else {     
-                console.log("deleting")
                 const path = "userData/"+user.uid+"/flashcards";
                 await deleteDoc(doc(db, path, eco));
                 const newFlashcards = flashcards.filter((flashcard) => flashcard.moves !== eco);
@@ -288,17 +284,14 @@ const Toolbar = (props) => {
                         {
                             (modal === "sign-in") ? 
                                 <>
-                                    <button
-                                        onClick = {()=> {
-                                            nav("log-in")
-                                        }}
-                                    >
+                                    <button className= "small-modal-sign-in" onClick = { ()=> nav("/log-in") }>
                                         Sign in
                                     </button>
-                                    <button onClick = { ()=> setModal("") }>
+                                    <button className= "small-modal-cancel" onClick = { ()=> setModal("") }>
                                         Cancel
                                     </button>
-                                </> : (modal === "added") ? 
+                                </> 
+                                : (modal === "added") ? 
                                 <>
                                     <button
                                         onClick = { ()=> setModal("")} >
@@ -318,7 +311,8 @@ const Toolbar = (props) => {
             <div className="toolbar-container">
 
                 <div className="toolbar-header">
-                    <h2 className="toolbar-title">Explorer</h2>
+
+                    <h2 className="toolbar-title">{(tab === 'test') ? "Flashcards" : "Explorer"}</h2>
 
 
                     {
@@ -388,17 +382,16 @@ const Toolbar = (props) => {
 
                     <div className="toolbar-description">
                         { (currOpening) ? parseName(currOpening) : (game.fen() !== startingFen) ? parseMoveHistory() : null }
-                        
+
                         {
-                            ((game.fen() !== startingFen && showAddButton && currOpening && currPath.pathname !== "/flashcards") || (currPath.pathname === "/" && showAddButton && game.fen() !== startingFen)) ?            
+
+                            ((game.fen() !== startingFen && showAddButton && currOpening && !testMode) || (currPath.pathname === "/" && showAddButton && game.fen() !== startingFen)) ?            
                             <button onClick = { addOpening }>
                                 <FaPlus />
                             </button> : null
                         }
     
-                        {
-                            getModal()
-                        }
+                        { getModal() }
                         
                     </div>
                 </div>

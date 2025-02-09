@@ -9,6 +9,14 @@
     align-items: center;
 }
 
+.profile-wrapper > h1 {
+    width: clamp(360px, 50%, 1080px);
+    align-content: left;
+    margin-top: 1rem;
+    color: white;
+    margin-bottom: .5rem;
+}
+
 .profile-blob {
     background-color: var(--eigen);
     height: auto;
@@ -78,11 +86,12 @@
 
 .profile-field > div {
     width: 40%;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .profile-field > .stat {
     margin-left: 3rem;
+    overflow-x: hidden;
 }
 
 .profile-field > input {
@@ -91,7 +100,7 @@
 }
 
 .profile-field > button {
-    font-size: 1rem;
+    font-size: 16px;
     padding: .2rem .5rem;
     background-color: var(--darkGreen);
     color: white;
@@ -120,16 +129,25 @@
 }
 
 .profile-red-btns > button {
-    font-size: 1.2rem;
+    font-size: 16px;
 }
 
 .profile-red-btns > button:hover {
     background-color: rgba(255,0,0,.5);
 }
 
+.confirm-delete {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+
+}
+
 .confirm-delete > input {
-    width: 100%;
-    margin-top: 2rem;
+    align-self: stretch;
+    margin-top: 1rem;
+
     padding:.5rem;
     font-size: 1rem;
 }

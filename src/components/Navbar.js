@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import { Chess } from "chess.js";
+
 import { FaSearch } from "react-icons/fa";
 import { PiCardsLight } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
@@ -12,20 +14,32 @@ import { BsThreeDots } from "react-icons/bs";
 import { IoReorderThree } from "react-icons/io5";
 import { RxExit } from "react-icons/rx";
 
+const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 
-const Navbar = () => {
+const Navbar = (props) => {
+
+    const { tab, setTab } = props;
 
     const nav = useNavigate();
     const [user] = useAuthState(auth);
-    const [tab, setTab] = useState("explore");
     const currPath = useLocation();
     const [showMobileNav, setShowMobileNav] = useState(false);
 
+
     useEffect(()=>{
-        if (currPath.pathname === "/log-in") setTab("login")
-        else if (currPath.pathname === "/sign-up") setTab("signup")
+        if (currPath.pathname !== tab) {
+            let relPath = currPath.pathname.slice(1);
+            if (relPath === "") relPath = "explore";
+            else if (relPath === "sign-up") relPath = "signup"
+            else if (relPath === "log-in") relPath = "login"
+            else if (relPath === "flashcards") relPath = "test"
+
+            setTab(relPath);
+        }
     },[currPath])
+
+
 
     return (
         <>
@@ -83,7 +97,7 @@ const Navbar = () => {
                     className={(tab === "more") ? "selected-tab" : ""} 
                 >
                     <BsThreeDots />
-                    More
+                    About
                 </button>
             </nav>
             

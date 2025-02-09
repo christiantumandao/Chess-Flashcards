@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Game from "./Game";
 import Toolbar from "./Toolbar";
 
 import { Chess } from "chess.js";
-import { useLocation } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase.config";
+import { getDefaultCards } from "../util/helper";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-const MainBody = () => {
+const MainBody = (props) => {
 
-    const currPath = useLocation();
+   // const { tab,flashcards,setFlashcards  } = props;
+   const { tab } = props;
+    const [user] = useAuthState(auth);
 
     const [game, setGame] = useState(new Chess()); 
     const [history, setHistory] = useState([startingFen]);
@@ -33,6 +37,35 @@ const MainBody = () => {
     const [testMode, setTestMode] = useState(false);
 
 
+    const  makeAMove = useCallback( (move) => {
+
+        try {
+            const isFirstMove = (game.fen() === startingFen);
+            const gameCopy = new Chess(game.fen());
+            gameCopy.move(move);
+            setGame(gameCopy);
+
+            const newHistory = history.slice(0, currMove + 1);
+            newHistory.push(gameCopy.fen());
+            setHistory(newHistory);
+            setCurrMove(currMove + 1);
+
+            if (isFirstMove) {
+                setMoveHistory([gameCopy.history()[0]]);
+            } else {
+                const newMoveHistory = moveHistory.slice(0, currMove);
+                newMoveHistory.push(gameCopy.history()[0]);
+                setMoveHistory(newMoveHistory);
+            }
+
+        } catch {
+            console.error("Invalid move")
+        }
+    },[currMove, game, history, moveHistory])
+
+
+
+    // event listener for seeing player history with arrows
     useEffect(() => {
         const handleKeyPress = (event) => {
             if (event.key === 'ArrowLeft') {
@@ -50,18 +83,24 @@ const MainBody = () => {
         return () => {
           window.removeEventListener('keydown', handleKeyPress);
         };
-      });
-
-
-    useEffect(()=> {
-        setCurrOpening(null);
-        setGame(new Chess())
-        setMoveHistory([]);
-    },[currPath.pathname])
+    });
 
     useEffect(()=> {
-        if (!testMode && autoPlay && autoPlayIdx <= autoPlayMoves.length) {
-            if (autoPlayIdx === autoPlayMoves.length) setAutoPlay(false);
+        if (!user) {
+            getDefaultCards(setFlashcards);
+        }
+    },[user]);
+
+
+    // useEffect for autoplaying an opening
+    useEffect(()=> {
+
+        const autoPlayMove = () => {
+            if (autoPlayIdx === autoPlayMoves.length) {
+                setTimeout(()=>{
+                    setAutoPlay(false);
+                },1000)
+            }
             else {
                 setTimeout(()=> {
                 
@@ -70,11 +109,23 @@ const MainBody = () => {
                 },500);
             }
         }
-    },[game.fen(), game])
 
+        if (!testMode && autoPlay && autoPlayIdx <= autoPlayMoves.length) {
+            autoPlayMove();
+        }
+
+    },[game, testMode, autoPlay, autoPlayIdx, autoPlayMoves, makeAMove])
+
+    // incase user changes tab in middle of autoplaying an opening
     useEffect(()=>{
         setTestMode(false);
-    },[currPath])
+
+        const newGame = new Chess();
+        setGame(newGame);
+        setHistory([startingFen]);
+        setMoveHistory([]);
+        setCurrMove(0);
+    },[tab])
 
     const testFlashcards = (color) => {
         if (flashcards.length === 0) {
@@ -127,32 +178,6 @@ const MainBody = () => {
         return res;
     }
 
-    function makeAMove(move) {
-
-        try {
-            const isFirstMove = (game.fen() === startingFen);
-            const gameCopy = new Chess(game.fen());
-            gameCopy.move(move);
-            setGame(gameCopy);
-
-            const newHistory = history.slice(0, currMove + 1);
-            newHistory.push(gameCopy.fen());
-            setHistory(newHistory);
-            setCurrMove(currMove + 1);
-
-            if (isFirstMove) {
-                setMoveHistory([gameCopy.history()[0]]);
-            } else {
-                const newMoveHistory = moveHistory.slice(0, currMove);
-                newMoveHistory.push(gameCopy.history()[0]);
-                setMoveHistory(newMoveHistory);
-            }
-
-        } catch {
-            console.error("Invalid move")
-        }
-    }
-
     const restart = () => {
         const newGame = new Chess();
         setGame(newGame);
@@ -178,7 +203,6 @@ const MainBody = () => {
         else {
             setCurrMove(currMove -1);
             const prevMove = history[currMove - 1];
-            console.log("setting at " + prevMove);
             setGame(new Chess(prevMove));
         }
     }
@@ -202,6 +226,7 @@ const MainBody = () => {
                 autoPlayOpening = { autoPlayOpening }
                 color = { color }
                 setColor = { setColor }
+                autoPlay = { autoPlay }
 
                 flashcardIdx = { flashcardIdx }
                 setFlashcardIdx = { setFlashcardIdx }
@@ -216,6 +241,7 @@ const MainBody = () => {
                 parseMoves = { parseMoves }
             />
             <Toolbar 
+                tab = { tab }
                 restart = { restart } 
                 makeAMove = { makeAMove }
                 moveHistory = { moveHistory }

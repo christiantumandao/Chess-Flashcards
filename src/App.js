@@ -4,10 +4,9 @@ import Navbar from './components/Navbar';
 import MainBody from './components/MainBody';
 import More from './components/More';
 
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './firebase.config';
 import LogIn from './components/LogIn';
 import Profile from './components/Profile';
+import { useState } from 'react';
 
 /**
  * 
@@ -20,19 +19,19 @@ import Profile from './components/Profile';
 
 function App() {
 
-  const [user] = useAuthState(auth);
+  const [tab, setTab] = useState("explore");
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar tab = { tab } setTab = { setTab } />
 
       <Routes>
-        <Route path="/" element={<MainBody />}></Route>
+        <Route path="/" element={<MainBody tab = { tab } />}></Route>
         <Route path="/more" element={<More />}></Route>
         <Route path="/log-in" element={<LogIn login={true}/>}></Route>
         <Route path="/sign-up" element={<LogIn  login={false}/>}></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/flashcards" element={<MainBody />}></Route>
+        <Route path="/flashcards" element={<MainBody tab = { tab } />}></Route>
       </Routes>
 
 

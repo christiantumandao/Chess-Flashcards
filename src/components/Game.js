@@ -25,7 +25,7 @@ const Game = (props) => {
         testMode, flashcardIdx, 
         setFlashcardIdx, flashcardMoves, setFlashcardMoves,
         playerMoveIdx, setPlayerMoveIdx, parseMoves,
-        onFinishFlashcards } = props;
+        onFinishFlashcards, autoPlay } = props;
 
     const [flashGreen, setFlashGreen] = useState(false);
     const [flashRed, setFlashRed] = useState(false);
@@ -41,13 +41,13 @@ const Game = (props) => {
 
 
 
+    // when using a flashcard, the bot must play first:
     useEffect(()=>{
         setTimeout(()=>{
             if (color==='black' && playerMoveIdx===0 && flashcardMoves) {
-                console.log("g");
                 makeAMove(flashcardMoves[0]);
             }
-        },1000);
+        }, 1000);
     },[testMode, playerMoveIdx, currOpening])
 
     useEffect(()=>{
@@ -85,10 +85,9 @@ const Game = (props) => {
                     // next move in flashcard
                     } else {
                         checkBot();
-                        console.log("correct");
                     }
                 } else {
-                    console.log("incorrect!: "+move+" != " + flashcardMoves[playerMoveIdx]);
+                    //console.log("incorrect!: "+move+" != " + flashcardMoves[playerMoveIdx]);
                     setFlashRed(true);
                     setPlayerMoveIdx(0);
                     setGame(new Chess());
@@ -124,23 +123,25 @@ const Game = (props) => {
 
 
     const onNextFlashcard = () => {
-        setFlashGreen(true);
-        if ((flashcardIdx + 1) >= flashcards.length) {
-            onFinishFlashcards();
-            return;
-        }
-        const idx = flashcardIdx+1;
-        const newFlashcard = flashcards[idx];
-        const newMoves = parseMoves(newFlashcard.moves);
-
-        setGame(new Chess());
-
-        setCurrOpening(newFlashcard);
-        setFlashcardIdx(idx);
-        setFlashcardMoves(newMoves);
-
-        setPlayerMoveIdx(0);
-        incrementCorrects();
+        setTimeout(()=>{
+            setFlashGreen(true);
+            if ((flashcardIdx + 1) >= flashcards.length) {
+                onFinishFlashcards();
+                return;
+            }
+            const idx = flashcardIdx+1;
+            const newFlashcard = flashcards[idx];
+            const newMoves = parseMoves(newFlashcard.moves);
+    
+            setGame(new Chess());
+    
+            setCurrOpening(newFlashcard);
+            setFlashcardIdx(idx);
+            setFlashcardMoves(newMoves);
+    
+            setPlayerMoveIdx(0);
+            incrementCorrects();
+        },500);
     }
     
 
@@ -224,9 +225,11 @@ const Game = (props) => {
                 <Chessboard 
                     position = { game.fen() }
                     onPieceDrop = { onDrop }
-                    animationDuration={animationSpeed}
-                   
+
+                    animationDuration={(autoPlay) ? animationSpeed : 0}
                     boardOrientation={(color==='both') ? 'white' : color}
+                    customBoardStyle = { (window.innerWidth > 425) ?                  
+                        { borderRadius: '5px' } : {} }
                 />
             </div>
 

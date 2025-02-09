@@ -47,7 +47,7 @@ const LogIn = (props) => {
                 setEmail("");
                 setPassword("")
                 setConfirmPassword("");
-                nav("/");
+                nav("/flashcards");
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -82,7 +82,7 @@ const LogIn = (props) => {
                     setEmail("");
                     setFirstName("");
                     setLastName("");
-                    nav("/");
+                    nav("/flashcards");
                 })
                 .catch((e)=>{
                     setErrorMessage(e.code);

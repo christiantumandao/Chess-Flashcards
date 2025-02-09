@@ -51,6 +51,7 @@
 
 .mobilenav-container > h2 {
     padding-right: 50px !important;
+
 }
 
 .navbar-icon > button {
@@ -83,6 +84,9 @@
 .navbar-wrapper h2 {
     padding: 10px;
     padding-left: 20px;
+
+    border-bottom: var(--border);
+    background-color: var(--darkGrey);
 }
 
 nav {
@@ -115,7 +119,11 @@ nav svg {
 }
 
 nav > button:hover {
-    background-color: rgba(255,255,255,.5);
+    background-color: var(--hoverHighlightLight);
+}
+
+nav > button:focus {
+    outline: none;
 }
 
 .selected-tab {

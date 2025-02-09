@@ -6,8 +6,9 @@ import { EmailAuthProvider, deleteUser, getAuth, reauthenticateWithCredential } 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { deleteDoc, doc, getDoc } from "@firebase/firestore";
 import { updateFirstName, updateLastName } from "../util/users";
-const Profile = () => {
+const Profile = (props) => {
 
+    const { setFlashcards } = props;
     const nav = useNavigate();
 
     const [logout, setLogout] = useState(false);
@@ -26,19 +27,13 @@ const Profile = () => {
         const getUserData = async () => {
             const user = auth.currentUser;
             if (!user) {
-                console.log(user);
                 return false;
             }
             try {
                 const ref = doc(db, "userData", user.uid);
-                console.log("getting doc")
 
                 const docSnap = await getDoc(ref);
-                console.log(user.uid);
-
-                console.log("recieved doc")
                 if (docSnap.exists()) {
-                    console.log(docSnap.data());
                     setUserData(docSnap.data());
                 } else {
                     console.log("could not find user");
@@ -57,10 +52,11 @@ const Profile = () => {
     const signOutUser = () => {
         try {
             auth.signOut();
+
         } catch (e) {
             console.error(e);
         } finally {
-            nav("/");
+            nav("/log-in");
         }
     }
 
@@ -117,14 +113,11 @@ const Profile = () => {
 
     return (
         <div className="page profile-wrapper">
+
+            <h1>Settings</h1>
             <div className="profile-blob">
-
-                <header className="profile-header">
-                    <h1>Profile</h1>
-                </header>
-
                 <section className="profile-blobcontent">
-                    <h2>Settings</h2>
+                    <h3>Profile</h3>
                     <div className="profile-field">
                         <div>E-mail</div>
                         <p className="email">{(userData) ? userData.email : null}</p>
@@ -162,19 +155,23 @@ const Profile = () => {
             <div className="profile-blob">
 
             <section className="profile-blobcontent">
-                    <h2>Statistics</h2>
+                    <h3>Statistics</h3>
 
                     <div className="profile-field">
-                        <div>Cards correct</div>
+                        <div>Cards Correct</div>
                         <div className="stat">{(userData) ? userData.correct : null}</div>
                     </div>
                     <div className="profile-field">
-                        <div>Cards incorrect</div>
+                        <div>Cards Incorrect</div>
                         <div className="stat">{(userData) ? userData.incorrect : null}</div>
                     </div>
                     <div className="profile-field">
+                        <div>Total Cards Completed</div>
+                        <div className="stat">{(userData) ? userData.incorrect + userData.correct : null}</div>
+                    </div>
+                    <div className="profile-field">
                         <div>Accuracy</div>
-                        <div className="stat">{(userData) ? (userData.correct)/(userData.incorrect + userData.correct) : null}</div>
+                        <div className="stat">{(userData) ? (userData.correct + userData.incorrect === 0) ? 0 : ((userData.correct)/(userData.incorrect + userData.correct)).toFixed(2) : null}</div>
                     </div>
                 </section>
             </div>
