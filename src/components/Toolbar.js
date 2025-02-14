@@ -7,6 +7,7 @@ import { FaRedo } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaArrowsAltV } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import { FaPlusCircle } from "react-icons/fa";
 
 
@@ -14,12 +15,14 @@ import { FaPlusCircle } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase.config";
-import Flashcard from "./Flashcard";
 import { addDoc, collection, deleteDoc, doc, getDocs, limit, query, setDoc, where } from "@firebase/firestore";
-import MovePair from "./MovePair";
 import { getDefaultCards, parseName, parseQuery, shuffleCards } from "../util/helper";
+
+import MovePair from "./MovePair";
 import Folder from "./Folder";
 import Folders from "./Folders";
+import Flashcard from "./Flashcard";
+import ToolbarBodyHeader from "./ToolbarBodyHeader";
 
 const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -27,7 +30,6 @@ const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const Toolbar = (props) => {
     const currPath = useLocation();
     const [user] = useAuthState(auth);
-    const [flashcardsOrFolder, setFlashcardsOrFolder] = useState("Flashcards");
     const nav = useNavigate();
 
     const { tab } = props;
@@ -44,13 +46,16 @@ const Toolbar = (props) => {
             testMode, 
             flashcardIdx } = props;
 
+    const [flashcardsOrFolder, setFlashcardsOrFolder] = useState("Flashcards");
+    const [editFolderMode, setEditFolderMode] = useState(false);
+    const [currentFolder, setCurrentFolder] = useState(null);
+    const [addOpeningsToFolder, setAddOpeningsToFolder] = useState(false);
+
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [resultLimit, setResultLimit] = useState(20);
     const [showAddButton, setShowAddButton] = useState(true);
 
-    const [currentFolder, setCurrentFolder] = useState(null);
-    const [showAddOpeningInput, setShowAddOpeningInput] = useState(false);
 
     const [modal, setModal] = useState("");
 
@@ -67,22 +72,22 @@ const Toolbar = (props) => {
         }  
     },[user, setFlashcards])
 
-    const getUserCards_updated = useCallback( async () => {
+    const getUserFolders = useCallback( async () => {
         try {
-            const userCards = [];
-            const querySnapshot = await getDocs(collection(db, "userData", user.uid, "flashcards"));
+            const userFolders = [];
+            const querySnapshot = await getDocs(collection(db, "userData", user.uid, "folders"));
             querySnapshot.forEach((doc) => {
-                userCards.push(doc.data());
-            });
-            setFlashcards(userCards);
+                userFolders.push(doc.data());
+            })
+            setFolders(userFolders);
         } catch (e) {
             console.error(e);
-        }  
-    },[user, setFlashcards])
+        }
+    },[user, setFolders]);
 
     // whenever the component is mounted or login changes, we get the user's cards
     // TO DO: 
-    // TODO - non urgent: remove setFlashcard
+    // TODO - non urgent: remove setFlashcard from dependency array
     useEffect(()=> {
         const fetchCards = async () => {
             try {
@@ -95,8 +100,22 @@ const Toolbar = (props) => {
                 console.error(e);
             }
         }
+
+        const fetchFolders = async () => {
+            if (!user) {
+                return;
+            }
+
+            try {
+                await getUserFolders();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         const fetchData = async () => {
             await fetchCards();
+            await fetchFolders();
         }
         fetchData();
         setSearchResults([]);
@@ -422,7 +441,7 @@ const Toolbar = (props) => {
                                 }
                                 {
                                     (testMode) ? null : 
-                                    <button onClick ={ ()=>shuffleCards(flashcards, setFlashcards) } className="shuffle-button">
+                                    <button onClick ={ ()=> shuffleCards(flashcards, setFlashcards) } className="shuffle-button">
                                         Shuffle
                                     </button>
                                 }
@@ -445,47 +464,47 @@ const Toolbar = (props) => {
                     </div>
                 </div>
 
-                <div className={currentFolder ? "toolbar-body toolbar-body-folder-highlight" : "toolbar-body"}>
+                {/** Toolbar Body */}
+                <div className={currentFolder && currPath.pathname === "/flashcards" ? "toolbar-body toolbar-body-folder-highlight" : "toolbar-body"}>
 
-                    {/** Body Header */}
+                    {/** Header of Body */}
                     {
                     (flashcards && currPath.pathname === "/flashcards") ? 
-                    <div className="toolbar-body-header">
-
-                        {
-                        (flashcardsOrFolder === "Folders" && currentFolder) ? 
-                        <button 
-                        className="flashcards-folders-back-btn"
-                        onClick = { () => setCurrentFolder(null)}>
-                            <FaArrowLeft />
-                        </button>
-                        : null
-                         }
-
-                        <h3>{(flashcardsOrFolder === "Folders") ? (currentFolder) ? currentFolder.name : "Folders" : "Flashcards"}</h3>
-                        <button 
-                            className="flashcards-folders-btn"
-                            onClick = { () => (flashcardsOrFolder === "Folders") ? setFlashcardsOrFolder("Flashcards")  : setFlashcardsOrFolder("Folders")}>
-                                {(flashcardsOrFolder === "Folders") ? "Flashcards" : "Folders" }
-                        </button>
-                    </div> : null
+                        <ToolbarBodyHeader 
+                            flashcardsOrFolder = { flashcardsOrFolder }
+                            setFlashcardsOrFolder = { setFlashcardsOrFolder }
+                            currentFolder = { currentFolder }
+                            setCurrentFolder = { setCurrentFolder }   
+                            editFolderMode = { editFolderMode }
+                            setEditFolderMode = { setEditFolderMode }   
+                            user = { user }
+                            folders = { folders }
+                            setFolders = { setFolders }
+                            addOpeningsToFolder = { addOpeningsToFolder } 
+                        />
+                    : null
                     }
 
 
-                    {/** Body Body */}
+                    {/** Body of Body */}
                     
                     {
-                    (flashcardsOrFolder === "Folders") ? 
+                    (flashcardsOrFolder === "Folders" && currPath.pathname === "/flashcards") ? 
                         
                         <Folders 
                             currentFolder = { currentFolder }
                             testMode = { testMode }
                             autoPlayOpening = { autoPlayOpening }
                             flashcardIdx = { flashcardIdx }
-                            deleteFlashcard = { deleteFlashcard }
                             folders = { folders }
+                            setFolders = { setFolders }
                             deleteFolder = { deleteFolder }
-                            setCurrentFolder = { setCurrentFolder }                  
+                            setCurrentFolder = { setCurrentFolder }        
+                            editFolderMode = { editFolderMode }   
+                            flashcards = { flashcards }
+                            user = { user }
+                            addOpeningsToFolder = { addOpeningsToFolder }
+                            setAddOpeningsToFolder = { setAddOpeningsToFolder }
                         />
                         
                     :

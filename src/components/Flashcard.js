@@ -39,7 +39,7 @@ const Flashcard = (props) => {
                 (showDelete && !testMode && user) ?        
                     <button 
                         onClick = { handleDeleteFlashcard }
-                        className="delete-container">
+                        className="delete-container red-btn">
                     <FaRegTrashAlt />
                     </button>
 

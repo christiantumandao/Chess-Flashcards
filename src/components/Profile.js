@@ -178,11 +178,11 @@ const Profile = (props) => {
 
             <div className="profile-blob">
                 <section className="profile-blobcontent profile-red-btns">
-                    <button onClick = { () => setLogout(true) } >
+                    <button className="red-btn" onClick = { () => setLogout(true) } >
                         Sign out
                     </button>
 
-                    <button onClick = { () => setDel(true) }>
+                    <button className="red-btn" onClick = { () => setDel(true) }>
                         Delete account
                     </button>
                 </section>

@@ -34,25 +34,12 @@ const Folder = (props) => {
         onClick = { ()=> {
             setCurrentFolder(folder);
         } }
-        className="flashcard-wrapper">
+        className="folder-wrapper">
             <div className="flashcard-body">
-                <h4 className="flashcard-title">
+                <h4 className="folder-title">
                     { folder.name }
                 </h4>
 
-            </div>
-            
-            <div className="folders-buttons-container">
-                <button className="edit-container">
-                    <FaEdit />
-                </button>
-                <button 
-                    className='delete-container'
-                    onClick = { handleDelete }
-                    >
-                    
-                    <FaRegTrashAlt />
-                </button>
             </div>
 
         </div> :
