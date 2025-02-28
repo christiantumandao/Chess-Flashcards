@@ -47,7 +47,8 @@
 
 .flashcard-wrapper:hover,
 .folder-wrapper:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightDarkGrey);
+
 }
 
 
@@ -69,8 +70,8 @@
     text-align: left;
 }
 
-.flashcard-highlight {
-    border: .1rem solid var(--darkGreen);
+div.flashcard-highlight {
+    border: 1px solid var(--darkGreen);
     box-shadow: none;
 }
 
@@ -99,23 +100,4 @@
     flex-direction: row;
 }
 
-.edit-container {
-    margin-right: 6px;
-    height: 32px;
-    width: 32px;
-    background-color: var(--eigen);
-    color: white;
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 5px;
-    border: var(--border);
-}
-
-.edit-container:hover {
-    background-color: var(--hoverHighlightLight);
-}
 

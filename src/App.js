@@ -18,7 +18,6 @@ import { useState } from 'react';
  */
 
 function App() {
-
   const [tab, setTab] = useState("explore");
 
   return (
@@ -26,7 +25,7 @@ function App() {
       <Navbar tab = { tab } setTab = { setTab } />
 
       <Routes>
-        <Route path="/" element={<MainBody tab = { tab } />}></Route>
+        <Route path="/" element={<MainBody tab = { tab } setTab = { setTab } />}></Route>
         <Route path="/more" element={<More />}></Route>
         <Route path="/log-in" element={<LogIn login={true}/>}></Route>
         <Route path="/sign-up" element={<LogIn  login={false}/>}></Route>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import { auth, db } from "../firebase.config";
+import { auth, db } from "../../../../firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc, setDoc } from "@firebase/firestore";
-import { validateFolderName } from "../util/helper";
+import { validateFolderName } from "../../../../util/helper";
 
 const CreateFolder = (props) => {
 

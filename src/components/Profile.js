@@ -8,7 +8,6 @@ import { deleteDoc, doc, getDoc } from "@firebase/firestore";
 import { updateFirstName, updateLastName } from "../util/users";
 const Profile = (props) => {
 
-    const { setFlashcards } = props;
     const nav = useNavigate();
 
     const [logout, setLogout] = useState(false);

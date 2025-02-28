@@ -43,6 +43,7 @@
 .selectcolor-container {
     width: 100%;
     height: 38px;
+    min-height: 38px;
     margin: 1rem 0;
 
     display: flex;
@@ -74,21 +75,20 @@
 }
 .selectcolor-container > button:hover,
 .selectcolor-container > select:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightDarkGrey);
 }
 
 .selectcolor-container > button.begin-test:hover {
-    background-color: rgba(81, 112, 88,.5);
     color: white;
     border: 1px solid var(--green);
-    
+    background-color: var(--hoverHighlightGreen);
     
 }
 
 button.begin-test {
     background-color: var(--green);
     margin: 0;
-    border: 1px solid var(--lightGreen);
+
 }
 button.exit-test {
     background-color: rgba(255,0,0,.5);
@@ -153,10 +153,11 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 .search-container button {
     padding: .5rem .8rem;
-    border-left: 1px solid gray;
+    border-left: 1px solid var(--green);
     flex-grow: 1;
-
-}
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}   
 .search-container select:focus {
     outline: none;
 
@@ -164,12 +165,14 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 .search-container button:hover,
 .search-container select:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightGreen);
     color: white;
 }
 
 .search-container select {
     border-right: 10px solid transparent;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .toolbar-title {
@@ -236,7 +239,8 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 .toolbar-body-folder-highlight {
-    background-color: #37323E;
+    /*background-color: #37323E;*/
+    background-color: rgb(69,69,69);
     -webkit-box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);
     -moz-box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);
     box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);
@@ -260,7 +264,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 .toolbar-body-header svg {
-    font-size: 1rem;
+    font-size: 14px;
 }
 
 .toolbar-body-top-header {
@@ -269,10 +273,11 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 45px;
+    max-height: 45px;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    
-    border-bottom: var(--border);
+
 }
 
 
@@ -281,10 +286,6 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     margin-left: auto;
 }
 
-.toolbar-body-header button:hover {
-    background-color: var(--hoverHighlightLight);
-    
-}
 
 .toolbar-body-header .flashcards-folders-back-btn,
 .toolbar-body-header button.edit-folder-btn {
@@ -306,10 +307,8 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 
-.toolbar-body-header .flashcards-folders-back-btn:hover,
-.toolbar-body-header .flashcards-folders-btn:hover,
 .toolbar-body-header button.edit-folder-btn:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightDarkGrey);
 }
 
 .toolbar-body-bottom-header {
@@ -362,10 +361,19 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 .add-folder-input-field input {
     height: 30px;
     width: 100%;
-    font-size: 14px;
-    padding: .5rem;
+
     color: var(--lightGrey);
     margin-top: 5px;
+
+
+    padding: .2rem .5rem;
+    font-size: .9rem;
+    letter-spacing: .2ch;
+    border: var(--border);
+    border-radius: 5px;
+    background-color: var(--darkGrey);
+    color: var(--lightGrey);
+    box-shadow: var(--defaultShadow);
 }
 
 .add-folder-buttons {
@@ -384,22 +392,23 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     background-color: var(--darkGrey);
     border-radius: 5px;
     color: white;
-    font-size: 14px;
+    font-size: 12x;
     font-weight: bolder;
-    padding: .5rem;
+    padding: .2rem .5rem;
 }
 
 button.cancel-create-folder {
-    background-color: var(--lightGrey);
+    background-color: var(--eigen);
 }
 
 .add-folder-buttons > button:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightEigen);
+    border: 1px solid var(--eigen);
 }
 
 .add-folder-buttons button.create-folder:hover {
-    background-color: rgba(81, 112, 88,.5);
-    color: rgb(211, 211, 211);
+    background-color: var(--hoverHighlightGreen);
+    border: 1px solid var(--green);
     
 }
 
@@ -438,7 +447,7 @@ button.cancel-create-folder {
 }
 
 .add-folder-wrapper:hover {
-    background-color: var(--hoverHighlightLight);
+    background-color: var(--hoverHighlightDarkGrey);
     transform: scale(1.02);
 }
 
@@ -489,10 +498,16 @@ button.cancel-create-folder {
     padding: 5px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    font-size: 14px;
+    letter-spacing: .2ch;
 }
 
+.edit-name-field-set button:disabled {
+    border: var(--border);
+    color: var(--lightGrey);
+    background-color: var(--darkGrey);
+}
 
-.toolbar-body-header .flashcards-folders-btn,
 .toolbar-body-header .cancel-edit-folder-btn,
 .toolbar-body-header .delete-folder-btn {
     border: var(--border);
@@ -503,6 +518,8 @@ button.cancel-create-folder {
     font-weight: bolder;
     padding: .5rem;
 }
+
+
 
 div.toolbar-body-top-header button.delete-folder-btn {
     background-color: var(--red);
@@ -518,6 +535,63 @@ div.toolbar-body-top-header button.delete-folder-btn:hover {
     font-weight: bolder;
 }
 
+.folders-flashcards-button-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: center;
+
+    border-radius: 5px;
+
+    border: var(--border);
+}
+
+
+
+.folders-flashcards-button-container > button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.folders-flashcards-button-container > button:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.flashcards-folders-btn-selected {
+    background-color: var(--eigen);
+    border: none;
+
+    flex-grow: 1;
+    color: #303030;
+    font-size: 14px;
+    font-weight: bolder;
+    padding: .5rem;
+}
+div > button.border-right {
+    border-right: var(--border);
+}
+
+.flashcards-folders-btn {
+    border: none;
+
+    flex-grow: 1;
+    background-color: var(--darkGrey);
+
+    color: white;
+    font-size: 14px;
+    font-weight: bolder;
+    padding: .5rem;
+}
+
+.flashcards-folders-btn:hover,
+.cancel-edit-folder-btn:hover,
+.buttons-container > button:hover {
+    background-color: var(--hoverHighlightDarkGrey);
+}
 
 
 .toolbar-footer {
@@ -554,10 +628,6 @@ div.toolbar-body-top-header button.delete-folder-btn:hover {
     border-radius: 5px;
 
     
-}
-
-.buttons-container > button:hover {
-    background-color: var(--hoverHighlightLight);
 }
 
 .buttons-container svg {

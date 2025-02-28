@@ -56,11 +56,13 @@
     border-radius: 10px;
     border: none;
     background-color: var(--green);
-    color: black;
+    color: white;
+    border: 1px solid transparent;
 
 }
 .login-info .login-button:hover {
-    opacity: .7;
+    border: 1px solid var(--lightGreen);
+    background-color: var(--darkGreen);
 }
 
 

@@ -1,15 +1,13 @@
 import React from "react";
-import "../styles/flashcard.css";
-import { useLocation } from "react-router-dom";
+import "../../../../styles/flashcard.css";
 
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase.config";
+import { auth } from "../../../../firebase.config";
 
 
 const Flashcard = (props) => {
     const { flashcard, testMode, flashcardIdx, idx, deleteFlashcard, showDelete } = props;
-    const currPath = useLocation();
 
     const parseName = () => {
         return "["+flashcard.eco+"] "+flashcard.name;
@@ -18,7 +16,7 @@ const Flashcard = (props) => {
 
     const handleDeleteFlashcard = async (e) => {
         e.stopPropagation();
-        await deleteFlashcard(flashcard.eco, flashcard);
+        await deleteFlashcard(flashcard.eco, flashcard, user);
     }
 
     return (

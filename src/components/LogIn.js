@@ -31,6 +31,7 @@ const LogIn = (props) => {
             setEmail("");
             setFirstName("");
             setLastName("");
+            setErrorMessage('');
         }
     },[currPath]);
 
@@ -47,6 +48,8 @@ const LogIn = (props) => {
                 setEmail("");
                 setPassword("")
                 setConfirmPassword("");
+                setFirstName("");
+                setFirstName("");
                 nav("/flashcards");
             })
             .catch((error) => {

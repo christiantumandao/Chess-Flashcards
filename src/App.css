@@ -7,7 +7,6 @@
 }
 :root {
   --navbarWidth: 200px;
-  /*--toolbarFootHeight: 60px;*/
   --toolbarFootHeight: auto;
   --mobileTBFootHeight: 50px;
 
@@ -18,15 +17,21 @@
 
   --hoverHighlightDark: rgba(0,0,0,.5);
   --hoverHighlightLight: rgba(255,255,255,.04);
-
+  --hoverHighlightEigen: rgb(61, 61, 68);
+  --hoverHighlightDarkGrey: rgb(29, 29, 39);
+  --hoverHighlightGreen: rgba(81, 112, 88,.5);
 
   --border: 1px solid rgba(68, 68, 74, .4); 
+
   --darkGrey: rgb(17, 17, 23);
   --lightGrey: rgb(115,115,119);
+
   --eigen: #16161d;
+
   --darkGreen: #2b3b31;
   --green: #517058;
   --lightGreen: #799981;
+
   --red: rgba(255,0,0,.5);
   --lightRed: rgba(255,26,26,.6);
 }

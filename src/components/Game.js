@@ -1,7 +1,6 @@
 import React, { useState , useEffect} from "react";
 import "../styles/game.css";
 
-import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { db, auth } from "../firebase.config";
 import { collection, query, where, getDocs, updateDoc, doc, getDoc } from "@firebase/firestore";
@@ -20,7 +19,7 @@ const Game = (props) => {
 
     const { game, setGame, 
         currOpening, makeAMove,
-        setCurrOpening, flashcards, 
+        setCurrOpening, 
         color, 
         testMode, flashcardIdx, 
         setFlashcardIdx, flashcardMoves, setFlashcardMoves,
@@ -194,7 +193,7 @@ const Game = (props) => {
             if (currFen === startingFen) return;
             const openingsCollection = collection(db, 'openings');
             
-            const q = await query(openingsCollection, where("fen", "==",currFen));
+            const q =  query(openingsCollection, where("fen", "==",currFen));
 
             const querySnapshot = await getDocs(q);
             
@@ -225,6 +224,7 @@ const Game = (props) => {
                 <Chessboard 
                     position = { game.fen() }
                     onPieceDrop = { onDrop }
+                    
 
                     animationDuration={(autoPlay) ? animationSpeed : 0}
                     boardOrientation={(color==='both') ? 'white' : color}

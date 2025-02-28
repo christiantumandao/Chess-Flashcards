@@ -20,13 +20,72 @@ const getDefaultCards = (setFlashcards) => {
                 name: "French Defense: Advance Variation"
             },
 
-        ])
+        ]);
+
     } catch (e) {
-        console.log(e);
+        console.error(e);
+    }
+}
+
+const getDefaultFolders = (setFolders) => {
+    try {
+        setFolders([
+            {
+                name: "King's Pawn Openings",
+                openings: [
+                    {
+                        eco: "C44",
+                        fen: "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+                        moves: "1. e4 e5 2. Nf3 Nc6 3. d4",
+                        name: "Scotch Game"
+                    },
+                    {
+                        eco: "C60",
+                        fen: "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+                        moves: "1. e4 e5 2. Nf3 Nc6 3. Bb5",
+                        name: "Ruy Lopez"
+                    },
+                    {
+                        eco: "C36",
+                        fen: "rnbqkbnr/ppp2ppp/8/3P4/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+                        moves: "1. e4 e5 2. f4 exf4 3. Nf3 d5 4. exd5",
+                        name: "King's Gambit Accepted: Modern Defense"
+                    }
+                ]
+            },
+            {
+                name: "Queen's Pawn Openings",
+                openings: [
+                    {
+                        eco: "D02",
+                        fen: "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3",
+                        moves: "1. d4 d5 2. Nf3 Nf6 3. Bf4",
+                        name: "Queen's Pawn Game: London System"
+                    },
+                    {
+                        eco: "D53",
+                        fen: "rnbqk2r/ppp1bppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+                        moves: "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7",
+                        name: "Queen's Gambit Declined"
+                    },
+                    {
+                        eco: "A85",
+                        fen: "rnbqkb1r/ppppp2p/5np1/5pB1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 1 4",
+                        moves: "1. d4 f5 2. c4 Nf6 3. Nc3 g6 4. Bg5",
+                        name: "Dutch: Queen's Knigh Variation"
+                    }
+                ]
+            }
+
+        ]);
+
+    } catch (e) {
+        console.error(e);
     }
 }
 
 const parseQuery = (str) => {
+    console.log(str)
     return str.replace(/\b\w/g, function (match) {
         return match.toUpperCase();
     });
@@ -74,4 +133,4 @@ const validateFolderName = (name, setErrorMessage, folders) => {
     return true;
 }
 
-export { getDefaultCards, parseQuery, parseName, shuffleCards, validateFolderName };
+export { getDefaultCards, parseQuery, parseName, shuffleCards, validateFolderName, getDefaultFolders };

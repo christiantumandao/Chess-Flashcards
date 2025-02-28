@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "../styles/navbar.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { auth } from "../firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { Chess } from "chess.js";
 
-import { FaSearch } from "react-icons/fa";
 import { PiCardsLight } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
 import { BsThreeDots } from "react-icons/bs";
 import { IoReorderThree } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

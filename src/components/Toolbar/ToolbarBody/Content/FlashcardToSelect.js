@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
-const FlashcardToAdd = (props) => {
+const FlashcardToSelect = (props) => {
 
-    const { autoPlayOpening, flashcard, setOpeningsToAdd, openingsToAdd, selected } = props;
+    const { autoPlayOpening, flashcard, setSelectedFlashcards, selectedFlashcards, selected } = props;
 
     const handlePlay = (e) => {
         e.stopPropagation();
@@ -11,12 +11,12 @@ const FlashcardToAdd = (props) => {
     return (
         <div onClick = {()=>{
             if (!selected) {
-                const newOpeningsToAdd = [...openingsToAdd];
-                newOpeningsToAdd.push(flashcard);
-                setOpeningsToAdd(newOpeningsToAdd);
+                const newSelectedFlashcards = [...selectedFlashcards];
+                newSelectedFlashcards.push(flashcard);
+                setSelectedFlashcards(newSelectedFlashcards);
             } else {
-                const newOpeningsToAdd = openingsToAdd.filter((f) => f.eco !== flashcard.eco);
-                setOpeningsToAdd(newOpeningsToAdd);
+                const newSelectedFlashcards = selectedFlashcards.filter((f) => f.eco !== flashcard.eco);
+                setSelectedFlashcards(newSelectedFlashcards);
             }
 
         }}
@@ -45,4 +45,4 @@ const FlashcardToAdd = (props) => {
     )
 }
 
-export default FlashcardToAdd;
+export default FlashcardToSelect;

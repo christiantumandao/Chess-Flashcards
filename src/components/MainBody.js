@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Game from "./Game";
-import Toolbar from "./Toolbar";
+import Toolbar from "./Toolbar/Toolbar";
 
 import { Chess } from "chess.js";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -11,8 +11,7 @@ const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const MainBody = (props) => {
 
    // const { tab,flashcards,setFlashcards  } = props;
-   const { tab } = props;
-    const [user] = useAuthState(auth);
+   const { tab, setTab } = props;
 
     const [game, setGame] = useState(new Chess()); 
     const [history, setHistory] = useState([startingFen]);
@@ -256,6 +255,7 @@ const MainBody = (props) => {
                 autoPlayOpening = { autoPlayOpening }
                 color = { color }
                 setColor = { setColor }
+                setTab = { setTab }
 
                 folders = { folders }
                 setFolders = { setFolders }
