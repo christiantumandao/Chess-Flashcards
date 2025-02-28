@@ -24,6 +24,7 @@ const Game = (props) => {
         testMode, flashcardIdx, 
         setFlashcardIdx, flashcardMoves, setFlashcardMoves,
         playerMoveIdx, setPlayerMoveIdx, parseMoves,
+        setMoveHistory,
         onFinishFlashcards, autoPlay, testingFlashcards } = props;
 
     const [flashGreen, setFlashGreen] = useState(false);
@@ -137,6 +138,7 @@ const Game = (props) => {
             setCurrOpening(newFlashcard);
             setFlashcardIdx(idx);
             setFlashcardMoves(newMoves);
+            setMoveHistory([]);
     
             setPlayerMoveIdx(0);
             incrementCorrects();

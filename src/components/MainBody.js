@@ -68,9 +68,9 @@ const MainBody = (props) => {
     // event listener for seeing player history with arrows
     useEffect(() => {
         const handleKeyPress = (event) => {
-            if (event.key === 'ArrowLeft') {
+            if (event.key === 'ArrowLeft' && !testMode) {
                 undo();
-            } else if (event.key === 'ArrowRight') {
+            } else if (event.key === 'ArrowRight' && !testMode) {
                 redo();
               }
 
@@ -134,6 +134,8 @@ const MainBody = (props) => {
         setPlayerMoveIdx(0);
         setCurrOpening(flashcardsToTest[0]);
         setGame(new Chess());
+        setMoveHistory([]);
+        setHistory([startingFen]);
     }
 
     const onFinishFlashcards = () => {
@@ -144,6 +146,8 @@ const MainBody = (props) => {
         setPlayerMoveIdx(0);
         setCurrOpening(null);
         setTestingFlashcards([]);
+        setMoveHistory([]);
+        setHistory([startingFen]);
     }
 
 
@@ -153,6 +157,7 @@ const MainBody = (props) => {
         setHistory([startingFen]);
         setCurrMove(0);
 
+        setMoveHistory([]);
         const moves = parseMoves(flashcard.moves);
         setCurrOpening(flashcard);
         setAutoPlay(true);
@@ -211,6 +216,7 @@ const MainBody = (props) => {
                 restart = { restart }
                 history = { history }
                 moveHistory = { moveHistory }
+                setMoveHistory = { setMoveHistory }
                 currMove = { currMove }
                 setGame = { setGame }
                 makeAMove = { makeAMove }

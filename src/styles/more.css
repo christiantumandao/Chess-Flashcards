@@ -77,9 +77,6 @@ article > h3 > svg {
     column-fill: balance;
 }
 
-article > ul {
-}
-
 article li {
     margin-left: 15px;
     color: white;
@@ -88,8 +85,7 @@ article li {
 
 
 @media (max-width: 1024px) {
-    .more-blob {
-    }
+
 }
 
 @media (max-width: 425px) {
