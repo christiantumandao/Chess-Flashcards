@@ -7,6 +7,7 @@ import { parseName, shuffleCards } from "../../../util/helper";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import TopHeaderExplore from "./TopHeaderExplore";
+import { BsCaretDown } from "react-icons/bs";
 
 const ToolbarHeader = (props) => {
 
@@ -206,6 +207,7 @@ const ToolbarHeader = (props) => {
                             <option value = "white">White</option>
                             <option value = "black">Black</option>
                         </select>
+                        <BsCaretDown />
                         <button 
                             className="begin-test" 
                             onClick={ handleBegin }>

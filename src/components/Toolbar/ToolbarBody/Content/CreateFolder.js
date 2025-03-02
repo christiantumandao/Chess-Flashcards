@@ -20,7 +20,6 @@ const CreateFolder = (props) => {
 
     const handleCreateFolder = async (e) => {
         e.preventDefault();
-        console.log("submitting");
         if (!user) {
             setErrorMessage("You must be signed in to create a folder!");
             return;
@@ -48,7 +47,6 @@ const CreateFolder = (props) => {
                     newFolders.push(folderToAdd);
                     setFolders(newFolders);
                     setShowAddFolder(false);
-                    console.log("folder created");
                 }).catch( (e) => {
                     console.error(e);
                 })

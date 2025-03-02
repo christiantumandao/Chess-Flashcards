@@ -87,8 +87,9 @@ div.flashcard-highlight {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    color: black;
     border-radius: 5px;
+    margin-left: 5px;
 }
 
 .delete-container svg {

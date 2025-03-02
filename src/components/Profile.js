@@ -117,11 +117,11 @@ const Profile = (props) => {
             <div className="profile-blob">
                 <section className="profile-blobcontent">
                     <h3>Profile</h3>
-                    <div className="profile-field">
+                    <div className="profile-field profile-setting">
                         <div>E-mail</div>
                         <p className="email">{(userData) ? userData.email : null}</p>
                     </div>
-                    <div className="profile-field">
+                    <div className="profile-field profile-setting">
                         <div>First Name</div>
                         <input 
                             placeholder={(userData) ? userData.firstName : null}
@@ -134,7 +134,7 @@ const Profile = (props) => {
                                 : null
                         }
                     </div>
-                    <div className="profile-field">
+                    <div className="profile-field profile-setting">
                         <div>Last Name</div>
                         <input 
                             placeholder={(userData) ? userData.lastName : null}

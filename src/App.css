@@ -8,7 +8,7 @@
 :root {
   --navbarWidth: 200px;
   --toolbarFootHeight: auto;
-  --mobileTBFootHeight: 50px;
+  --mobileTBFootHeight: 40px;
 
   --btnRadius: 5px;
   --defaultRadius: 10px;
@@ -36,15 +36,37 @@
   --lightRed: rgba(255,26,26,.6);
 }
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 16px;
+}
+
+select > option {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
+}
+
+html {
+  overscroll-behavior: none;
+  background-color: var(--darkGrey);
+}
+
+
 body {
   font-family: 'Poppins', sans-serif;
   overscroll-behavior: none;
+
 }
 
 .App {
   max-height: 100vh;
   overflow: scroll;
 }
+
 
 
 .mainbody {
@@ -276,6 +298,7 @@ button.delete:hover {
 }
 
 
+
   div.toolbar-container {
     height: 100%;
   }
@@ -301,9 +324,11 @@ button.delete:hover {
 }
 
 @media (max-width: 768px) {
+
   div.App {
     max-height: none;
-    width: auto !important;
+    height: auto;
+    width: 100% !important;
   }
   .mainbody {
     flex-direction: column;
@@ -328,7 +353,6 @@ button.delete:hover {
   div.toolbar-wrapper {
     width: 360px;
 
-    max-height: 100%;
     padding: 0 20px; 
 
     width: 100%;
@@ -342,10 +366,6 @@ div.small-modal-message,
 div.small-modal-buttons > button {
   font-size: 16px;
 }
-
-div.toolbar-container > div.toolbar-body {
-  max-height: 400px;
-}
 div.game-wrapper {
     height: auto;
     width: 100vw;
@@ -355,28 +375,42 @@ div.game-wrapper {
     flex: 1 1 0;
     padding-top: 10px;
 }
+
+div.buttons-container > button:hover {
+  background-color: transparent;
+}
+div.buttons-container > button:hover > svg {
+  color: grey;
+}
+div.toolbar-container {
+  height: auto;
+}
+div.toolbar-body {
+  max-height: 60vh;
+  overflow-y: scroll;
+  padding-bottom: 0;
+  overscroll-behavior: none;
+}
+
 }
 
 @media (max-width: 425px) {
-  html {
-    background-color: var(--darkGrey);
-  }
 
   div.navbar-icon {
-    margin: 0;
     height: auto;
+    margin: 0;
   }
 
   div.navbar-icon > button {
     background-color: transparent;
     width: auto;
-
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 0;
-    margin-left: 5px;
+    margin: 10px;
+    font-size: 28px;
   }
 
   div.toolbar-title {
@@ -407,19 +441,74 @@ div.game-wrapper {
 
   div.search-container {
     order: 2;
-    border-bottom: var(--border);
-    padding-bottom: 15px;
-    margin-bottom: 0;
+    margin: 0;
+    margin-top: 15px;
+  }
+  div.search-container > * {
+    height: 38px;
   }
   .search-container select {
     font-size: 14px;
+  }
+  div.search-btns {
+    min-width: 0;
+  }
+  div.search-btns > svg {
+    right: 58px;
+  }
+  div.search-btns > input {
+    min-width: 100px;
   }
 
   h4.flashcard-title {
     font-size: 12px;
   }
 
-  div.toolbar-body {
-    padding-top: 0;
+  div.toolbar-header > .toolbar-description {
+    order: 1;
   }
+  div.toolbar-header > .selectcolor-container {
+    order: 2;
+    border-bottom: var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 0;
+  }
+  div.toolbar-body {
+
+    padding-top: 15px;
+    max-height: 70vh;
+  }
+
+
+  div.movepair-container {
+    height: 40px;
+    padding: 5px;
+  }
+
+  div.white-move, div.black-move, div.move-number {
+    font-size: 14px;
+  }
+
+  div.toolbar-footer {
+    margin: 0;
+    order: 1;
+    height: auto;
+  }
+
+  div.buttons-container > button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 10px 20px;
+  }
+
+  div.toolbar-body {
+    order: 3;
+  }
+
+  div.toolbar-header {
+    order:2;
+  }
+
+
 }

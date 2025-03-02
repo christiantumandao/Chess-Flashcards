@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import search from "../../../util/search";
+import { BsCaretDown } from "react-icons/bs";
 
 const TopHeaderExplore = (props) => {
 
@@ -26,6 +27,7 @@ const TopHeaderExplore = (props) => {
                 onChange = { (e)=> setSearchQuery(e.target.value)}
                 required
             />
+
             <div className="search-btns">
                 <select
                     value = { resultLimit }
@@ -37,6 +39,7 @@ const TopHeaderExplore = (props) => {
                     <option value = {50}>50</option>
 
                 </select>
+                <BsCaretDown />
                 <button
                     disabled = { searchQuery.length === 0 }
                     onClick = { ()=>search(searchQuery, setSearchResults, resultLimit) }

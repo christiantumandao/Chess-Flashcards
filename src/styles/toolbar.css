@@ -61,8 +61,19 @@
     font-size: 14px;
     font-weight: bolder;
     padding: .5rem;
-    margin: 0 15px;
-    
+    margin: 0 15px;  
+}
+
+div.selectcolor-container > select {
+    padding-right: 24px;
+    margin-right: 0;
+}
+
+.selectcolor-container svg {
+    font-size: 12px;
+    position: relative;
+    right: 18px;
+    color: white;
 }
 
 .selectcolor-container > select:focus {
@@ -120,6 +131,7 @@ input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 
+
 .search-btns {
     background-color: var(--darkGreen);
     border-radius: 5px;
@@ -127,24 +139,26 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     height: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;
     min-width: 100px;
 }
 
-.search-btns > * {
+.search-btns > input,
+.search-btns > button,
+.search-btns > select {
     background-color: transparent;
     border: none;
     padding: .5rem;
     font-size: 1rem;
     color: white;
     font-weight: bolder;
+    height: 100%;
 
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
-
-
 
 .search-container button {
     padding: .5rem .8rem;
@@ -165,10 +179,20 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 .search-container select {
-    border-right: 10px solid transparent;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+
+    padding-right: 24px;
+    margin-right: 0;
 }
+
+.search-btns > svg {
+    font-size: 12px;
+    position: absolute;
+    right: 65px;
+    color: white;
+}
+
 
 .toolbar-title {
     border-bottom: var(--border);

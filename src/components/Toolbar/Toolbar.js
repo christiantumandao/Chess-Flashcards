@@ -184,11 +184,7 @@ const Toolbar = (props) => {
                         {
                         (!testMode) ? 
                         <>
-                            <button
-                                onClick = { ()=>{
-                                    restart();
-                                } }
-                            >
+                            <button onClick = { restart }>
                                 <FaRedo />
                             </button>
     
@@ -196,24 +192,17 @@ const Toolbar = (props) => {
                                 onClick = { () => {
                                     if (color === 'white' || color ==='both') setColor('black');
                                     else setColor('white');
-                                } }
+                                }}
                             >
                                 <FaArrowsAltV />
                             </button>
 
-                            <button
-                                onClick = { ()=> {
-                                    undo()
-                                }}
-                            >
+                            <button onClick = { undo }>
                                 <FaArrowLeft />
                             </button>
 
                             <button
-                                onClick = { ()=> {
-                                    redo()
-                                }}
-                            >
+                                onClick = { redo } >
                             <FaArrowRight />
                             </button>
                         </> : null
