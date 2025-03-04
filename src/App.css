@@ -52,7 +52,6 @@ select > option {
 
 html {
   overscroll-behavior: none;
-  background-color: var(--darkGrey);
 }
 
 
