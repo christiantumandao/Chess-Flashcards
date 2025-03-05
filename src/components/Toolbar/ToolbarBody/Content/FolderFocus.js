@@ -49,7 +49,7 @@ const FolderFocus = (props) => {
                     setFolders = { setFolders }
                     autoPlayOpening = { autoPlayOpening }
                     flashcardIdx = { flashcardIdx }
-                    showDelete = { false }
+                    showDelete = { editFolderMode }
                     toolbarTab = { toolbarTab }
                     currentFolder = { currentFolder }
                     setCurrentFolder = { setCurrentFolder }

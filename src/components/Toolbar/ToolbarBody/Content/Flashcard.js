@@ -21,9 +21,6 @@ const Flashcard = (props) => {
             folders,
             toolbarTab } = props;
 
-    const parseName = () => {
-        return "["+flashcard.eco+"] "+flashcard.name;
-    }
     const [user] = useAuthState(auth);
     const [editFlashcard, setEditFlashcard] = useState(false);
     const [newName, setNewName] = useState("");
@@ -169,6 +166,10 @@ const Flashcard = (props) => {
         }
     }
 
+    const parseName = () => {
+        return "["+flashcard.eco+"] "+flashcard.name;
+    }
+
     return (
         <div 
             className={(testMode && idx === flashcardIdx) ? "flashcard-wrapper flashcard-highlight" : "flashcard-wrapper"} 
@@ -188,6 +189,16 @@ const Flashcard = (props) => {
                 (editFlashcard) ?
                     getEditingFlashcardButtons() :
                     getFlashcardButtons()
+            }
+
+            {
+                (showDelete) ? 
+                   <button 
+                    onClick = { handleDeleteFlashcard }
+                    className="red-btn delete-flashcard-btn flashcard-button-container">
+                        <FaRegTrashAlt />
+                   </button>
+                : null
             }
 
 

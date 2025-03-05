@@ -7,7 +7,6 @@ import FolderFocus from "./FolderFocus";
 import Folders from "./Folders";
 import { useLocation } from "react-router-dom";
 import { getDefaultCards } from "../../../../util/helper";
-import SelectOpeningsInFolder from "./SelectOpeningsInFolder";
 
 const ToolbarContent = (props) => {
 
@@ -18,6 +17,7 @@ const ToolbarContent = (props) => {
         getUserCards,
         toolbarTab, setToolbarTab,
         editFolderMode, setEditFolderMode,
+        editFlashcardsMode, setEditFlashcardsMode,
         addOpeningsToFolder, setAddOpeningsToFolder,
 
         autoPlayOpening,
@@ -143,13 +143,14 @@ const ToolbarContent = (props) => {
                             key = { flashcard.moves + idx }
                             idx = { idx }
                             testMode = { testMode }
+                            
                             flashcard = { flashcard }
                             flashcards = { flashcards }
                             setFlashcards = { setFlashcards }
                             autoPlayOpening = { autoPlayOpening }
                             flashcardIdx = { flashcardIdx }
                             deleteFlashcard = { deleteFlashcard }
-                            showDelete = { true }
+                            showDelete = { editFlashcardsMode }
                             toolbarTab = { toolbarTab }
                             folders = { folders }
                         />
@@ -171,13 +172,16 @@ const ToolbarContent = (props) => {
                         <Flashcard
                             key = { flashcard.moves }
                             idx = { idx }
-                            testMode = { testMode }
+                            showDelete = { false }
                             toolbarTab = { toolbarTab }
+
+                            folders = { folders }
                             flashcard = { flashcard }
                             flashcards = { flashcards }
                             setFlashcards = { setFlashcards }
+
                             autoPlayOpening = { autoPlayOpening }
-                            folders = { folders }
+                            testMode = { testMode }
                         />
                     ))
                 : (currPath.pathname === "/") ? 

@@ -301,21 +301,23 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 
 
-.toolbar-body-top-header > button.edit-folder-btn {
+.toolbar-body-top-header > button.edit-folder-btn,
+.toolbar-body-top-header > button.cancel-edit-flashcards-btn {
     margin-left: auto;
 }
 
 
 .toolbar-body-header .flashcards-folders-back-btn,
-.toolbar-body-header button.edit-folder-btn {
+.toolbar-body-header button.edit-folder-btn,
+button.cancel-edit-flashcards-btn {
     border: var(--border);
     background-color: var(--darkGrey);
     border-radius: 5px;
     color: white;
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: bolder;
-    padding: .4rem;
-
+    padding: 5px;
+    padding: 7px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -326,7 +328,8 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 }
 
 
-.toolbar-body-header button.edit-folder-btn:hover {
+.toolbar-body-header button.edit-folder-btn:hover,
+.toolbar-body-top-header > button.cancel-edit-flashcards-btn:hover {
     background-color: var(--hoverHighlightDarkGrey);
 }
 

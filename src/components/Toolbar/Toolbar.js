@@ -38,6 +38,7 @@ const Toolbar = (props) => {
 
     const [toolbarTab, setToolbarTab] = useState("Flashcards");
     const [editFolderMode, setEditFolderMode] = useState(false);
+    const [editFlashcardsMode, setEditFlashcardsMode] = useState(false);
     const [currentFolder, setCurrentFolder] = useState(null);
     const [addOpeningsToFolder, setAddOpeningsToFolder] = useState(false);
 
@@ -167,6 +168,8 @@ const Toolbar = (props) => {
 
                     editFolderMode = { editFolderMode }
                     setEditFolderMode = { setEditFolderMode }
+                    editFlashcardsMode = { editFlashcardsMode }
+                    setEditFlashcardsMode = { setEditFlashcardsMode }
 
                     addOpeningsToFolder = { addOpeningsToFolder }
                     setAddOpeningsToFolder = { setAddOpeningsToFolder }

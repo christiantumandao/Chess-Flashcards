@@ -102,7 +102,7 @@ div.flashcard-highlight {
     margin-left: 5px;
 }
 
-.flashcard-button-container svg {
+.flashcard-body svg {
     font-weight: bolder;
 }
 
@@ -112,6 +112,7 @@ div.flashcard-highlight {
     color: white;
     padding: 5px;
     border-radius:5px;
+    height: 32px;
 }
 .edit-flashcard-button:hover {
     background-color: var(--hoverHighlightDarkGrey);
@@ -160,3 +161,16 @@ button.edit-flashcard-btn {
     border: 1px solid var(--green);
 }
 
+.delete-flashcard-btn {
+    border: 1px solid transparent;
+    color: black;
+    padding: 5px;
+
+    border-left: none;
+    border-radius: 5px;
+
+}
+
+.delete-flashcard-btn > svg {
+    font-weight: bolder;
+}

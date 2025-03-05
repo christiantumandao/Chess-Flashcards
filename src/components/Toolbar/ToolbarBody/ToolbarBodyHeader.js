@@ -10,8 +10,11 @@ const ToolbarBodyHeader = (props) => {
         setToolbarTab,
         currentFolder,
         setCurrentFolder,
+        
         editFolderMode,
         setEditFolderMode,
+        editFlashcardsMode,
+        setEditFlashcardsMode,
 
         user,
         folders,
@@ -23,6 +26,14 @@ const ToolbarBodyHeader = (props) => {
 
     useEffect(()=>{
         setEditFolderMode(false);
+        setEditFlashcardsMode(false);
+
+        return (
+            () => {
+                setEditFolderMode(false);
+                setEditFlashcardsMode(false);               
+            }
+        )
     },[])
 
     // CONDITIONAL COMPONENTS
@@ -31,12 +42,23 @@ const ToolbarBodyHeader = (props) => {
         return (
             <div className="toolbar-body-top-header">   
             {  
-                (editFolderMode) ?
-                    getEditFolderTopHeaderComponent() :
-                    getFlashcardsOrFolders()
+                    (editFolderMode) ?
+                        getEditFolderTopHeaderComponent()
+                :   (editFlashcardsMode) ?
+                        getEditFlashcardsTopHeaderComponent() 
+                :
+                        getFlashcardsOrFolders()
                     
             }
             </div>
+        )
+    }
+
+    const getEditFlashcardsTopHeaderComponent = () => {
+        return (
+            <button onClick = { () => setEditFlashcardsMode(false) }className="cancel-edit-flashcards-btn">
+                Cancel
+            </button>
         )
     }
 
@@ -115,7 +137,10 @@ const ToolbarBodyHeader = (props) => {
                     <button onClick = { () => setEditFolderMode(true) }className="edit-folder-btn">
                         <FaRegEdit />
                     </button>
-                :  null
+                :  (toolbarTab === "Flashcards" && !editFlashcardsMode && user) ? 
+                    <button onClick = { () => setEditFlashcardsMode(true) }className="edit-folder-btn">
+                        <FaRegEdit />
+                    </button> : null  
             }
             </div>
         )

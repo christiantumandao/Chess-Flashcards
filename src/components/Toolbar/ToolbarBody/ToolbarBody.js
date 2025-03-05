@@ -15,6 +15,7 @@ const ToolbarBody = (props) => {
             toolbarTab, setToolbarTab,
 
             editFolderMode, setEditFolderMode,
+            editFlashcardsMode, setEditFlashcardsMode,
 
             addOpeningsToFolder, setAddOpeningsToFolder,
 
@@ -42,14 +43,18 @@ const ToolbarBody = (props) => {
                         toolbarTab = { toolbarTab }
                         setToolbarTab = { setToolbarTab }
                         currentFolder = { currentFolder }
-                        setCurrentFolder = { setCurrentFolder }   
-                        editFolderMode = { editFolderMode }
-                        setEditFolderMode = { setEditFolderMode }   
-                        user = { user }
+                        setCurrentFolder = { setCurrentFolder }  
                         folders = { folders }
-                        setFolders = { setFolders }
+                        setFolders = { setFolders } 
+
                         addOpeningsToFolder = { addOpeningsToFolder } 
                         setAddOpeningsToFolder = { setAddOpeningsToFolder }
+                        editFolderMode = { editFolderMode }
+                        setEditFolderMode = { setEditFolderMode }   
+                        editFlashcardsMode = { editFlashcardsMode }
+                        setEditFlashcardsMode = { setEditFlashcardsMode }
+
+                        user = { user }
                         testMode = { testMode }
                     />
                     : null
@@ -68,9 +73,12 @@ const ToolbarBody = (props) => {
                 getUserCards = { getUserCards }
                 toolbarTab = { toolbarTab } 
                 setToolbarTab = { setToolbarTab }
+                
                 editFolderMode = { editFolderMode } 
                 setEditFolderMode = { setEditFolderMode }
                 addOpeningsToFolder = { addOpeningsToFolder } 
+                editFlashcardsMode = { editFlashcardsMode }
+                setEditFlashcardsMode = { setEditFlashcardsMode }
                 setAddOpeningsToFolder = { setAddOpeningsToFolder }
         
                 autoPlayOpening = { autoPlayOpening }
