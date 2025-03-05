@@ -128,6 +128,8 @@ const ToolbarContent = (props) => {
                     setFolders = { setFolders }
                     setCurrentFolder = { setCurrentFolder }
                     setEditFolderMode = { setEditFolderMode }
+                    toolbarTab = { toolbarTab }
+                    setFlashcards = { setFlashcards }
 
                 />
 
@@ -142,10 +144,14 @@ const ToolbarContent = (props) => {
                             idx = { idx }
                             testMode = { testMode }
                             flashcard = { flashcard }
+                            flashcards = { flashcards }
+                            setFlashcards = { setFlashcards }
                             autoPlayOpening = { autoPlayOpening }
                             flashcardIdx = { flashcardIdx }
                             deleteFlashcard = { deleteFlashcard }
                             showDelete = { true }
+                            toolbarTab = { toolbarTab }
+                            folders = { folders }
                         />
                     )) 
                 // if searched, none found
@@ -166,8 +172,12 @@ const ToolbarContent = (props) => {
                             key = { flashcard.moves }
                             idx = { idx }
                             testMode = { testMode }
+                            toolbarTab = { toolbarTab }
                             flashcard = { flashcard }
+                            flashcards = { flashcards }
+                            setFlashcards = { setFlashcards }
                             autoPlayOpening = { autoPlayOpening }
+                            folders = { folders }
                         />
                     ))
                 : (currPath.pathname === "/") ? 

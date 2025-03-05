@@ -134,12 +134,12 @@ const SelectOpeningsInFolder = (props) => {
             (currentFolder.openings.length > 0) ? 
                 currentFolder.openings.map((flashcard, idx)=>
                     <FlashcardToSelect 
-                        key = { flashcard.eco }
+                        key = { flashcard.moves + idx }
                         flashcard = { flashcard }
                         autoPlayOpening = { autoPlayOpening }
                         setSelectedFlashcards = { setSelectedFlashcards }
                         selectedFlashcards = { selectedFlashcards }
-                        selected = { selectedFlashcards.some(f => f.eco === flashcard.eco) }
+                        selected = { selectedFlashcards.some(f => f.moves + idx === flashcard.moves + idx) }
                     />
                 ) 
             : 
@@ -154,12 +154,12 @@ const SelectOpeningsInFolder = (props) => {
             (addableFlashcards.length > 0) ? 
                 addableFlashcards.map((flashcard, idx)=>
                     <FlashcardToSelect 
-                        key = { flashcard.eco }
+                        key = { flashcard.moves  + idx}
                         flashcard = { flashcard }
                         autoPlayOpening = { autoPlayOpening }
                         setSelectedFlashcards = { setSelectedFlashcards }
                         selectedFlashcards = { selectedFlashcards }
-                        selected = { selectedFlashcards.some(f => f.eco === flashcard.eco) }
+                        selected = { selectedFlashcards.some(f => f.moves + idx === flashcard.moves + idx) }
                     />
                 ) 
             : 

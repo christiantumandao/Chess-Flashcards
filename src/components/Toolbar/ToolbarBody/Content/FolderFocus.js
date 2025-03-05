@@ -17,6 +17,8 @@ const FolderFocus = (props) => {
         folders, 
         setFolders,
         setCurrentFolder,
+        toolbarTab, 
+        setFlashcards
     } = props;
 
     
@@ -42,9 +44,17 @@ const FolderFocus = (props) => {
                     idx = { idx }
                     testMode = { testMode }
                     flashcard = { opening }
+                    setFlashcards = { setFlashcards }
+                    flashcards = { flashcards }
+                    setFolders = { setFolders }
                     autoPlayOpening = { autoPlayOpening }
                     flashcardIdx = { flashcardIdx }
                     showDelete = { false }
+                    toolbarTab = { toolbarTab }
+                    currentFolder = { currentFolder }
+                    setCurrentFolder = { setCurrentFolder }
+                    folders = { folders }
+
                 />
             ))
 

@@ -15,7 +15,7 @@ const FlashcardToSelect = (props) => {
                 newSelectedFlashcards.push(flashcard);
                 setSelectedFlashcards(newSelectedFlashcards);
             } else {
-                const newSelectedFlashcards = selectedFlashcards.filter((f) => f.eco !== flashcard.eco);
+                const newSelectedFlashcards = selectedFlashcards.filter((f) => f.moves !== flashcard.moves);
                 setSelectedFlashcards(newSelectedFlashcards);
             }
 

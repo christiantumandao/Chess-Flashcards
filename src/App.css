@@ -124,6 +124,15 @@ input {
   border: 1px solid var(--red);
 }
 
+.green-btn {
+  background-color: var(--green);
+  border: 1px solid transparent;
+}
+.green-btn:hover {
+  background-color: var(--darkGreen);
+  border: 1px solid var(--lightGreen);
+}
+
 input::placeholder {
   color: rgb(69,69,74);
 }

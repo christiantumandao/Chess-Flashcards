@@ -1,22 +1,172 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../../styles/flashcard.css";
 
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../../firebase.config";
+import { auth, db } from "../../../../firebase.config";
+import { doc, setDoc } from "@firebase/firestore";
 
 
 const Flashcard = (props) => {
-    const { flashcard, testMode, flashcardIdx, idx, deleteFlashcard, showDelete } = props;
+    const { flashcard,
+            flashcards,
+            setFlashcards,
+            testMode, 
+            flashcardIdx, 
+            idx, 
+            deleteFlashcard, 
+            showDelete,
+            currentFolder, setCurrentFolder,
+            setFolders,
+            folders,
+            toolbarTab } = props;
 
     const parseName = () => {
         return "["+flashcard.eco+"] "+flashcard.name;
     }
     const [user] = useAuthState(auth);
+    const [editFlashcard, setEditFlashcard] = useState(false);
+    const [newName, setNewName] = useState("");
+
+    useEffect(()=>{
+        setNewName("");
+    },[editFlashcard])
 
     const handleDeleteFlashcard = async (e) => {
         e.stopPropagation();
         await deleteFlashcard(flashcard.eco, flashcard, user);
+    }
+
+    const getFlashcardContent = () => {
+        return(
+            <>
+                <h4 className="flashcard-title">
+                    { (flashcard) ? parseName() : null}
+                </h4>
+                <p>
+                    {(testMode) ? null : flashcard.moves }
+                </p>
+            </>
+        )
+    }
+
+    const getEditFlashcard = () => {
+        return (
+            <form 
+                className="edit-flashcard-name-form"
+                onSubmit = { handleEditFlashcardName }>
+                    
+                <input 
+                    placeholder={(flashcard) ? parseName() : null }
+                    value = { newName }
+                    onChange = { (e) => setNewName(e.target.value)}
+                    onClick = { (e) => e.stopPropagation()}
+                    required
+                />
+                <button 
+                    onClick = { (e) => e.stopPropagation()}
+                    className= "edit-flashcard-btn green-btn" type="submit">
+                    Change
+                </button>
+            </form>
+        )
+    }
+
+    const getFlashcardButtons = () => {
+        if (user) {
+        return (
+            <button 
+                onClick = { (e)=> {
+                    setEditFlashcard(true); 
+                    e.stopPropagation()
+                }}
+                className="flashcard-button-container edit-flashcard-button">
+                <FaRegEdit />
+            </button>
+        )}
+        else return null;
+    }
+
+    const getEditingFlashcardButtons = () => {
+        return (
+            <button 
+                onClick = { (e)=> { 
+                    setEditFlashcard(false); 
+                    e.stopPropagation()
+                }}
+                className="edit-flashcard-button">
+                Cancel
+            </button>
+        )
+    }
+
+    const handleEditFlashcardName = async (e) => {
+        e.preventDefault();
+        if (!user) return;
+       
+        (currentFolder && toolbarTab === "FolderFocus") ? handleEditInFolder() : handleEditFlashcard();
+    }
+
+    const handleEditInFolder = async () => {
+        try {
+            const ref = doc(db, "userData", user.uid, "folders", currentFolder.name);
+
+            const newFolder = {
+                name: currentFolder.name,
+                openings: currentFolder.openings.map((opening) => {
+                if (opening.moves === flashcard.moves) {
+                    return {...opening, name: newName};
+                } else return opening;
+            })}
+            await setDoc(ref, newFolder)
+                .then(()=>{
+                    setNewName("");
+                    setEditFlashcard(false);
+                    // setCurrentFolders
+                    const newFolders = folders.map((folder)=> {
+                        if (folder.name === currentFolder.name) {
+                            return newFolder;
+                        } else return folder;
+                    })
+                    setFolders(newFolders);
+                    setCurrentFolder(newFolder);
+                    setEditFlashcard(false);
+                })
+                .catch((e)=> {
+                    console.error(e);
+                }) 
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const handleEditFlashcard = async () => {
+        try {
+            if (!flashcard.id) {
+                console.error("Cannot resolve flaschard id");
+                return;
+            }
+            const ref = doc(db, "userData", user.uid, "flashcards", flashcard.id);
+            const newFlashcard = {...flashcard, name: newName};
+            const newFlashcards = flashcards.map((f)=> {
+                if (f.id === flashcard.id) {
+                    return newFlashcard;
+                } else return f;
+            })
+            await setDoc(ref, newFlashcard)
+                .then(()=>{
+                    setNewName("");
+                    setFlashcards(newFlashcards);
+                    setEditFlashcard(false);
+                })
+                .catch((e)=> {
+                    console.error(e);
+                })
+            
+
+        } catch (e) {
+
+        }
     }
 
     return (
@@ -24,25 +174,22 @@ const Flashcard = (props) => {
             className={(testMode && idx === flashcardIdx) ? "flashcard-wrapper flashcard-highlight" : "flashcard-wrapper"} 
             onClick ={ () => {
                 if (!testMode) props.autoPlayOpening(flashcard)
-            }}>
-            <div className="flashcard-body">
-                <h4 className="flashcard-title">
-                    { (flashcard) ? parseName() : null}
-                </h4>
-                <p>
-                {(testMode) ? null : flashcard.moves }
-                </p>
-            </div>
-            {
-                (showDelete && !testMode && user) ?        
-                    <button 
-                        onClick = { handleDeleteFlashcard }
-                        className="delete-container red-btn">
-                    <FaRegTrashAlt />
-                    </button>
+            }}>     
 
-                    : null
+            <div className="flashcard-body">
+            {
+                (!editFlashcard) ? 
+                    getFlashcardContent() :
+                    getEditFlashcard()
             }
+            </div>
+
+            {
+                (editFlashcard) ?
+                    getEditingFlashcardButtons() :
+                    getFlashcardButtons()
+            }
+
 
         </div>
     );

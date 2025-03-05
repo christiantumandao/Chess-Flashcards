@@ -1,0 +1,9 @@
+class Flashcard {
+    constructor(id, name, eco, fen, moves) {
+        this.id = id;
+        this.name = name;
+        this.eco = eco;
+        this.fen = fen;
+        this.moves = moves;
+    }
+}

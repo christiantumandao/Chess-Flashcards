@@ -78,9 +78,19 @@ div.flashcard-highlight {
 
 .flashcard-body {
     flex: 1;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.delete-container {
+.flashcard-wrapper button:focus {
+    outline: none;
+}
+
+.flashcard-button-container {
     height: 32px;
     width: 32px;
     display: flex;
@@ -92,8 +102,20 @@ div.flashcard-highlight {
     margin-left: 5px;
 }
 
-.delete-container svg {
+.flashcard-button-container svg {
     font-weight: bolder;
+}
+
+.edit-flashcard-button {
+    background-color: var(--eigen);
+    border: var(--border);
+    color: white;
+    padding: 5px;
+    border-radius:5px;
+}
+.edit-flashcard-button:hover {
+    background-color: var(--hoverHighlightDarkGrey);
+    color: grey;
 }
 
 .folders-buttons-container {
@@ -101,4 +123,40 @@ div.flashcard-highlight {
     flex-direction: row;
 }
 
+
+.edit-flashcard-name-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.edit-flashcard-name-form > * {
+    height: 50%;
+}
+
+form.edit-flashcard-name-form > input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 12px;
+    width: 50%;
+}
+
+.edit-flashcard-name-form > button {
+    background-color: var(--eigen);
+    border: var(--border);
+    color: white;
+    padding: 5px;
+    border-top-left-radius: 0;
+    border-left: none;
+}
+
+button.edit-flashcard-btn {
+    background-color: var(--green);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 1px solid var(--green);
+}
 

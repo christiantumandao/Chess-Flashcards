@@ -36,14 +36,14 @@ const ToolbarHeader = (props) => {
 
     // if the current position changes, then currOpening will change, and so add showAddButton
     useEffect(()=> {
-        if (!currOpening || game.fen() === startingFen || testMode) setShowAddButton(false);
-        else if (currOpening && flashcards.some((flashcard) => flashcard.fen === game.fen())) {
+        if (game.fen() === startingFen || testMode) setShowAddButton(false);
+        else if (flashcards.some((flashcard) => flashcard.fen === game.fen())) {
             setShowAddButton(false);
-        } else if (currOpening) {
+        } else {
             setShowAddButton(true);
         }
 
-    },[currOpening])
+    },[currOpening, game.fen()])
 
     const addOpening = async () => {
         if (!user) {
@@ -86,8 +86,8 @@ const ToolbarHeader = (props) => {
                     moves: customMoves,
                     name: customMoves
                 }
-                const collectionRef = collection(db, "userData", user.uid, "flashcards");
-                await addDoc(collectionRef, newOpening)
+                const docRef = doc(db, "userData", user.uid, "flashcards", customMoves);
+                await setDoc(docRef, newOpening)
                     .then(()=>{
                         const newFlashcards = [...flashcards];
                         newFlashcards.push(newOpening);

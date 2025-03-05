@@ -46,7 +46,10 @@ const Toolbar = (props) => {
             const userCards = [];
             const querySnapshot = await getDocs(collection(db, "userData", user.uid, "flashcards"));
             querySnapshot.forEach((doc) => {
-                userCards.push(doc.data());
+                userCards.push({
+                    ...doc.data(),
+                    id: doc.id
+                });
             });
             setFlashcards(userCards);
         } catch (e) {
