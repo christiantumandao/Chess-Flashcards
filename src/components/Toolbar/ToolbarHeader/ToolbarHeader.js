@@ -36,14 +36,14 @@ const ToolbarHeader = (props) => {
 
     // if the current position changes, then currOpening will change, and so add showAddButton
     useEffect(()=> {
-        if (!currOpening || game.fen() === startingFen || testMode) setShowAddButton(false);
+        if (game.fen() === startingFen || testMode) setShowAddButton(false);
         else if (currOpening && flashcards.some((flashcard) => flashcard.fen === game.fen())) {
             setShowAddButton(false);
         } else if (currOpening) {
             setShowAddButton(true);
         }
 
-    },[currOpening])
+    },[game.fen()])
 
     const addOpening = async () => {
         if (!user) {
@@ -145,7 +145,6 @@ const ToolbarHeader = (props) => {
         const querySnapshot = await getDocs(q);
         const cards = [];
         querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
             cards.push(doc.data());
         });
         if (cards.length > 0) return true;
