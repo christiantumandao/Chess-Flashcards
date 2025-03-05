@@ -13,7 +13,9 @@ const ToolbarBody = (props) => {
             currentFolder, setCurrentFolder,
             getUserCards,
             toolbarTab, setToolbarTab,
+
             editFolderMode, setEditFolderMode,
+
             addOpeningsToFolder, setAddOpeningsToFolder,
 
             autoPlayOpening,

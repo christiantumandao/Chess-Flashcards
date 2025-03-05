@@ -164,10 +164,13 @@ const Toolbar = (props) => {
         
                     toolbarTab = { toolbarTab }
                     setToolbarTab = { setToolbarTab }
+
                     editFolderMode = { editFolderMode }
                     setEditFolderMode = { setEditFolderMode }
+
                     addOpeningsToFolder = { addOpeningsToFolder }
                     setAddOpeningsToFolder = { setAddOpeningsToFolder }
+
                     autoPlayOpening = { autoPlayOpening }
                     testMode = { testMode }
                     game = { game }

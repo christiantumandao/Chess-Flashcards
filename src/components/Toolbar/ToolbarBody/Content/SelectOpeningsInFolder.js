@@ -10,7 +10,7 @@ import FlashcardToSelect from "./FlashcardToSelect";
 
 const SelectOpeningsInFolder = (props) => {
     const { 
-            mode,
+            mode, // delete, add
             flashcards,
             setAddOpeningsToFolder,
             setEditFolderMode,
@@ -39,7 +39,7 @@ const SelectOpeningsInFolder = (props) => {
 
     },[]);
 
-    const handleDeleteOpenings = async () => {
+    const handleDeleteOpeningsFromFolder = async () => {
         if (!user || selectedFlashcards.length === 0) return;
 
         try {
@@ -49,7 +49,9 @@ const SelectOpeningsInFolder = (props) => {
 
             const newCurrentFolder = {...currentFolder};
             newCurrentFolder.openings = newCurrentFolder.openings.filter((opening) => 
-                !selectedFlashcards.some(flashcard => flashcard.eco === opening.eco)
+                !selectedFlashcards.some(flashcard => flashcard.moves === opening.moves && 
+                                                        flashcard.name === opening.name &&
+                                                        flashcard.fen === opening.fen )
             );
 
             const folderRef = doc(db, "userData", user.uid, "folders", currentFolder.name);
@@ -123,13 +125,16 @@ const SelectOpeningsInFolder = (props) => {
                     (mode === "delete") ? 
                         <h4>Delete Flashcards From { currentFolder.name }</h4>
                     :
-                    <h4>Add Flashcards to { currentFolder.name }</h4>
+                    (mode === "add") ? 
+                        <h4>Add Flashcards to { currentFolder.name }</h4>
+                    :
+                        <h4>Delete Flashcards</h4>
                 }
         </div>
         )
     }
 
-    const getFlashcardsToDelete = () => {
+    const getFlashcardsToDeleteFromFolder = () => {
         return (
             (currentFolder.openings.length > 0) ? 
                 currentFolder.openings.map((flashcard, idx)=>
@@ -182,8 +187,8 @@ const SelectOpeningsInFolder = (props) => {
                 </button>
             : 
                 (mode === "delete") ?
-                    <button className="delete-openings-btn red-btn" onClick = { handleDeleteOpenings }>
-                        Delete Openings
+                    <button className="delete-openings-btn red-btn" onClick = { handleDeleteOpeningsFromFolder }>
+                        Delete Flashcards
                     </button>
 
             :
@@ -204,7 +209,8 @@ const SelectOpeningsInFolder = (props) => {
                     (mode === "add") ?
                         getFlashcardsToAdd()
                     :
-                        getFlashcardsToDelete()
+                        getFlashcardsToDeleteFromFolder() 
+
                         
                 }
                 </div>

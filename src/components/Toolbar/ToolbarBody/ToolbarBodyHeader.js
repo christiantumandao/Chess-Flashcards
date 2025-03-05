@@ -12,6 +12,7 @@ const ToolbarBodyHeader = (props) => {
         setCurrentFolder,
         editFolderMode,
         setEditFolderMode,
+
         user,
         folders,
         setFolders,
@@ -31,8 +32,7 @@ const ToolbarBodyHeader = (props) => {
             <div className="toolbar-body-top-header">   
             {  
                 (editFolderMode) ?
-                    getEditFolderTopHeaderComponent()
-                :
+                    getEditFolderTopHeaderComponent() :
                     getFlashcardsOrFolders()
                     
             }
@@ -115,14 +115,11 @@ const ToolbarBodyHeader = (props) => {
                     <button onClick = { () => setEditFolderMode(true) }className="edit-folder-btn">
                         <FaRegEdit />
                     </button>
-                :
-                null
+                :  null
             }
             </div>
         )
     }
-
-    // FUNCTIONS
 
     const handleDeleteFolder = async () => {
         try {

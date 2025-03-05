@@ -66,6 +66,7 @@ const FolderFocus = (props) => {
             <SelectOpeningsInFolder
                 mode = "add"
                 flashcards = { flashcards }
+                setFlashcards = { setFlashcards }
                 setAddOpeningsToFolder = { setAddOpeningsToFolder }
                 currentFolder = { currentFolder }
                 setCurrentFolder = { setCurrentFolder }
@@ -79,6 +80,7 @@ const FolderFocus = (props) => {
             <SelectOpeningsInFolder 
                 mode = "delete"
                 flashcards = { flashcards }
+                setFlashcards = { setFlashcards }
                 setAddOpeningsToFolder = { setAddOpeningsToFolder }
                 currentFolder = { currentFolder }
                 setCurrentFolder = { setCurrentFolder }

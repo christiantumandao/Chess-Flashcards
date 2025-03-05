@@ -7,6 +7,7 @@ import FolderFocus from "./FolderFocus";
 import Folders from "./Folders";
 import { useLocation } from "react-router-dom";
 import { getDefaultCards } from "../../../../util/helper";
+import SelectOpeningsInFolder from "./SelectOpeningsInFolder";
 
 const ToolbarContent = (props) => {
 
@@ -132,7 +133,6 @@ const ToolbarContent = (props) => {
                     setFlashcards = { setFlashcards }
 
                 />
-
             :
             <div className="flashcards-container">
             {
