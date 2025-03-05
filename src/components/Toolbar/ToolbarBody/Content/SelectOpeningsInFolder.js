@@ -37,7 +37,7 @@ const SelectOpeningsInFolder = (props) => {
 
         if (mode === "add" && addableFlashcards.length === 0 && flashcards.length !== 0) filterFlashcards();
 
-    },[]);
+    },[flashcards, addableFlashcards, setAddableFlashcards, currentFolder, mode]);
 
     const handleDeleteOpeningsFromFolder = async () => {
         if (!user || selectedFlashcards.length === 0) return;

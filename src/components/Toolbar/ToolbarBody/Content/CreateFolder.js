@@ -10,7 +10,6 @@ const CreateFolder = (props) => {
     const {
         folders,
         setFolders,
-        showAddFolder,
         setShowAddFolder
     } = props;
 
@@ -24,10 +23,9 @@ const CreateFolder = (props) => {
             setErrorMessage("You must be signed in to create a folder!");
             return;
         }
-
-        const validName = await validateFolderName(folderName, setErrorMessage, folders);
+        const validName = validateFolderName(folderName, setErrorMessage, folders);
         if (!validName) {
-            console.log("something went wrong");
+            console.error("Something went wrong validating name of folder");
             return;
         }
 

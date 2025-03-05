@@ -11,7 +11,6 @@ const ToolbarBody = (props) => {
             flashcards, 
             folders, setFolders,
             currentFolder, setCurrentFolder,
-            getUserCards,
             toolbarTab, setToolbarTab,
 
             editFolderMode, setEditFolderMode,
@@ -70,7 +69,6 @@ const ToolbarBody = (props) => {
                 setFolders = { setFolders }
                 currentFolder = { currentFolder } 
                 setCurrentFolder = { setCurrentFolder }
-                getUserCards = { getUserCards }
                 toolbarTab = { toolbarTab } 
                 setToolbarTab = { setToolbarTab }
                 
@@ -78,7 +76,6 @@ const ToolbarBody = (props) => {
                 setEditFolderMode = { setEditFolderMode }
                 addOpeningsToFolder = { addOpeningsToFolder } 
                 editFlashcardsMode = { editFlashcardsMode }
-                setEditFlashcardsMode = { setEditFlashcardsMode }
                 setAddOpeningsToFolder = { setAddOpeningsToFolder }
         
                 autoPlayOpening = { autoPlayOpening }

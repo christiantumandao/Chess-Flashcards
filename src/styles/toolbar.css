@@ -408,24 +408,42 @@ button.cancel-edit-flashcards-btn {
     gap: 10px;
 }
 
-.add-folder-buttons > button {
+.add-folder-buttons button {
     flex: 1;
     border: var(--border);
-    background-color: var(--darkGrey);
+    background-color: var(--eigen);
     border-radius: 5px;
     color: white;
     font-size: 12x;
     font-weight: bolder;
-    padding: .2rem .5rem;
+    padding: 5px;
+    height: 32px;
 }
 
 button.cancel-create-folder {
     background-color: var(--eigen);
 }
 
-.add-folder-buttons > button:hover {
+.add-folder-buttons button:hover {
     background-color: var(--hoverHighlightEigen);
     border: 1px solid var(--eigen);
+}
+.add-folder-input-wrapper > div {
+    font-weight: bolder;
+}
+
+.add-folder-sign-in-msg {
+    background-color: transparent;
+    text-decoration: underline;
+    color: white;
+    border: none;
+    font-size: 14px;
+    margin-top: 6px;
+    font-family: inherit;
+}
+
+.add-folder-sign-in-msg:hover {
+    color: gray;
 }
 
 .add-folder-buttons button.create-folder:hover {
@@ -513,15 +531,20 @@ button.cancel-create-folder {
 .edit-name-field-set button {
     font-size: 14px;
     height: 40px;
-    background-color: var(--eigen);
-    border: 1px solid var(--lightGrey);
+    background-color: var(--green);
+    border: 1px solid transparent;
     border-radius: 5px;
     color: white;
-    padding: 5px;
+    padding: 5px 10px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     font-size: 14px;
     letter-spacing: .2ch;
+}
+
+.edit-name-field-set button:hover {
+    background-color: var(--darkGreen);
+    border: 1px solid var(--lightGreen);
 }
 
 .edit-name-field-set button:disabled {

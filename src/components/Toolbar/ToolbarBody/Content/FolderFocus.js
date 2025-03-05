@@ -1,37 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import Flashcard from "./Flashcard";
 import SelectOpeningsInFolder from "./SelectOpeningsInFolder";
+import { useNavigate } from "react-router-dom";
 
 const FolderFocus = (props) => {
 
     const {
-        currentFolder,
+        flashcards,
+        setFlashcards,
+        currentFolder, setCurrentFolder,
+        folders, setFolders,
+
         addOpeningsToFolder, setAddOpeningsToFolder,
+        editFolderMode, setEditFolderMode,
+
+        user,
+        toolbarTab, 
+        deleteFlashcard,
         testMode,
         autoPlayOpening,
-        flashcardIdx,
-        editFolderMode, setEditFolderMode,
-        flashcards,
-        user,
-        folders, 
-        setFolders,
-        setCurrentFolder,
-        toolbarTab, 
-        setFlashcards
+        flashcardIdx
     } = props;
 
+    const [showSignInMsg, setShowSignInMsg] = useState(false);
+    const nav = useNavigate();  
     
+    useEffect(()=>{
+        return ()=>{
+            setShowSignInMsg(false);
+        }
+    },[]);
 
     const getAddToFolderElement = () => {
         return (
             (addOpeningsToFolder || editFolderMode || testMode) ? null :
             <button 
-                onClick = { ()=> setAddOpeningsToFolder(true) }
+                onClick = { ()=> (user) ? setAddOpeningsToFolder(true) : setShowSignInMsg(true) }
                 className="add-folder-wrapper">
                     <FaPlusCircle />
                     <h4>Add Openings</h4>
             </button>
+        )
+    }
+
+    const getSignInMessage = () => {
+        return (
+            <div className="add-folder-input-wrapper">
+                <div>
+                    You must be signed in to edit this folder!
+                </div>
+
+                <button 
+                    className="add-folder-sign-in-msg"
+                    onClick = { () => nav("/log-in") }>
+                    Sign in here
+                </button>
+            </div>
         )
     }
 
@@ -60,6 +85,34 @@ const FolderFocus = (props) => {
 
         );
     }
+
+    const showEditFolderOpenings = () => {
+        return (
+
+            currentFolder.openings.map((opening, idx)=>(
+                <Flashcard 
+                    key = { opening.moves + idx }
+                    idx = { idx }
+                    testMode = { testMode }
+                    flashcard = { opening }
+                    setFlashcards = { setFlashcards }
+                    flashcards = { flashcards }
+                    setFolders = { setFolders }
+                    autoPlayOpening = { autoPlayOpening }
+                    flashcardIdx = { flashcardIdx }
+                    showDelete = { true }
+                    toolbarTab = { toolbarTab }
+                    currentFolder = { currentFolder }
+                    setCurrentFolder = { setCurrentFolder }
+                    folders = { folders }
+                    deleteFlashcard = { deleteFlashcard }
+
+                />
+            ))
+
+        );
+    }
+
     return (
         
         (addOpeningsToFolder && currentFolder) ? 
@@ -76,7 +129,9 @@ const FolderFocus = (props) => {
                 setFolders = { setFolders }
             /> 
         :
-        (editFolderMode && currentFolder) ?
+        (editFolderMode && currentFolder) ? 
+            showEditFolderOpenings()
+       /* (editFolderMode && currentFolder) ?
             <SelectOpeningsInFolder 
                 mode = "delete"
                 flashcards = { flashcards }
@@ -89,10 +144,10 @@ const FolderFocus = (props) => {
                 folders = { folders }
                 setFolders = { setFolders }
                 setEditFolderMode = { setEditFolderMode }
-            />
+            />*/
         :
             <div className="flashcards-container">
-                { getAddToFolderElement() }
+                { (showSignInMsg) ? getSignInMessage() : getAddToFolderElement() }
                 { showFolderOpenings() }
             </div>
         

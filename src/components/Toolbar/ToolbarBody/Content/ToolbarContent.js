@@ -1,12 +1,11 @@
 import React from "react";
 import MovePair from "../../../MovePair";
-import { collection, deleteDoc, doc, getDocs, query, where } from "@firebase/firestore";
+import { deleteDoc, doc, setDoc } from "@firebase/firestore";
 import { db } from "../../../../firebase.config";
 import Flashcard from "./Flashcard";
 import FolderFocus from "./FolderFocus";
 import Folders from "./Folders";
 import { useLocation } from "react-router-dom";
-import { getDefaultCards } from "../../../../util/helper";
 
 const ToolbarContent = (props) => {
 
@@ -14,10 +13,9 @@ const ToolbarContent = (props) => {
         flashcards, 
         folders, setFolders,
         currentFolder, setCurrentFolder,
-        getUserCards,
         toolbarTab, setToolbarTab,
         editFolderMode, setEditFolderMode,
-        editFlashcardsMode, setEditFlashcardsMode,
+        editFlashcardsMode,
         addOpeningsToFolder, setAddOpeningsToFolder,
 
         autoPlayOpening,
@@ -33,48 +31,60 @@ const ToolbarContent = (props) => {
 
     const currPath = useLocation();
 
-    const deleteFlashcard = async (eco, fc, user) => {
+    const deleteFlashcardFromFolder = async (fc, currFolder) => {
         if (!user) return;
-        /**
-         * delete from db
-         * delete from local array (flashcards)
-         */
+        if (!currFolder || !fc) {
+            console.error("Error resolving folder/flashcard");
+            return
+        }
 
         try {
-            if (eco === 'usr') { // not doing this yet
-                // get the id of the opening from firebase
-                // delete with id
-                const q = query(collection(db, "userData", user.uid, "flashcards"), where("moves", "==", fc.moves));
-                const querySnapshot = await getDocs(q);
+            const ref = doc(db, "userData", user.uid, "folders", currFolder.name);
 
-                let qs = [];
-                querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                    qs.push(doc.id);
-                });
+            const newCurrentFolder = { ...currFolder };
+            newCurrentFolder.openings = currFolder.openings.filter((opening) => (
+                opening.eco !== fc.eco &&
+                opening.name !== fc.name &&
+                opening.moves !== fc.moves &&
+                opening.fen !== fc.fen
+            ))
 
-                const path = "userData/"+user.uid+"/flashcards";
-                await deleteDoc(doc(db, path, qs[0]));
-
-                
-            }
-            else {     
-                const path = "userData/"+user.uid+"/flashcards";
-                await deleteDoc(doc(db, path, eco));
-                const newFlashcards = flashcards.filter((flashcard) => flashcard.moves !== eco);
-                setFlashcards(newFlashcards);
-            }
-
-            try {
-                if (!user) {
-                    getDefaultCards(setFlashcards);
-                } else {
-                    await getUserCards();
-                }
-            } catch (e) {
-                console.error(e);
-            }
+            const newFolders = folders.map((folder)=>{
+                if (folder.name === currFolder) return newCurrentFolder;
+                else return folder;
+            })
             
+            await setDoc(ref, newCurrentFolder)
+                .then(()=>{
+                    setCurrentFolder(newCurrentFolder);
+                    setFolders(newFolders);
+                })
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    // this is ONLY for deleting flashcards from main set
+    const deleteFlashcardFromMain = async (fc) => {
+        if (!user) {
+            console.error('User not signed in');
+            return;
+        };
+        if (!fc || !fc.id) {
+            console.error("Issue resolving flashcard to delete");
+            return;
+        }
+
+        try {
+            const ref = doc(db, "userData", user.uid, "flashcards", fc.id);
+            await deleteDoc(ref)
+                .then(()=>{
+                    const newFlashcards = flashcards.filter((f)=>f.id !== fc.id);
+                    setFlashcards(newFlashcards);
+                })
+                .catch((e) => {
+                    console.error(e);
+                })
         } catch (e) {
             console.error(e);
         }
@@ -110,6 +120,7 @@ const ToolbarContent = (props) => {
                     setCurrentFolder = { setCurrentFolder }
                     setAddOpeningsToFolder = { setAddOpeningsToFolder }
                     setToolbarTab = { setToolbarTab }
+                    user = { user }
                 />
                 
             :
@@ -131,6 +142,7 @@ const ToolbarContent = (props) => {
                     setEditFolderMode = { setEditFolderMode }
                     toolbarTab = { toolbarTab }
                     setFlashcards = { setFlashcards }
+                    deleteFlashcard = { deleteFlashcardFromFolder }
 
                 />
             :
@@ -143,13 +155,13 @@ const ToolbarContent = (props) => {
                             key = { flashcard.moves + idx }
                             idx = { idx }
                             testMode = { testMode }
-                            
+
                             flashcard = { flashcard }
                             flashcards = { flashcards }
                             setFlashcards = { setFlashcards }
                             autoPlayOpening = { autoPlayOpening }
                             flashcardIdx = { flashcardIdx }
-                            deleteFlashcard = { deleteFlashcard }
+                            deleteFlashcard = { deleteFlashcardFromMain }
                             showDelete = { editFlashcardsMode }
                             toolbarTab = { toolbarTab }
                             folders = { folders }

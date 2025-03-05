@@ -8,7 +8,7 @@ const updateFirstName = async (firstName, user) => {
             firstName: firstName
         })
     } catch (e) {
-        console.log("Something went wrong. Try again later");
+        console.error("Something went wrong. Try again later");
         console.error(e);
 
     }
@@ -21,7 +21,7 @@ const updateLastName = async (lastName, user) => {
             lastName: lastName
         })
     } catch (e) {
-        console.log("Something went wrong. Try again later");
+        console.error("Something went wrong. Try again later");
         console.error(e);
     }
 }

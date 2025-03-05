@@ -6,7 +6,7 @@ import { EmailAuthProvider, deleteUser, getAuth, reauthenticateWithCredential } 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { deleteDoc, doc, getDoc } from "@firebase/firestore";
 import { updateFirstName, updateLastName } from "../util/users";
-const Profile = (props) => {
+const Profile = () => {
 
     const nav = useNavigate();
 
@@ -35,7 +35,7 @@ const Profile = (props) => {
                 if (docSnap.exists()) {
                     setUserData(docSnap.data());
                 } else {
-                    console.log("could not find user");
+                    console.error("Error: Could not find user");
                 }
             } catch (e) {
                 console.error(e);
@@ -69,7 +69,7 @@ const Profile = (props) => {
                     auth.currentUser.email,
                     confirmPw
                 )
-                const result = await reauthenticateWithCredential(
+                await reauthenticateWithCredential(
                     auth.currentUser, 
                     credential
                 )
@@ -89,7 +89,7 @@ const Profile = (props) => {
     const handleFirstNameChange = async () => {
         try {
             await updateFirstName(firstName, user);
-            const newData = { ...userData, firstName: firstName };
+            //const newData = { ...userData, firstName: firstName };
             setFirstName("");
             
         } catch (e) {
@@ -101,7 +101,7 @@ const Profile = (props) => {
     const handleLastNameChange = async () => {
         try {
             await updateLastName(lastName, user);
-            const newData = { ...userData, lastName: lastName };
+           // const newData = { ...userData, lastName: lastName };
             setLastName("");
         } catch (e) {
             console.error(e);

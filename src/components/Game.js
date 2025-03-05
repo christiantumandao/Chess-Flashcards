@@ -29,7 +29,7 @@ const Game = (props) => {
 
     const [flashGreen, setFlashGreen] = useState(false);
     const [flashRed, setFlashRed] = useState(false);
-    const [animationSpeed, setAnimationSpeed] = useState(100);
+    const animationSpeed = 100;
 
     useEffect(()=> {
         if (!testMode) {
@@ -37,9 +37,7 @@ const Game = (props) => {
         } else if (currPath.pathname === "/flashcards" && testMode) {
             validateMove();
         } 
-    },[game.fen(), game]);
-
-
+    },[game, currPath, testMode]);
 
     // when using a flashcard, the bot must play first:
     useEffect(()=>{
@@ -48,7 +46,8 @@ const Game = (props) => {
                 makeAMove(flashcardMoves[0]);
             }
         }, 1000);
-    },[testMode, playerMoveIdx, currOpening])
+    },[testMode, playerMoveIdx, currOpening,
+        flashcardMoves, color])
 
     useEffect(()=>{
         setTimeout(()=>{
@@ -69,7 +68,7 @@ const Game = (props) => {
         setTimeout(()=>{
             if (game.fen() === startingFen) return;
             else  validateMove_both(move);
-        },animationSpeed)
+        }, animationSpeed)
 
     }
 
@@ -87,7 +86,6 @@ const Game = (props) => {
                         checkBot();
                     }
                 } else {
-                    //console.log("incorrect!: "+move+" != " + flashcardMoves[playerMoveIdx]);
                     setFlashRed(true);
                     setPlayerMoveIdx(0);
                     setGame(new Chess());

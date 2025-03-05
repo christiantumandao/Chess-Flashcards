@@ -16,7 +16,7 @@ const TopHeaderExplore = (props) => {
             setSearchQuery("");
             setSearchResults([]);
         })
-    },[]);
+    },[setSearchQuery, setSearchResults]);
  
     return (
         <div className="search-container">

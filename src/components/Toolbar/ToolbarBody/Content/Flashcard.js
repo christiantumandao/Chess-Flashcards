@@ -14,6 +14,7 @@ const Flashcard = (props) => {
             testMode, 
             flashcardIdx, 
             idx, 
+            autoPlayOpening,
             deleteFlashcard, 
             showDelete,
             currentFolder, setCurrentFolder,
@@ -31,7 +32,12 @@ const Flashcard = (props) => {
 
     const handleDeleteFlashcard = async (e) => {
         e.stopPropagation();
-        await deleteFlashcard(flashcard.eco, flashcard, user);
+
+        if (toolbarTab === "Flashcards") await deleteFlashcard(flashcard);
+        else if (toolbarTab === "FolderFocus" && currentFolder) await deleteFlashcard(flashcard, currentFolder);
+        else {
+            console.error("Error resolving flashcard/folder for deletion");
+        }
     }
 
     const getFlashcardContent = () => {
@@ -174,7 +180,7 @@ const Flashcard = (props) => {
         <div 
             className={(testMode && idx === flashcardIdx) ? "flashcard-wrapper flashcard-highlight" : "flashcard-wrapper"} 
             onClick ={ () => {
-                if (!testMode) props.autoPlayOpening(flashcard)
+                if (!testMode) autoPlayOpening(flashcard)
             }}>     
 
             <div className="flashcard-body">

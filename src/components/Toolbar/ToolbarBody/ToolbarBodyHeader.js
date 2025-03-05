@@ -10,7 +10,7 @@ const ToolbarBodyHeader = (props) => {
         setToolbarTab,
         currentFolder,
         setCurrentFolder,
-        
+
         editFolderMode,
         setEditFolderMode,
         editFlashcardsMode,
@@ -34,7 +34,7 @@ const ToolbarBodyHeader = (props) => {
                 setEditFlashcardsMode(false);               
             }
         )
-    },[])
+    },[setEditFlashcardsMode, setEditFolderMode])
 
     // CONDITIONAL COMPONENTS
 
@@ -57,7 +57,7 @@ const ToolbarBodyHeader = (props) => {
     const getEditFlashcardsTopHeaderComponent = () => {
         return (
             <button onClick = { () => setEditFlashcardsMode(false) }className="cancel-edit-flashcards-btn">
-                Cancel
+                Exit
             </button>
         )
     }
@@ -72,7 +72,7 @@ const ToolbarBodyHeader = (props) => {
                 </button>
 
                 <button onClick = { () => setEditFolderMode(false) }className="cancel-edit-folder-btn">
-                    Cancel
+                    Exit
                 </button>
             </>
         )

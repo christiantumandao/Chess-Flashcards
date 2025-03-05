@@ -85,7 +85,6 @@ const getDefaultFolders = (setFolders) => {
 }
 
 const parseQuery = (str) => {
-    console.log(str)
     return str.replace(/\b\w/g, function (match) {
         return match.toUpperCase();
     });

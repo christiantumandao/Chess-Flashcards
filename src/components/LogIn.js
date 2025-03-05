@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "../styles/login.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase.config";
 import { doc, setDoc } from "@firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 const LogIn = (props) => {
 
-    const [user] = useAuthState(auth);
-    const currPath = useLocation();
     const { login }  = props;
 
     const [email, setEmail] = useState("");
@@ -26,16 +23,19 @@ const LogIn = (props) => {
 
     useEffect(()=>{
         return ()=>{
-            setPassword("");
-            setConfirmPassword("");
-            setEmail("");
-            setFirstName("");
-            setLastName("");
-            setErrorMessage('');
+            resetFields();
         }
-    },[currPath]);
+    },[]);
 
 
+    const resetFields = () => {
+        setPassword("");//
+        setConfirmPassword("");//
+        setEmail("");//
+        setFirstName("");//
+        setLastName("");//
+        setErrorMessage('');//
+    }
 
     const submitLogin = async (e) => {
         e.preventDefault();
@@ -43,18 +43,12 @@ const LogIn = (props) => {
         if (login) {
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
-                setErrorMessage("");
-                setEmail("");
-                setPassword("")
-                setConfirmPassword("");
-                setFirstName("");
-                setFirstName("");
+                //const user = userCredential.user;
+                resetFields();
                 nav("/flashcards");
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                console.error(error)
                 setErrorMessage(error.code);
             });
             

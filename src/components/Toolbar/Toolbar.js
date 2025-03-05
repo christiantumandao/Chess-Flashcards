@@ -111,13 +111,11 @@ const Toolbar = (props) => {
         return () => {
             setSearchResults([]);
         }
-    },[user, getUserCards, getUserFolders, setFlashcards])
-
-
+    },[user, getUserCards, getUserFolders, setFlashcards, setFolders])
 
     useEffect(()=>{
         setToolbarTab("Flashcards");
-    },[tab]);
+    },[tab, setToolbarTab]);
 
 
     const handleBegin = () => {
@@ -183,7 +181,6 @@ const Toolbar = (props) => {
                     currMove = { currMove }
                     startingFen = { startingFen }
                     moveHistory = { moveHistory }
-                    getUserCards = { getUserCards } 
                 />
                 
 

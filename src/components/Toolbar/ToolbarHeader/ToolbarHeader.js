@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../../../firebase.config";
-import { collection, getDocs, query, where, doc, setDoc, addDoc } from "@firebase/firestore";
+import { collection, getDocs, query, where, doc, setDoc } from "@firebase/firestore";
 
 import { parseName, shuffleCards } from "../../../util/helper";
 
@@ -43,7 +43,7 @@ const ToolbarHeader = (props) => {
             setShowAddButton(true);
         }
 
-    },[currOpening, game.fen()])
+    },[currOpening, flashcards, game, startingFen, testMode])
 
     const addOpening = async () => {
         if (!user) {
@@ -65,10 +65,10 @@ const ToolbarHeader = (props) => {
                     fen: currOpening.fen,
                     eco: currOpening.eco, 
                     moves: currOpening.moves,
-                    name: currOpening.name
+                    name: currOpening.name,
                 }).then(()=>{
                         const newFlashcards = [...flashcards];
-                        newFlashcards.push(currOpening);
+                        newFlashcards.push({...currOpening, id: currOpening.eco});
                         setFlashcards(newFlashcards);
 
                         setShowAddButton(false);    
@@ -88,9 +88,9 @@ const ToolbarHeader = (props) => {
                 }
                 const docRef = doc(db, "userData", user.uid, "flashcards", customMoves);
                 await setDoc(docRef, newOpening)
-                    .then(()=>{
+                    .then((newDoc)=>{
                         const newFlashcards = [...flashcards];
-                        newFlashcards.push(newOpening);
+                        newFlashcards.push({...newOpening, id: customMoves});
                         setFlashcards(newFlashcards);
                         setShowAddButton(false);
                 }).catch((e)=>{

@@ -13,8 +13,6 @@ import { IoReorderThree } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { RxExit } from "react-icons/rx";
 
-const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
 
 const Navbar = (props) => {
 
@@ -36,7 +34,7 @@ const Navbar = (props) => {
 
             setTab(relPath);
         }
-    },[currPath])
+    },[currPath, tab, setTab])
 
 
 
