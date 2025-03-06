@@ -141,8 +141,7 @@
 
 .confirm-delete > input {
     align-self: stretch;
-    margin-top: 1rem;
-
+    margin-bottom: 15px;
     padding:.5rem;
     font-size: 1rem;
 }
@@ -153,6 +152,7 @@
 
 .confirm-delete-btn {
     background-color: var(--red);
+    border: 1px solid transparent;
 }
 
 .confirm-delete-btn:hover {

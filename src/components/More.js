@@ -83,13 +83,6 @@ const More = () => {
                     </article>
 
                     <article>
-                        <h3>User-created flashcards</h3>
-                        <p>To take openings a step further, many players also remember forks from certain openings. Studying these dubious lines prove useful for not only regular games, but 
-                            faster paced ones such as bullet matches. This feature will let users add their own custom openings and rename them accordingly.
-                        </p>
-                    </article>
-
-                    <article>
                         <h3>Other</h3>
                         <ul>
                             <li>Notes for flashcards</li>

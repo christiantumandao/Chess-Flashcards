@@ -174,7 +174,7 @@ input:focus {
 
 .modal-header {
   text-align: center;
-
+  margin-bottom: 40px;
 }
 
 .modal-buttons {
@@ -185,7 +185,6 @@ input:focus {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
 }
 .modal-buttons > button {
   flex-grow: 1;
@@ -194,6 +193,7 @@ input:focus {
   padding: .5rem;
   font-size: 1rem;
   font-weight: bolder;
+  border: 1px solid transparent;
 }
 
 button.confirm {
@@ -211,6 +211,7 @@ button.delete {
 
 button.delete:hover {
   background-color: rgba(255,255,255,.3);
+  border: 1px solid gray;
 }
 
 

@@ -46,6 +46,10 @@ const Profile = () => {
         }
 
         getData();
+
+        return () => {
+            setErrorMessage("");
+        }
     },[])
 
     const signOutUser = () => {
@@ -202,7 +206,7 @@ const Profile = () => {
                                 (logout) ?
                                 <div className="modal-buttons">
                                 
-                                    <button className="confirm" onClick = { ()=>{
+                                    <button className="confirm red-btn" onClick = { ()=>{
                                         signOutUser();
                                         setLogout(false);
                                         setDel(false);
@@ -221,7 +225,7 @@ const Profile = () => {
 
                                 </div> : 
                                 <div className="confirm-delete">
-                                    <p className="error-message">{errorMessage}</p>
+                                    { (errorMessage.length > 0) ? <p className="error-message">{errorMessage}</p> : null }
                                     <input 
                                         type="password"
                                         placeholder="Confirm password"
@@ -230,7 +234,7 @@ const Profile = () => {
                                         required
                                     />
                                     <div className="modal-buttons">
-                                        <button className="confirm-delete-btn"
+                                        <button className="confirm-delete-btn red-btn"
                                             onClick = {deleteAccount}
                                         >
                                             Delete
