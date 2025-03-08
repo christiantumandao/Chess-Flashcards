@@ -11,7 +11,7 @@ const MovePair = (props) => {
                     (idx+2) / 2 +"."
                 }
             </div>
-            <div className={(currMove == idx+1) ? "white-move move-highlight" : "white-move"}>
+            <div className={(currMove === idx+1) ? "white-move move-highlight" : "white-move"}>
                 {moveHistory[idx]}
             </div>
             {

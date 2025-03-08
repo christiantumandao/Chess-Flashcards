@@ -17,9 +17,14 @@ const TopHeaderExplore = (props) => {
             setSearchResults([]);
         })
     },[setSearchQuery, setSearchResults]);
+
+    const handleSubmitSearch = (e) => {
+        e.preventDefault();
+        search(searchQuery, setSearchResults, resultLimit)
+    }
  
     return (
-        <div className="search-container">
+        <form className="search-container" onSubmit = { handleSubmitSearch }>
             <input 
                 type="search"
                 placeholder="Search openings"
@@ -42,14 +47,14 @@ const TopHeaderExplore = (props) => {
                 <BsCaretDown />
                 <button
                     disabled = { searchQuery.length === 0 }
-                    onClick = { ()=>search(searchQuery, setSearchResults, resultLimit) }
+                    type="submit"
                 >
                     <FaSearch />
                 </button>
             </div>
 
 
-    </div>
+    </form>
     )
 }
 

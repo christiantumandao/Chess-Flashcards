@@ -3,8 +3,6 @@ import Game from "./Game";
 import Toolbar from "./Toolbar/Toolbar";
 
 import { Chess } from "chess.js";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase.config";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 

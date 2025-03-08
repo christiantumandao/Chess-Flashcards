@@ -152,7 +152,6 @@
 
 .confirm-delete-btn {
     background-color: var(--red);
-    border: 1px solid transparent;
 }
 
 .confirm-delete-btn:hover {
