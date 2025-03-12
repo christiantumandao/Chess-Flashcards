@@ -87,7 +87,7 @@ const LogIn = (props) => {
                 setEmail("");
                 setFirstName("");
                 setLastName("");
-                nav("/flashcards");
+                nav("/");
                 setIsLoading(false);
             })
             .catch((e)=>{
@@ -118,12 +118,13 @@ const LogIn = (props) => {
             <div className="login-container">
 
                 {
-                    (login) ? <h2>Login</h2> : <h2>Sign up</h2>
+                    (login) ? 
+                        <h2>Login</h2> 
+                    : 
+                        <h2>Sign up</h2>
                 }
 
-                {
-                    (errorMessage.length === 0) ? null : <div className="error-message">{ errorMessage } </div>
-                }
+                { (errorMessage.length === 0) ? null : <div className="error-message">{ errorMessage } </div> }
 
                 <form 
                     onSubmit = { (login) ? submitLogin : createUser }
@@ -198,13 +199,13 @@ const LogIn = (props) => {
                 {
                     (!login) ? 
                     <>
-                    <div className={(isLoading) ? "hidden" : "or"}>
-                        or
-                    </div>
-                    <div className={(isLoading) ? "hidden" : "sign-up-link"}>
-                        <Link to="/log-in">Already have an account? Log in</Link>
-                    </div>
-                </>
+                        <div className={(isLoading) ? "hidden" : "or"}>
+                            or
+                        </div>
+                        <div className={(isLoading) ? "hidden" : "sign-up-link"}>
+                            <Link to="/log-in">Already have an account? Log in</Link>
+                        </div>
+                    </>
                     :
                     <>
                         <div className={(isLoading) ? "hidden" : "or"}>

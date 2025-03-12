@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/profile.css";
 import "../styles/loading.css";
 import { auth, db } from "../firebase.config";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmailAuthProvider, deleteUser, getAuth, reauthenticateWithCredential } from "@firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { deleteDoc, doc, getDoc } from "@firebase/firestore";
@@ -13,6 +13,7 @@ const Profile = () => {
 
     const [logout, setLogout] = useState(false);
     const [del, setDel] = useState(false);
+    const [profileIsDeleted, setProfileIsDeleted] = useState(false);
     const [userData, setUserData] = useState(null);
 
     const [firstName, setFirstName] = useState("");
@@ -21,6 +22,7 @@ const Profile = () => {
 
     const [isLoadingFirstName, setIsLoadingFirstName] = useState(false);
     const [isLoadingLastName, setIsLoadingLastName] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [user] = useAuthState(auth);
@@ -28,10 +30,6 @@ const Profile = () => {
 
     useEffect(()=>{
         const getUserData = async () => {
-            const user = auth.currentUser;
-            if (!user) {
-                return false;
-            }
             try {
                 const ref = doc(db, "userData", user.uid);
 
@@ -45,16 +43,14 @@ const Profile = () => {
                 console.error(e);
             }
         }
-        const getData = async () => {
-            await getUserData();
-        }
 
-        getData();
+        if (user) getUserData();
+        else nav("/");
 
         return () => {
             setErrorMessage("");
         }
-    },[])
+    },[user])
 
     const signOutUser = () => {
         try {
@@ -71,7 +67,7 @@ const Profile = () => {
         const user = auth.currentUser;
         if (!user) return;
             try {
-
+                setIsLoadingDelete(true);
                 const auth = getAuth()
                 const credential = EmailAuthProvider.credential(
                     auth.currentUser.email,
@@ -82,15 +78,17 @@ const Profile = () => {
                     credential
                 )
 
-                deleteUser(user)
-                    .then(async ()=>{
-                        await deleteDoc(doc(db, "userData",user.uid));
-                        nav("/log-in");
-                        setErrorMessage("");
-                    })
+                const uid = user.uid;
+                await deleteUser(user);
+                await deleteDoc(doc(db, "userData", uid));
+                setErrorMessage("");
+                setProfileIsDeleted(true);
+
             } catch (e) {
                 console.error(e);
                 setErrorMessage(e.code);
+            } finally {
+                setIsLoadingDelete(false);
             }
     }
 
@@ -123,6 +121,25 @@ const Profile = () => {
             setIsLoadingLastName(false);
         }
 
+    }
+
+    const getDeletionConfirmation = () => {
+        return (
+            <div className="modal-wrapper">
+                <div className="modal-container">               
+
+                    <section className="modal-header">
+                            <h2>
+                                 Account successfully deleted!
+                            </h2>
+                    </section>
+
+                    <p>You can create another account for free <Link to="/sign-up">here.</Link></p>
+                    <br />
+                    <p>Or you can continue to explore openings at the Explore tab <Link to="/">here.</Link></p>
+                </div>
+            </div>
+        )
     }
 
 
@@ -215,7 +232,8 @@ const Profile = () => {
             </div>
 
             {
-                (del || logout) ? 
+                (del || logout || profileIsDeleted) ? 
+                (profileIsDeleted) ? getDeletionConfirmation() :
                 <div className="modal-wrapper">
                     <div className="modal-container">
                         <section className="modal-header">
@@ -251,14 +269,16 @@ const Profile = () => {
                                     { (errorMessage.length > 0) ? <p className="error-message">{errorMessage}</p> : null }
                                     <input 
                                         type="password"
-                                        placeholder="Confirm password"
-                                        value = { confirmPw }
+                                        placeholder={ (isLoadingDelete) ? "" : "Confirm password"}
+                                        value = { (isLoadingDelete) ? "" : confirmPw }
                                         onChange = { (e)=>setConfirmPw(e.target.value)}
+                                        className= { (isLoadingDelete) ? "shimmer" : ""}
+                                        disabled = { isLoadingDelete }
                                         required
                                     />
-                                    <div className="modal-buttons">
+                                    <div className={(isLoadingDelete) ? "hidden modal-buttons" : "modal-buttons"}>
                                         <button className="confirm-delete-btn red-btn"
-                                            onClick = {deleteAccount}
+                                            onClick = { deleteAccount }
                                         >
                                             Delete
                                         </button>
