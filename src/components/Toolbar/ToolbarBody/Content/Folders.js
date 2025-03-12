@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "../../../../styles/loading.css";
+
 import FolderWrapper from "./FolderWrapper";
 import { FaPlusCircle } from "react-icons/fa";
 
@@ -20,6 +22,7 @@ const Folders = (props) => {
 
     const [showAddFolder, setShowAddFolder] = useState(false);
     const [showSignIn, setShowSignIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const nav = useNavigate();
 
@@ -39,11 +42,13 @@ const Folders = (props) => {
     const getCreateFolderEelement = () => {
         return (
             (showAddFolder) ? 
-            <div className="add-folder-input-wrapper">
+            <div className={(isLoading) ? "add-folder-input-wrapper shimmer" : "add-folder-input-wrapper"}>
                 <CreateFolder 
                     folders = { folders }
                     setFolders = { setFolders }
                     setShowAddFolder = { setShowAddFolder }
+                    isLoading = { isLoading }
+                    setIsLoading = { setIsLoading }
                 />
 
             </div>

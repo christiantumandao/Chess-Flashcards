@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import "../../../styles/toolbarHeader.css";
+
 import { db } from "../../../firebase.config";
-import { collection, getDocs, query, where, doc, setDoc } from "@firebase/firestore";
+import { doc, setDoc } from "@firebase/firestore";
 
-import { parseName, shuffleCards } from "../../../util/helper";
+import { formatMoveHistory, parseName, shuffleCards } from "../../../util/helper";
 
-import { FaPlus } from "react-icons/fa";
+import { CgAddR, CgCheckR } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
-import TopHeaderExplore from "./TopHeaderExplore";
 import { BsCaretDown } from "react-icons/bs";
+
+import TopHeaderExplore from "./TopHeaderExplore";
 
 const ToolbarHeader = (props) => {
 
@@ -17,6 +20,7 @@ const ToolbarHeader = (props) => {
             currPath,
             flashcards, setFlashcards,
             moveHistory,
+            currMove,
             setSearchResults,
             testMode,
             color, setColor,
@@ -33,6 +37,7 @@ const ToolbarHeader = (props) => {
     
     const [modal, setModal] = useState("");
     const [showAddButton, setShowAddButton] = useState(true);
+    const [isAddLoading, setIsAddLoading] = useState(false);
 
     // if the current position changes, then currOpening will change, and so add showAddButton
     useEffect(()=> {
@@ -51,56 +56,38 @@ const ToolbarHeader = (props) => {
             return;
         }
         try {
-            const isAdded = await checkIfAdded(currOpening);
+            setIsAddLoading(true);
+            const name = (currOpening) ? currOpening.moves : formatMoveHistory(moveHistory);
+            const isAdded = (flashcards.some((flashcard) => flashcard.moves === name))
             if (isAdded) {
                 setModal("added");
                 setShowAddButton(false);
+                setIsAddLoading(false);
                 return;
             }
 
-            // if the opening to be added is in the DB
-            if (currOpening) {
-                const docRef = doc(db, "userData", user.uid, "flashcards",currOpening.eco);
-                await setDoc(docRef, {
-                    fen: currOpening.fen,
-                    eco: currOpening.eco, 
-                    moves: currOpening.moves,
-                    name: currOpening.name,
-                }).then(()=>{
-                        const newFlashcards = [...flashcards];
-                        newFlashcards.push({...currOpening, id: currOpening.eco});
-                        setFlashcards(newFlashcards);
 
-                        setShowAddButton(false);    
-                }).catch((e)=>{
-                    console.error(e);
-                });
-            }
+            const flashcardMoves = (currOpening) ? currOpening.moves : formatMoveHistory(moveHistory);
+            const flashcardECO = (currOpening) ? currOpening.eco : "usr";
+            const flashcardName = (currOpening) ? currOpening.name : flashcardMoves;
 
-            // if the opening to be added is NOT in the db
-            else {
-                const customMoves = formatMoveHistory();
-                const newOpening = {
-                    fen: game.fen(),
-                    eco: "usr",
-                    moves: customMoves,
-                    name: customMoves
-                }
-                const docRef = doc(db, "userData", user.uid, "flashcards", customMoves);
-                await setDoc(docRef, newOpening)
-                    .then((newDoc)=>{
-                        const newFlashcards = [...flashcards];
-                        newFlashcards.push({...newOpening, id: customMoves});
-                        setFlashcards(newFlashcards);
-                        setShowAddButton(false);
-                }).catch((e)=>{
-                    console.error(e);
-                })
-            }
-            
+            const docRef = doc(db, "userData", user.uid, "flashcards", flashcardECO);
+            await setDoc(docRef, {
+                fen: game.fen(),
+                eco: flashcardECO, 
+                moves: flashcardMoves,
+                name: flashcardName,
+            });
+
+            const newFlashcards = [...flashcards];
+            newFlashcards.push({...currOpening, id: currOpening.eco});
+            setFlashcards(newFlashcards);
+            setShowAddButton(false);       
             
         } catch (e) {
             console.error(e);
+        } finally {
+            setIsAddLoading(false);
         }
         
     }
@@ -138,9 +125,8 @@ const ToolbarHeader = (props) => {
         )
     }
 
-    const checkIfAdded = async () => {
-        const name = (currOpening) ? currOpening.moves : formatMoveHistory();
-        const q = query(collection(db, "userData", user.uid, "flashcards"), where("moves", "==", name));
+   /*const checkIfAdded = async () => {
+       /* const q = query(collection(db, "userData", user.uid, "flashcards"), where("moves", "==", name));
 
         const querySnapshot = await getDocs(q);
         const cards = [];
@@ -149,30 +135,20 @@ const ToolbarHeader = (props) => {
             cards.push(doc.data());
         });
         if (cards.length > 0) return true;
-        else return false;
-    }
+        else return false; 
+    }*/
 
-    const formatMoveHistory =  () => {
 
-        let mc = 1;
-        let str = "";
-        for (let i = 0; i<moveHistory.length; i++) {
-            if (i%2 === 0) {
-                str += mc + ". " + moveHistory[i];
-                mc++;
-            } else {
-                if (i === moveHistory.length - 1) str += " "+moveHistory[i];
-                else str += " "+moveHistory[i]+" ";
-            }
-        }
-        return str;
-    }
-
+    // this is for displaying a custom opening in the title
     const parseMoveHistory = () => {
         let title = "";
         let cnt = 1;
         for (let i = 0; i < moveHistory.length; i++) {
-            if (i >= 5) break;
+            if (i === currMove) break;
+            else if (i >= 7) {
+                title+="...";
+                break;
+            }
             else if (i % 2 === 0) {
                 title+= (cnt + ". ");
                 cnt++;
@@ -183,9 +159,6 @@ const ToolbarHeader = (props) => {
             <p>{title}</p>
         )
     }
-
-    // conditional components
-    
     
     const getTestOptions = () => {
         return (
@@ -245,9 +218,20 @@ const ToolbarHeader = (props) => {
                 {
 
                     (showAddButton) ?           
-                    <button onClick = { addOpening }>
-                        <FaPlus />
-                    </button> : null
+                        <button 
+                        className={(isAddLoading) ? "hidden" : "add-opening-btn"}
+                        onClick = { addOpening }>
+                            <CgAddR />
+                        </button> 
+                    : 
+                    (game.fen() !== startingFen) ?
+                        <button className="is-added-btn" disabled>
+                            <CgCheckR />
+                            <div className="is-added-tooltip">
+                                Opening is added
+                            </div>
+                        </button> : null
+
                 }
 
                 { getSignInMessage() }

@@ -31,7 +31,7 @@ const ToolbarContent = (props) => {
 
     const currPath = useLocation();
 
-    const deleteFlashcardFromFolder = async (fc, currFolder) => {
+    const deleteFlashcardFromFolder = async (fc, currFolder, setIsLoading) => {
         if (!user) return;
         if (!currFolder || !fc) {
             console.error("Error resolving folder/flashcard");
@@ -39,6 +39,7 @@ const ToolbarContent = (props) => {
         }
 
         try {
+            setIsLoading(true);
             const ref = doc(db, "userData", user.uid, "folders", currFolder.name);
 
             const newCurrentFolder = { ...currFolder };
@@ -55,17 +56,18 @@ const ToolbarContent = (props) => {
             })
             
             await setDoc(ref, newCurrentFolder)
-                .then(()=>{
-                    setCurrentFolder(newCurrentFolder);
-                    setFolders(newFolders);
-                })
+            setCurrentFolder(newCurrentFolder);
+            setFolders(newFolders);
+
         } catch(e) {
             console.error(e);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     // this is ONLY for deleting flashcards from main set
-    const deleteFlashcardFromMain = async (fc) => {
+    const deleteFlashcardFromMain = async (fc, setIsLoading) => {
         if (!user) {
             console.error('User not signed in');
             return;
@@ -76,17 +78,19 @@ const ToolbarContent = (props) => {
         }
 
         try {
+            setIsLoading(true);
+            
             const ref = doc(db, "userData", user.uid, "flashcards", fc.id);
             await deleteDoc(ref)
-                .then(()=>{
-                    const newFlashcards = flashcards.filter((f)=>f.id !== fc.id);
-                    setFlashcards(newFlashcards);
-                })
-                .catch((e) => {
-                    console.error(e);
-                })
+
+            const newFlashcards = flashcards.filter((f)=>f.id !== fc.id);
+            setFlashcards(newFlashcards);
+
+
         } catch (e) {
             console.error(e);
+        } finally {
+            setIsLoading(false);
         }
     }
 

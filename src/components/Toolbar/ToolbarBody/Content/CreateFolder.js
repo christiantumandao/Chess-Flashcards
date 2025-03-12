@@ -10,7 +10,8 @@ const CreateFolder = (props) => {
     const {
         folders,
         setFolders,
-        setShowAddFolder
+        setShowAddFolder,
+        isLoading, setIsLoading
     } = props;
 
     const [user] = useAuthState(auth);
@@ -19,13 +20,19 @@ const CreateFolder = (props) => {
 
     const handleCreateFolder = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+
         if (!user) {
             setErrorMessage("You must be signed in to create a folder!");
+            setIsLoading(false);
+            setErrorMessage("");
             return;
         }
         const validName = validateFolderName(folderName, setErrorMessage, folders);
         if (!validName) {
             console.error("Something went wrong validating name of folder");
+            setIsLoading(false);
+            setErrorMessage("");
             return;
         }
 
@@ -39,25 +46,27 @@ const CreateFolder = (props) => {
                 ]
             };
 
-            await setDoc(docRef, folderToAdd)
-                .then( () => {
-                    const newFolders = [...folders];
-                    newFolders.push(folderToAdd);
-                    setFolders(newFolders);
-                    setShowAddFolder(false);
-                }).catch( (e) => {
-                    console.error(e);
-                })
+            await setDoc(docRef, folderToAdd);
 
-        } catch {
+            const newFolders = [...folders];
+            newFolders.push(folderToAdd);
+            setFolders(newFolders);
+            setShowAddFolder(false);
 
+
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setIsLoading(false);
+            setErrorMessage("");
         }
-        setErrorMessage("");
     }
 
 
     return (
-        <form className="add-folder-input-container" onSubmit = { handleCreateFolder }>
+        <form 
+        className= {(isLoading) ? "hidden" : "add-folder-input-container" }
+        onSubmit = { handleCreateFolder }>
 
             { (errorMessage.length > 0) ? <p className="error-message">{ errorMessage }</p> : null }
 

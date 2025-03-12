@@ -31,6 +31,7 @@ const Game = (props) => {
     const [flashRed, setFlashRed] = useState(false);
     const animationSpeed = 100;
 
+    // for updating the title of opening is being played in toolbar
     useEffect(()=> {
         if (!testMode) {
             findOpening(); 
@@ -38,6 +39,7 @@ const Game = (props) => {
             validateMove();
         } 
     },[game, currPath, testMode]);
+
 
     // when using a flashcard, the bot must play first:
     useEffect(()=>{
@@ -191,6 +193,7 @@ const Game = (props) => {
         try {
             const currFen = game.fen();
             if (currFen === startingFen) return;
+
             const openingsCollection = collection(db, 'openings');
             
             const q =  query(openingsCollection, where("fen", "==",currFen));

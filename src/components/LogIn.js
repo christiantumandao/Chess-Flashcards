@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/login.css";
+import "../styles/loading.css";
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -17,6 +18,7 @@ const LogIn = (props) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const nav = useNavigate();
 
@@ -29,26 +31,30 @@ const LogIn = (props) => {
 
 
     const resetFields = () => {
-        setPassword("");//
-        setConfirmPassword("");//
-        setEmail("");//
-        setFirstName("");//
-        setLastName("");//
-        setErrorMessage('');//
+        setPassword("");
+        setConfirmPassword("");
+        setEmail("");
+        setFirstName("");
+        setLastName("");
+        setErrorMessage('');
+        setIsLoading(false);
     }
 
     const submitLogin = async (e) => {
         e.preventDefault();
 
         if (login) {
+            setIsLoading(true);
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 //const user = userCredential.user;
                 resetFields();
                 nav("/flashcards");
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.error(error)
+                setIsLoading(false);
                 setErrorMessage(error.code);
             });
             
@@ -62,29 +68,33 @@ const LogIn = (props) => {
         if (!valid) {
             return;
         }
-            await createUserWithEmailAndPassword(auth, email, password)
-                .then( async (userCredential)=>{
-                    const user = userCredential.user;
-                    const docRef = doc(db, "userData", user.uid);
-                    await setDoc(docRef, {
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        correct: 0,
-                        incorrect: 0,
-                        added: 0
-                    })
-                    setPassword("");
-                    setConfirmPassword("");
-                    setEmail("");
-                    setFirstName("");
-                    setLastName("");
-                    nav("/flashcards");
+        setIsLoading(true);
+        console.log("usiong "+ email);
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then( async (userCredential)=>{
+                const user = userCredential.user;
+                const docRef = doc(db, "userData", user.uid);
+                await setDoc(docRef, {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    correct: 0,
+                    incorrect: 0,
+                    added: 0
                 })
-                .catch((e)=>{
-                    setErrorMessage(e.code);
-                    console.error(e);
-                })
+                setPassword("");
+                setConfirmPassword("");
+                setEmail("");
+                setFirstName("");
+                setLastName("");
+                nav("/flashcards");
+                setIsLoading(false);
+            })
+            .catch((e)=>{
+                setErrorMessage(e.code);
+                setIsLoading(false);
+                console.error(e);
+            });
            
 
 
@@ -121,35 +131,44 @@ const LogIn = (props) => {
 
                     {
                         (!login) ? 
-                        <>
-                          <input 
-                                type="text"
-                                placeholder="First Name"
-                                value = { firstName }
-                                onChange = { (e)=> setFirstName(e.target.value)}
-                                required
-                            />
-                            <input 
-                                type="text"
-                                placeholder="Last Name"
-                                value = { lastName }
-                                onChange = { (e)=> setLastName(e.target.value)}
-                                required
-                            />
-                    </> : null
+                            <>
+                                <input 
+                                    type="text"
+                                    placeholder={(isLoading) ? "" : "First Name"}
+                                    value = { (isLoading) ? "" : firstName }
+                                    onChange = { (e)=> setFirstName(e.target.value)}
+                                    className = { (isLoading) ? "shimmer" : ""}
+                                    disabled = { isLoading }
+                                    required
+                                />
+                                <input 
+                                    type="text"
+                                    placeholder={(isLoading) ? "" : "Last Name"}
+                                    value = { (isLoading) ? "" : lastName }
+                                    onChange = { (e)=> setLastName(e.target.value)}
+                                    disabled = { isLoading }
+                                    className = { (isLoading) ? "shimmer" : ""} 
+                                    required
+                                />
+                            </> 
+                        : null
                     }
                     <input
-                        placeholder="E-mail"
+                        placeholder={(isLoading) ? "" : "E-mail"}
                         type="text"
-                        value = { email }
+                        value = { (isLoading) ? "" : email }
                         onChange = { (e)=> setEmail(e.target.value) }
+                        className = { (isLoading) ? "shimmer" : ""}
+                        disabled = { isLoading }
                         required
                     />
                     <input 
                         type="password"
-                        placeholder="Password"
-                        value = { password }
+                        placeholder={(isLoading) ? "" : "Password"}
+                        value = { (isLoading) ? "" : password }
                         onChange = { (e)=> setPassword(e.target.value)}
+                        disabled = { isLoading }
+                        className = { (isLoading) ? "shimmer" : ""} 
                         required
                     />
                     {
@@ -157,36 +176,41 @@ const LogIn = (props) => {
 
                             <input 
                                 type="password"
-                                placeholder="Confirm Password"
-                                value = { confirmPassword }
+                                placeholder={(isLoading) ? "" : "Confirm Password"}
+                                value = { (isLoading) ? "" : confirmPassword }
                                 onChange = { (e)=> setConfirmPassword(e.target.value)}
+                                disabled = { isLoading }
+                                className = { (isLoading) ? "shimmer" : ""} 
                                 required
                             />
                         : null
                     }
 
-                    <button className="login-button" type="submit">
+                    <button 
+                    className={(isLoading) ? "hidden" : "login-button" }
+                    type="submit">
                         {
                             (login) ? <>Login</> : <>Sign up</>
                         }
                     </button>
                 </form>
+
                 {
                     (!login) ? 
                     <>
-                    <div className="or">
+                    <div className={(isLoading) ? "hidden" : "or"}>
                         or
                     </div>
-                    <div className="sign-up-link">
+                    <div className={(isLoading) ? "hidden" : "sign-up-link"}>
                         <Link to="/log-in">Already have an account? Log in</Link>
                     </div>
                 </>
                     :
                     <>
-                        <div className="or">
+                        <div className={(isLoading) ? "hidden" : "or"}>
                             or
                         </div>
-                        <div className="sign-up-link">
+                        <div className={(isLoading) ? "hidden" : "sign-up-link"}>
                             <Link to="/sign-up">Don't have a Profile? Sign up</Link>
                         </div>
                     </>

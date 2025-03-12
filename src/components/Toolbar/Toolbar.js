@@ -146,6 +146,7 @@ const Toolbar = (props) => {
                     flashcards = { flashcards }
                     setFlashcards = { setFlashcards }
                     moveHistory = { moveHistory }
+                    currMove = { currMove }
                     onFinishFlashcards = { onFinishFlashcards }
                     startingFen = { startingFen }
                     addOpeningsToFolder = { addOpeningsToFolder }

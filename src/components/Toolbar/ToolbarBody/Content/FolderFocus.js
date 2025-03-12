@@ -13,7 +13,7 @@ const FolderFocus = (props) => {
         folders, setFolders,
 
         addOpeningsToFolder, setAddOpeningsToFolder,
-        editFolderMode, setEditFolderMode,
+        editFolderMode,
 
         user,
         toolbarTab, 
@@ -117,7 +117,6 @@ const FolderFocus = (props) => {
         
         (addOpeningsToFolder && currentFolder) ? 
             <SelectOpeningsInFolder
-                mode = "add"
                 flashcards = { flashcards }
                 setFlashcards = { setFlashcards }
                 setAddOpeningsToFolder = { setAddOpeningsToFolder }
@@ -131,20 +130,6 @@ const FolderFocus = (props) => {
         :
         (editFolderMode && currentFolder) ? 
             showEditFolderOpenings()
-       /* (editFolderMode && currentFolder) ?
-            <SelectOpeningsInFolder 
-                mode = "delete"
-                flashcards = { flashcards }
-                setFlashcards = { setFlashcards }
-                setAddOpeningsToFolder = { setAddOpeningsToFolder }
-                currentFolder = { currentFolder }
-                setCurrentFolder = { setCurrentFolder }
-                autoPlayOpening = { autoPlayOpening }
-                user = { user }
-                folders = { folders }
-                setFolders = { setFolders }
-                setEditFolderMode = { setEditFolderMode }
-            />*/
         :
             <div className="flashcards-container">
                 { (showSignInMsg) ? getSignInMessage() : getAddToFolderElement() }

@@ -114,6 +114,14 @@ input {
 
 }
 
+.display-none {
+  display: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 .red-btn {
   background-color: var(--red);
   border: 1px solid var(--lightRed);
@@ -215,70 +223,6 @@ button.delete:hover {
 }
 
 
-.small-modal-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 150;
-  height: 100%;
-  width: 100%;
-}
-
-.small-modal-container {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0 10px;
-
-  width: 100%;
-  height: 100%;
-  background-color: black;
-
-  flex-wrap: nowrap;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.small-modal-message {
-  font-size: 16px;
-  flex-grow: 1;
-}
-
-.small-modal-buttons {
-  font-size: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: auto;
-}
-
-.small-modal-buttons > button {
-  padding: .4rem;
-  font-size: 1rem;
-  border-radius: 3px;
-  border: none;
-  width: auto;
-  
-  display: flex;
-  flex-direction: center;
-  align-items: center;
-  color: white;
-  border: var(--border);
-  background-color: var(--eigen);
-}
-.small-modal-sign-in {
-  background-color: var(--darkGreen);
-  margin-right: 6px;
-}
-.small-modal-buttons > .small-modal-cancel {
-  background-color: var(--eigen);
-}
-
-.small-modal-buttons > button:hover {
-  opacity: .8;;
-}
 
 @media (max-width: 1495px) {
   div.small-modal-message,

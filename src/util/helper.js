@@ -132,4 +132,25 @@ const validateFolderName = (name, setErrorMessage, folders) => {
     return true;
 }
 
-export { getDefaultCards, parseQuery, parseName, shuffleCards, validateFolderName, getDefaultFolders };
+const formatMoveHistory =  (moveHistory) => {
+
+    let mc = 1;
+    let str = "";
+    
+    for (let i = 0; i < moveHistory.length; i++) {
+
+        if (i % 2 === 0) {
+            str += mc + ". " + moveHistory[i];
+            mc++;
+        } else {
+            if (i === moveHistory.length - 1) str += " "+moveHistory[i];
+            else str += " "+moveHistory[i]+" ";
+        }
+
+    }
+    return str;
+}
+
+
+
+export { getDefaultCards, parseQuery, parseName, shuffleCards, validateFolderName, getDefaultFolders, formatMoveHistory };
