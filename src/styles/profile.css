@@ -100,16 +100,12 @@
 .profile-field > button {
     font-size: 16px;
     padding: .2rem .5rem;
-    background-color: var(--darkGreen);
     color: white;
-    border: none;
+    border: 1px solid transparent;
     border-radius: 5px;
     margin-left: 10px;
     height: 100%;
-}
 
-.profile-field > button:hover {
-    background-color: rgba(255,255,255,.5);
 }
 
 

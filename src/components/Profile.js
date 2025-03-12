@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/profile.css";
+import "../styles/loading.css";
 import { auth, db } from "../firebase.config";
 import { useNavigate } from "react-router-dom";
 import { EmailAuthProvider, deleteUser, getAuth, reauthenticateWithCredential } from "@firebase/auth";
@@ -17,6 +18,9 @@ const Profile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [confirmPw, setConfirmPw] = useState("");
+
+    const [isLoadingFirstName, setIsLoadingFirstName] = useState(false);
+    const [isLoadingLastName, setIsLoadingLastName] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [user] = useAuthState(auth);
@@ -92,23 +96,31 @@ const Profile = () => {
 
     const handleFirstNameChange = async () => {
         try {
+            setIsLoadingFirstName(true);
             await updateFirstName(firstName, user);
-            //const newData = { ...userData, firstName: firstName };
+            const newData = { ...userData, firstName: firstName };
+            setUserData(newData);
             setFirstName("");
             
         } catch (e) {
             console.error(e);
+        } finally {
+            setIsLoadingFirstName(false);
         }
         
     }
 
     const handleLastNameChange = async () => {
         try {
+            setIsLoadingLastName(true);
             await updateLastName(lastName, user);
-           // const newData = { ...userData, lastName: lastName };
+            const newData = { ...userData, lastName: lastName };
+            setUserData(newData);
             setLastName("");
         } catch (e) {
             console.error(e);
+        } finally {
+            setIsLoadingLastName(false);
         }
 
     }
@@ -128,26 +140,37 @@ const Profile = () => {
                     <div className="profile-field profile-setting">
                         <div>First Name</div>
                         <input 
-                            placeholder={(userData) ? userData.firstName : null}
-                            value = {firstName}
+                            placeholder={(isLoadingFirstName) ? "" : (userData) ? userData.firstName : null}
+                            value = {(isLoadingFirstName) ? "" : firstName}
                             onChange = { (e)=>setFirstName(e.target.value)}
+                            disabled = { isLoadingFirstName }
+                            className = { (isLoadingFirstName) ? "shimmer" : "" }
                         />
                         {
                             (firstName.length !== 0) ? 
-                                <button onClick = { handleFirstNameChange}>Change</button> 
+                                <button 
+                                onClick = { handleFirstNameChange}
+                                className="green-btn">
+                                    Change</button> 
                                 : null
                         }
                     </div>
                     <div className="profile-field profile-setting">
                         <div>Last Name</div>
                         <input 
-                            placeholder={(userData) ? userData.lastName : null}
-                            value = {lastName}
+                            placeholder={(isLoadingLastName) ? "" : (userData) ? userData.lastName : null}
+                            value = {(isLoadingLastName) ? "" : lastName}
+                            disabled ={isLoadingLastName}
+                            className = { (isLoadingLastName) ? "shimmer" : "" }
                             onChange = { (e)=>setLastName(e.target.value)}
                         />
                         {
                             (lastName.length !== 0) ? 
-                                <button onClick = { handleLastNameChange }>Change</button> 
+                                <button 
+                                onClick = { handleLastNameChange }
+                                className="green-btn">
+                                    Change
+                                </button> 
                                 : null
                         }
                     </div>
