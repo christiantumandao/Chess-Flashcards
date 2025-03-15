@@ -26,7 +26,7 @@ const Profile = () => {
 
     const [errorMessage, setErrorMessage] = useState("");
     const [user] = useAuthState(auth);
-
+    
 
     useEffect(()=>{
         const getUserData = async () => {

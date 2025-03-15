@@ -50,10 +50,6 @@ select > option {
   justify-content: center;
 }
 
-html {
-  overscroll-behavior: none;
-}
-
 
 body {
   font-family: 'Poppins', sans-serif;
