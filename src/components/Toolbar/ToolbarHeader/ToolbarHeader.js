@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { BsCaretDown } from "react-icons/bs";
 
 import TopHeaderExplore from "./TopHeaderExplore";
+import buildTrie from "../../../util/Trie";
 
 const ToolbarHeader = (props) => {
 
@@ -29,7 +30,9 @@ const ToolbarHeader = (props) => {
             onFinishFlashcards,
             startingFen,
             toolbarTab,
-            addOpeningsToFolder
+            addOpeningsToFolder,
+            handleFreestyle,
+            freestyle
 
     } = props;
 
@@ -39,16 +42,17 @@ const ToolbarHeader = (props) => {
     const [showAddButton, setShowAddButton] = useState(true);
     const [isAddLoading, setIsAddLoading] = useState(false);
 
+
     // if the current position changes, then currOpening will change, and so add showAddButton
     useEffect(()=> {
-        if (game.fen() === startingFen || testMode) setShowAddButton(false);
+        if (game.fen() === startingFen || testMode || freestyle) setShowAddButton(false);
         else if (flashcards.some((flashcard) => flashcard.fen === game.fen())) {
             setShowAddButton(false);
         } else {
             setShowAddButton(true);
         }
 
-    },[currOpening, flashcards, game, startingFen, testMode])
+    },[currOpening, flashcards, game, startingFen, testMode, freestyle])
 
     const addOpening = async () => {
         if (!user) {
@@ -165,7 +169,7 @@ const ToolbarHeader = (props) => {
             <div className="selectcolor-container">
                         
                 {
-                    (testMode) ? 
+                    (testMode || freestyle) ? 
                     <button 
                         className="exit-test" 
                         onClick = { () => onFinishFlashcards(false)}>
@@ -186,11 +190,18 @@ const ToolbarHeader = (props) => {
                             onClick={ handleBegin }>
                                 Begin
                         </button>
+
+                        <button 
+                        className = "shuffle-button"
+                        onClick = { () => handleFreestyle() }>
+                            Freestyle
+
+                        </button>
                     </>
                     
                 }
                 {
-                    (testMode) ? null : 
+                    (testMode || freestyle) ? null : 
                     <button onClick ={ ()=> shuffleCards(flashcards, setFlashcards) } className="shuffle-button">
                         Shuffle
                     </button>
@@ -213,10 +224,10 @@ const ToolbarHeader = (props) => {
                 }
 
             <div className="toolbar-description">
-                { (currOpening) ? parseName(currOpening) : (game.fen() !== startingFen) ? parseMoveHistory() : null }
+                { (freestyle) ? null : (currOpening) ? parseName(currOpening) : (game.fen() !== startingFen) ? parseMoveHistory() : null }
 
                 {
-
+                    (freestyle) ? null :
                     (showAddButton) ?           
                         <button 
                         className={(isAddLoading) ? "hidden" : "add-opening-btn"}
@@ -235,8 +246,10 @@ const ToolbarHeader = (props) => {
                 }
 
                 { getSignInMessage() }
+
                 
             </div>
+
         </div>
     )
 }

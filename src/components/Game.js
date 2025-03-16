@@ -17,114 +17,194 @@ const Game = (props) => {
     const currPath = useLocation();
     const [user] = useAuthState(auth);
 
-    const { game, setGame, 
+    const { 
+        game, setGame, 
         currOpening, makeAMove,
         setCurrOpening, 
         color, 
         testMode, flashcardIdx, 
         setFlashcardIdx, flashcardMoves, setFlashcardMoves,
         playerMoveIdx, setPlayerMoveIdx, parseMoves,
-        setMoveHistory,
-        onFinishFlashcards, autoPlay, testingFlashcards } = props;
+        setMoveHistory, setHistory, setCurrMove,
+        onFinishFlashcards, autoPlay, testingFlashcards,
+        freestyle, currTrie, trieHead, setCurrTrie } = props;
 
     const [flashGreen, setFlashGreen] = useState(false);
     const [flashRed, setFlashRed] = useState(false);
     const animationSpeed = 100;
 
-    // for updating the title of opening is being played in toolbar
-    useEffect(()=> {
-        if (!testMode) {
-            findOpening(); 
-        } else if (currPath.pathname === "/flashcards" && testMode) {
-            validateMove();
-        } 
-    },[game, currPath, testMode]);
+    /* Game Logic
+        if applicable, useEffect1 will fire
+        when useEffect1 fires or player makes move, useEffect 2 fires and invokes validateMove
+        validateMove() checks if the flashcard is completed
+            if not, will look the next move in checkBot() before continuing
+        checkBot() see's if the bot must play
+            if not (the bot made this move), we increment the playerMoveIdx
+            if so, we increment moveIdx (from user move), and make the bot move
 
+        repeat, this cycle also applies to the bot move not just player move
+    */
 
+    // useEffect 1
     // when using a flashcard, the bot must play first:
     useEffect(()=>{
         setTimeout(()=>{
-            if (color==='black' && playerMoveIdx===0 && flashcardMoves) {
+            if (testMode && color==='black' && playerMoveIdx===0 && flashcardMoves) {
                 makeAMove(flashcardMoves[0]);
+
+            } else if (freestyle && color === 'black' && playerMoveIdx === 0 && currTrie) {
+                // making random move among children in currTrie node
+                const childrenArr = Object.keys(currTrie.children);
+                const randomIdx = Math.floor(Math.random() * childrenArr.length);
+                makeAMove(childrenArr[randomIdx]);
             }
         }, 1000);
-    },[testMode, playerMoveIdx, currOpening,
+    },[testMode, freestyle, playerMoveIdx,
         flashcardMoves, color])
 
-    useEffect(()=>{
-        setTimeout(()=>{
-            setFlashGreen(false);
-        },1000);
-    },[flashGreen]);
+    // useEffect 2
+    // for updating the title of opening is being played in toolbar
+    // for checking and proceding in flashcard testing
+    useEffect(()=> {
+        if (!testMode && !freestyle) {
+            findOpening(); 
+        } else if ((testMode || freestyle) && currPath.pathname === "/flashcards") {
+            const moveHistory = game.history();
+            const move = moveHistory[moveHistory.length - 1];
+            setTimeout(()=>{
+                if (game.fen() === startingFen) return;
+                else if (testMode) validateMove_flashcards(move);
+                else if (freestyle) validateMove_freestyle(move);
+            }, animationSpeed)
+        } 
+    },[game, currPath, testMode, freestyle]);
 
-    useEffect(()=>{
-        setTimeout(()=>{
-            setFlashRed(false);
-        },1000)
-    },[flashRed]);
-
-    // will fire when board is reset or player has made move during testing
-    const validateMove = () => {
-        const moveHistory = game.history();
-        const move = moveHistory[moveHistory.length - 1];
-        setTimeout(()=>{
-            if (game.fen() === startingFen) return;
-            else  validateMove_both(move);
-        }, animationSpeed)
-
-    }
-
-
-    const validateMove_both = (move) => {
+    const validateMove_freestyle = (move) => {
         if (!move) return;
-        else {
-                const isCorrect = (flashcardMoves[playerMoveIdx] === move);
-                if (isCorrect) {
-                    // next flashcard
-                    if ((playerMoveIdx + 1) >= flashcardMoves.length) {
-                        onNextFlashcard();
-                    // next move in flashcard
-                    } else {
-                        checkBot();
-                    }
-                } else {
-                    setFlashRed(true);
-                    setPlayerMoveIdx(0);
-                    setGame(new Chess());
-                    incrementIncorrects();
-                    
-                }
+        const childrenArr = Object.keys(currTrie.children);
+        const isCorrect = childrenArr.includes(move);
+
+        if (isCorrect) {
+            const nextTrie = currTrie.children[move];
+            if (Object.keys(nextTrie.children).length === 0) {
+                onNextFreestyle();
+            } else {
+                checkBot_freestyle(move);
+            }
+
+        } else {
+            setFlashRed(true);
+            incrementIncorrects();
+            setPlayerMoveIdx(0);
+            setGame(new Chess());
+            setCurrTrie(trieHead);
+
+            setHistory([startingFen]);
+            setMoveHistory([]);
+            setCurrMove(0);
+
+            
         }
+
     }
+
+    const validateMove_flashcards = (move) => {
+        if (!move) return;
+
+        const isCorrect = (flashcardMoves[playerMoveIdx] === move);
+        if (isCorrect) {
+            // next flashcard
+            if ((playerMoveIdx + 1) >= flashcardMoves.length) {
+                onNextFlashcard();
+            // next move in flashcard
+            } else {
+                checkBot_flashcards();
+            }
+        } else {
+            setFlashRed(true);
+            incrementIncorrects();
+            setPlayerMoveIdx(0);
+
+            setGame(new Chess());
+            setHistory([startingFen]);
+            setMoveHistory([]);
+            setCurrMove(0);
+            
+        }
+        
+    }
+
 
     /**
      * once bot has played, will trigger use effect again 
      * and enter the root else statement
      */
 
-    const checkBot = () => {
-            // checking if move prompts bot
-            if ((color === 'black' && playerMoveIdx % 2 === 1) || (color === 'white' && playerMoveIdx % 2 === 0)) {
-                setTimeout(()=>{
-                    makeAMove(flashcardMoves[playerMoveIdx+1]);
-                    if ((playerMoveIdx + 1) >= flashcardMoves.length) {
-                        onNextFlashcard();
-                    // next move in flashcard
-                    } else {
-                        setPlayerMoveIdx(playerMoveIdx+1);
-                    }
-                },animationSpeed);
-            // not a bot play (or bot has played)
-            } else {
-                setPlayerMoveIdx(playerMoveIdx+1);
-            }
-           // checking player move
+    const checkBot_freestyle = (move) => {
+        if ((color === 'black' && playerMoveIdx % 2 === 1) || (color === 'white' && playerMoveIdx % 2 === 0)) {
+            
+            setTimeout(()=>{
+                
+                const newCurrTrie = currTrie.children[move];
+                const childrenArr = Object.keys(newCurrTrie.children);
+                const randomIdx = Math.floor(Math.random() * childrenArr.length);
+                makeAMove(childrenArr[randomIdx]);
+                
+                if (Object.keys(newCurrTrie.children).length === 0) {
+                    onNextFreestyle();
+                // next move in flashcard
+                } else {
+                    setCurrTrie(currTrie.children[move]);
+                    setPlayerMoveIdx(playerMoveIdx+1);
+                }
+            }, animationSpeed);         
+        } else {
+            // updating states and await player move
+            setCurrTrie(currTrie.children[move]);
+            setPlayerMoveIdx(playerMoveIdx+1);
+        }
+    }
+
+    const checkBot_flashcards = () => {
+        // checking if move prompts bot
+        if ((color === 'black' && playerMoveIdx % 2 === 1) || (color === 'white' && playerMoveIdx % 2 === 0)) {
+            
+            setTimeout(()=>{
+                makeAMove(flashcardMoves[playerMoveIdx+1]);
+                if ((playerMoveIdx + 1) >= flashcardMoves.length) {
+                    onNextFlashcard();
+                // next move in flashcard
+                } else {
+                    setPlayerMoveIdx(playerMoveIdx+1);
+                }
+            }, animationSpeed);
+
+        // if not a bot play (or bot has played)
+        } else {
+            setPlayerMoveIdx(playerMoveIdx+1);
+        }
+        // checking player move
+    }
+
+    const onNextFreestyle = () => {
+        setTimeout(()=>{
+            setFlashGreen(true);
+            incrementCorrects();
+    
+            setGame(new Chess());
+            setCurrTrie(trieHead);
+            setMoveHistory([]);
+            setHistory(startingFen);
+            setPlayerMoveIdx(0);
+        },500);   
     }
 
 
     const onNextFlashcard = () => {
         setTimeout(()=>{
             setFlashGreen(true);
+            incrementCorrects();
+
             if ((flashcardIdx + 1) >= testingFlashcards.length) {
                 onFinishFlashcards();
                 return;
@@ -141,9 +221,20 @@ const Game = (props) => {
             setMoveHistory([]);
     
             setPlayerMoveIdx(0);
-            incrementCorrects();
         },500);
     }
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setFlashGreen(false);
+        },1000);
+    },[flashGreen]);
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setFlashRed(false);
+        },1000)
+    },[flashRed]);
     
 
     const incrementCorrects = async () => {

@@ -27,6 +27,7 @@ const ToolbarBody = (props) => {
             currMove,
             startingFen,
             moveHistory,
+            freestyle
     } = props;
 
     const currPath = useLocation();
@@ -55,6 +56,7 @@ const ToolbarBody = (props) => {
 
                         user = { user }
                         testMode = { testMode }
+                        freestyle = { freestyle }
                     />
                     : null
             }
@@ -80,6 +82,7 @@ const ToolbarBody = (props) => {
         
                 autoPlayOpening = { autoPlayOpening }
                 testMode = { testMode }
+                freestyle = { freestyle }
                 game = { game }
                 searchResults = { searchResults }
                 flashcardIdx = { flashcardIdx }

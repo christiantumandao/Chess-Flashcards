@@ -13,6 +13,7 @@ const Flashcard = (props) => {
             flashcards,
             setFlashcards,
             testMode, 
+            freestyle,
             flashcardIdx, 
             idx, 
             autoPlayOpening,

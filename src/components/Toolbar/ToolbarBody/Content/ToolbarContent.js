@@ -27,6 +27,7 @@ const ToolbarContent = (props) => {
         currMove,
         startingFen,
         moveHistory,
+        freestyle
     } = props;
 
     const currPath = useLocation();
@@ -147,6 +148,7 @@ const ToolbarContent = (props) => {
                     toolbarTab = { toolbarTab }
                     setFlashcards = { setFlashcards }
                     deleteFlashcard = { deleteFlashcardFromFolder }
+                    freestyle = { freestyle }
 
                 />
             :
@@ -169,6 +171,7 @@ const ToolbarContent = (props) => {
                             showDelete = { editFlashcardsMode }
                             toolbarTab = { toolbarTab }
                             folders = { folders }
+                            freestyle = { freestyle }
                         />
                     )) 
                 // if searched, none found
@@ -195,6 +198,7 @@ const ToolbarContent = (props) => {
                             flashcard = { flashcard }
                             flashcards = { flashcards }
                             setFlashcards = { setFlashcards }
+                            freestyle = { freestyle }
 
                             autoPlayOpening = { autoPlayOpening }
                             testMode = { testMode }

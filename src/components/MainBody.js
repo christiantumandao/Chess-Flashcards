@@ -12,27 +12,31 @@ const MainBody = (props) => {
    const { tab, setTab } = props;
 
     const [game, setGame] = useState(new Chess()); 
-    const [history, setHistory] = useState([startingFen]);
-    const [moveHistory, setMoveHistory] = useState([]);
-    const [currMove, setCurrMove] = useState(0);
+    const [history, setHistory] = useState([startingFen]); // holds the history of fens
+    const [moveHistory, setMoveHistory] = useState([]); // holds history of moves
+    const [currMove, setCurrMove] = useState(0); // used for tracking player history
 
-    const [testingFlashcards, setTestingFlashcards] = useState([]);
-    const [currOpening, setCurrOpening]= useState(null);
     const [flashcards, setFlashcards] = useState([]);
     const [folders, setFolders] = useState([]);
+
+    const [testingFlashcards, setTestingFlashcards] = useState([]);
+    const [currOpening, setCurrOpening]= useState(null); // contains opening name of whatever is on board
 
     // auto playing openings
     const [autoPlay, setAutoPlay] = useState(false);
     const [autoPlayIdx, setAutoPlayIdx] = useState(0);
     const [autoPlayMoves, setAutoPlayMoves] = useState([]);
 
-
-    // user attempting flashcard
+    // for playing flashcards
     const [color, setColor] = useState("both"); // what color user will be playing
     const [flashcardIdx, setFlashcardIdx] = useState(0);
     const [flashcardMoves, setFlashcardMoves] = useState([]);
-    const [playerMoveIdx, setPlayerMoveIdx] = useState(0);
+    const [playerMoveIdx, setPlayerMoveIdx] = useState(0); // the move idx in testing
     const [testMode, setTestMode] = useState(false);
+
+    const [freestyle, setFreestyle] = useState(false);
+    const [trieHead, setTrieHead] = useState(null);
+    const [currTrie, setCurrTrie] = useState(null);
 
 
     const  makeAMove = useCallback( (move) => {
@@ -57,7 +61,7 @@ const MainBody = (props) => {
             }
 
         } catch {
-            console.error("Invalid move")
+            console.error("Invalid move:", move)
         }
     },[currMove, game, history, moveHistory])
 
@@ -108,20 +112,57 @@ const MainBody = (props) => {
 
     },[game, testMode, autoPlay, autoPlayIdx, autoPlayMoves, makeAMove])
 
-    // incase user changes tab in middle of autoplaying an opening
+    // incase user changes tab in middle of autoplaying an opening or playing flashcards
     useEffect(()=>{
-        setTestMode(false);
+        resetVariables();
+    },[tab])
+
+    const resetVariables = () => {
 
         const newGame = new Chess();
         setGame(newGame);
         setHistory([startingFen]);
+        setCurrOpening(null);
         setMoveHistory([]);
         setCurrMove(0);
-    },[tab])
+
+        setTestMode(false);
+        setTestingFlashcards([]);
+        setFlashcardIdx(0);
+        setFlashcardMoves([]);
+        setPlayerMoveIdx(0);
+
+        setFreestyle(false);
+        setCurrTrie(null);
+        setTrieHead(null);
+
+        setAutoPlayIdx(0);
+        setAutoPlay(false);
+        setAutoPlayMoves([]);
+}
+
+
+    const beginFreestyle = (color, head) => {
+        if (head.length === 0) {
+            console.error("No flashcards to build trie off of");
+            return;
+        }
+        setFreestyle(true);
+        setTrieHead(head);
+        setCurrTrie(head);
+        setTestMode(false); //double check
+        setPlayerMoveIdx(0);
+        setGame(new Chess());
+        setMoveHistory([]);
+        setHistory([startingFen]);
+
+        // game logic in Game component
+
+    }
 
     const testFlashcards = (color, flashcardsToTest) => {
         if (flashcards.length === 0) {
-            alert("Do not have any flashcards");
+            console.error("Do not have any flashcards to begin testing");
             return;
         }
         const firstMoveSet = parseMoves(flashcardsToTest[0].moves);
@@ -134,18 +175,12 @@ const MainBody = (props) => {
         setGame(new Chess());
         setMoveHistory([]);
         setHistory([startingFen]);
+
+        // game logic in Game component
     }
 
     const onFinishFlashcards = () => {
-        setGame(new Chess());
-        setTestMode(false);
-        setFlashcardIdx(0);
-        setFlashcardMoves([]);
-        setPlayerMoveIdx(0);
-        setCurrOpening(null);
-        setTestingFlashcards([]);
-        setMoveHistory([]);
-        setHistory([startingFen]);
+        resetVariables();
     }
 
 
@@ -218,6 +253,8 @@ const MainBody = (props) => {
                 currMove = { currMove }
                 setGame = { setGame }
                 makeAMove = { makeAMove }
+                setHistory = { setHistory } 
+                setCurrMove = { setCurrMove }
 
                 currOpening = { currOpening }
                 setCurrOpening = { setCurrOpening }
@@ -237,6 +274,11 @@ const MainBody = (props) => {
                 playerMoveIdx = { playerMoveIdx }
                 setPlayerMoveIdx = { setPlayerMoveIdx }
                 onFinishFlashcards = { onFinishFlashcards }
+
+                freestyle = { freestyle }
+                currTrie = { currTrie }
+                setCurrTrie = { setCurrTrie}
+                trieHead = { trieHead }
 
                 parseMoves = { parseMoves }
                 testingFlashcards = { testingFlashcards }
@@ -273,11 +315,15 @@ const MainBody = (props) => {
                 playerMoveIdx = { playerMoveIdx }
                 setPlayerMoveIdx = { playerMoveIdx }
 
+                freestyle = { freestyle }
+
 
                 testFlashcards = { testFlashcards }
                 onFinishFlashcards = { onFinishFlashcards }
                 testingFlashcards = { testingFlashcards }
                 setTestingFlashcards = { setTestingFlashcards }
+                setTrieHead = { setTrieHead }
+                beginFreestyle = { beginFreestyle }
 
             />
         </div>

@@ -20,7 +20,8 @@ const ToolbarBodyHeader = (props) => {
         folders,
         setFolders,
         setAddOpeningsToFolder,
-        testMode
+        testMode,
+        freestyle
 
     } = props;
 

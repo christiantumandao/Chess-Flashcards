@@ -14,6 +14,7 @@ import { getDefaultCards, getDefaultFolders } from "../../util/helper";
 
 import ToolbarHeader from "./ToolbarHeader/ToolbarHeader";
 import ToolbarBody from "./ToolbarBody/ToolbarBody";
+import buildTrie from "../../util/Trie";
 
 const startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -30,8 +31,9 @@ const Toolbar = (props) => {
             folders, setFolders,
             tab,
 
+            setTrieHead, beginFreestyle,
             testFlashcards, onFinishFlashcards,
-            testMode, 
+            testMode, freestyle,
             flashcardIdx } = props;
 
     const [searchResults, setSearchResults] = useState([]);
@@ -117,6 +119,18 @@ const Toolbar = (props) => {
         setToolbarTab("Flashcards");
     },[tab, setToolbarTab]);
 
+    const handleFreestyle = () => {
+        let head = null;
+
+        if (toolbarTab === "FolderFocus" && (!currentFolder || currentFolder.openings.length === 0)) return;
+        if (toolbarTab === "FolderFocus" && currentFolder.openings.length > 0) head = buildTrie(currentFolder.openings);
+        else head = buildTrie(flashcards);  
+        setTrieHead(head);
+        beginFreestyle(color, head);
+
+    }
+
+
 
     const handleBegin = () => {
         if (toolbarTab === "FolderFocus" && (!currentFolder || currentFolder.openings.length === 0)) return;
@@ -150,6 +164,8 @@ const Toolbar = (props) => {
                     onFinishFlashcards = { onFinishFlashcards }
                     startingFen = { startingFen }
                     addOpeningsToFolder = { addOpeningsToFolder }
+                    handleFreestyle = { handleFreestyle }
+                    freestyle = { freestyle }
                 />
 
                 {/** Toolbar Body */}
@@ -182,6 +198,7 @@ const Toolbar = (props) => {
                     currMove = { currMove }
                     startingFen = { startingFen }
                     moveHistory = { moveHistory }
+                    freestyle = { freestyle }
                 />
                 
 
@@ -189,7 +206,7 @@ const Toolbar = (props) => {
                 <div className="toolbar-footer">
                     <div className="buttons-container">
                         {
-                        (!testMode) ? 
+                        (!testMode && !freestyle) ? 
                         <>
                             <button onClick = { restart }>
                                 <FaRedo />

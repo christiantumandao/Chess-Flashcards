@@ -20,7 +20,8 @@ const FolderFocus = (props) => {
         deleteFlashcard,
         testMode,
         autoPlayOpening,
-        flashcardIdx
+        flashcardIdx,
+        freestyle
     } = props;
 
     const [showSignInMsg, setShowSignInMsg] = useState(false);
@@ -68,6 +69,7 @@ const FolderFocus = (props) => {
                     key = { opening.moves + idx }
                     idx = { idx }
                     testMode = { testMode }
+                    freestyle = { freestyle }
                     flashcard = { opening }
                     setFlashcards = { setFlashcards }
                     flashcards = { flashcards }
@@ -94,6 +96,7 @@ const FolderFocus = (props) => {
                     key = { opening.moves + idx }
                     idx = { idx }
                     testMode = { testMode }
+                    freestyle = { freestyle }
                     flashcard = { opening }
                     setFlashcards = { setFlashcards }
                     flashcards = { flashcards }
