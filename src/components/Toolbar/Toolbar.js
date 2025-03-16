@@ -27,6 +27,7 @@ const Toolbar = (props) => {
             flashcards, 
             setFlashcards,
             autoPlayOpening, 
+            handleSkip,
             color, setColor,
             folders, setFolders,
             tab,
@@ -166,6 +167,7 @@ const Toolbar = (props) => {
                     addOpeningsToFolder = { addOpeningsToFolder }
                     handleFreestyle = { handleFreestyle }
                     freestyle = { freestyle }
+                    handleSkip = { handleSkip }
                 />
 
                 {/** Toolbar Body */}

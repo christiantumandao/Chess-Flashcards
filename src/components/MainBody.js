@@ -3,6 +3,7 @@ import Game from "./Game";
 import Toolbar from "./Toolbar/Toolbar";
 
 import { Chess } from "chess.js";
+import { incrementIncorrects } from "../util/users";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -12,14 +13,13 @@ const MainBody = (props) => {
    const { tab, setTab } = props;
 
     const [game, setGame] = useState(new Chess()); 
-    const [history, setHistory] = useState([startingFen]); // holds the history of fens
-    const [moveHistory, setMoveHistory] = useState([]); // holds history of moves
-    const [currMove, setCurrMove] = useState(0); // used for tracking player history
+    const [history, setHistory] = useState([startingFen]);  // holds the history of fens
+    const [moveHistory, setMoveHistory] = useState([]);     // holds history of moves
+    const [currMove, setCurrMove] = useState(0);            // used for tracking player history
 
     const [flashcards, setFlashcards] = useState([]);
     const [folders, setFolders] = useState([]);
 
-    const [testingFlashcards, setTestingFlashcards] = useState([]);
     const [currOpening, setCurrOpening]= useState(null); // contains opening name of whatever is on board
 
     // auto playing openings
@@ -28,11 +28,14 @@ const MainBody = (props) => {
     const [autoPlayMoves, setAutoPlayMoves] = useState([]);
 
     // for playing flashcards
-    const [color, setColor] = useState("both"); // what color user will be playing
-    const [flashcardIdx, setFlashcardIdx] = useState(0);
+    const [color, setColor] = useState("white");                     // what color user will be playing
+    const [testingFlashcards, setTestingFlashcards] = useState([]); 
+    const [flashcardIdx, setFlashcardIdx] = useState(0);            // idx for testingFlashcards
     const [flashcardMoves, setFlashcardMoves] = useState([]);
-    const [playerMoveIdx, setPlayerMoveIdx] = useState(0); // the move idx in testing
+    const [playerMoveIdx, setPlayerMoveIdx] = useState(0);          // the move idx in testing a flashcard
     const [testMode, setTestMode] = useState(false);
+    const [flashGreen, setFlashGreen] = useState(false);
+    const [flashRed, setFlashRed] = useState(false);
 
     const [freestyle, setFreestyle] = useState(false);
     const [trieHead, setTrieHead] = useState(null);
@@ -179,6 +182,30 @@ const MainBody = (props) => {
         // game logic in Game component
     }
 
+    const handleSkip = () => {
+
+        setFlashRed(true);
+        incrementIncorrects();
+
+        if ((flashcardIdx + 1) >= testingFlashcards.length) {
+            onFinishFlashcards();
+            return;
+        }
+        const idx = flashcardIdx+1;
+        const newFlashcard = testingFlashcards[idx];
+        const newMoves = parseMoves(newFlashcard.moves);
+
+        setGame(new Chess());
+
+        setCurrOpening(newFlashcard);
+        setFlashcardIdx(idx);
+        setFlashcardMoves(newMoves);
+        setMoveHistory([]);
+
+        setPlayerMoveIdx(0);
+
+    }
+
     const onFinishFlashcards = () => {
         resetVariables();
     }
@@ -282,6 +309,11 @@ const MainBody = (props) => {
 
                 parseMoves = { parseMoves }
                 testingFlashcards = { testingFlashcards }
+
+                flashGreen = { flashGreen }
+                flashRed = { flashRed }
+                setFlashGreen = { setFlashGreen }
+                setFlashRed = { setFlashRed }
             />
             <Toolbar 
                 tab = { tab }
@@ -317,7 +349,7 @@ const MainBody = (props) => {
 
                 freestyle = { freestyle }
 
-
+                handleSkip = { handleSkip }
                 testFlashcards = { testFlashcards }
                 onFinishFlashcards = { onFinishFlashcards }
                 testingFlashcards = { testingFlashcards }

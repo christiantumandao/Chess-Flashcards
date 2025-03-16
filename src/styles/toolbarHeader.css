@@ -147,12 +147,36 @@ div.selectcolor-container > select {
 
 button.exit-test {
     background-color: rgba(255,0,0,.5);
+    margin-left: 0;
 }
 
 button.begin-test {
     background-color: var(--green);
     margin: 0;
 
+}
+
+.playing-as {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.selectcolor-container > button.skip-btn {
+    margin-left: auto;
+}
+
+.selectcolor-container span {
+    font-weight: bolder;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.selectcolor-container span.black {
+    color: rgb(100,100,100);
 }
 
 button.shuffle-button {

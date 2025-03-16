@@ -33,7 +33,8 @@ const ToolbarHeader = (props) => {
             toolbarTab,
             addOpeningsToFolder,
             handleFreestyle,
-            freestyle
+            freestyle,
+            handleSkip
 
     } = props;
 
@@ -171,36 +172,63 @@ const ToolbarHeader = (props) => {
                         
                 {
                     (testMode || freestyle) ? 
-                    <button 
-                        className="exit-test" 
-                        onClick = { () => onFinishFlashcards(false)}>
-                            Exit
-                    </button> :
-                    <>
-                        <select                 
-                            value = { color }
-                            onChange = { (e)=> setColor(e.target.value)}
-                            >
-                            <option value = "both">Both</option>
-                            <option value = "white">White</option>
-                            <option value = "black">Black</option>
-                        </select>
-                        <BsCaretDown />
-                        <button 
-                            className="begin-test" 
-                            onClick={ handleBegin }>
-                                Begin
-                        </button>
-           
-                            <button 
-                            className = "shuffle-button"
-                            onClick = { () => handleFreestyle() }>
-                                Freestyle
+                        <>
+                            <div className="playing-as">
+                                <p>Playing as: </p>
+                                { 
+                                    (color === "white" ) ?
+                                        <span>{"  "}White</span>
 
+                                    : (color === "black") ?
+                                        <span className="black">{"  "}Black</span>
+
+                                    :
+                                        <span className="both">{"  "}Both</span>
+                                }
+                            </div>
+
+                            {
+                                (!freestyle) ? 
+                                    <button
+                                        className="skip-btn"
+                                        onClick = { handleSkip }
+                                        >
+                                        Skip
+                                    </button> : null
+                            }
+                            <button 
+                                className="exit-test" 
+                                onClick = { () => onFinishFlashcards(false)}>
+                                    Exit
                             </button>
-        
-                
-                    </>
+
+                        </>
+                    :
+                        <>
+                            <select                 
+                                value = { color }
+                                onChange = { (e)=> setColor(e.target.value)}
+                                >
+                                <option value = "both">Both</option>
+                                <option value = "white">White</option>
+                                <option value = "black">Black</option>
+                            </select>
+                            <BsCaretDown />
+                            <button 
+                                className="begin-test" 
+                                onClick={ handleBegin }>
+                                    Begin
+                            </button>
+            
+                                <button 
+                                className = "shuffle-button"
+                                onClick = { () => handleFreestyle() }>
+                                    Freestyle
+
+                                </button>
+            
+                    
+                        </>
                     
                 }
                 {

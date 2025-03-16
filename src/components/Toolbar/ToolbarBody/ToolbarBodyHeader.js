@@ -84,7 +84,7 @@ const ToolbarBodyHeader = (props) => {
             <div className="folders-flashcards-button-container">
                 <button
                     className={(toolbarTab === "Flashcards") ? "flashcards-folders-btn-selected border-right" :"flashcards-folders-btn border-right"}
-                    disabled = { (toolbarTab === "Flashcards" || testMode) }
+                    disabled = { (toolbarTab === "Flashcards" || testMode || freestyle) }
                     onClick = { () => {
                         setToolbarTab("Flashcards");
                         setCurrentFolder(null);
@@ -95,7 +95,7 @@ const ToolbarBodyHeader = (props) => {
                 </button>
                 <button
                     className={(toolbarTab === "Folders") ? "flashcards-folders-btn-selected" :"flashcards-folders-btn"}
-                    disabled = { (toolbarTab === "Folders" || testMode) }
+                    disabled = { (toolbarTab === "Folders" || testMode || freestyle) }
                     onClick = { () => {
                         setToolbarTab("Folders");
                         setCurrentFolder(null);
@@ -134,11 +134,11 @@ const ToolbarBodyHeader = (props) => {
             }
 
             {
-                (toolbarTab === "FolderFocus" && !editFolderMode && user) ?
+                (toolbarTab === "FolderFocus" && !editFolderMode && user && !testMode && !freestyle) ?
                     <button onClick = { () => setEditFolderMode(true) }className="edit-folder-btn">
                         <FaRegEdit />
                     </button>
-                :  (toolbarTab === "Flashcards" && !editFlashcardsMode && user) ? 
+                :  (toolbarTab === "Flashcards" && !editFlashcardsMode && user && !testMode && !freestyle) ? 
                     <button onClick = { () => setEditFlashcardsMode(true) }className="edit-folder-btn">
                         <FaRegEdit />
                     </button> : null  

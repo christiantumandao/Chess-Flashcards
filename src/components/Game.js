@@ -3,12 +3,13 @@ import "../styles/game.css";
 
 import 'firebase/firestore';
 import { db, auth } from "../firebase.config";
-import { collection, query, where, getDocs, updateDoc, doc, getDoc } from "@firebase/firestore";
+import { collection, query, where, getDocs } from "@firebase/firestore";
 
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { useLocation } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { incrementCorrects, incrementIncorrects } from "../util/users";
 
 const startingFen = "nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -27,10 +28,9 @@ const Game = (props) => {
         playerMoveIdx, setPlayerMoveIdx, parseMoves,
         setMoveHistory, setHistory, setCurrMove,
         onFinishFlashcards, autoPlay, testingFlashcards,
+        setFlashGreen, setFlashRed, flashGreen, flashRed,
         freestyle, currTrie, trieHead, setCurrTrie } = props;
 
-    const [flashGreen, setFlashGreen] = useState(false);
-    const [flashRed, setFlashRed] = useState(false);
     const animationSpeed = 100;
 
     /* Game Logic
@@ -236,49 +236,6 @@ const Game = (props) => {
         },1000)
     },[flashRed]);
     
-
-    const incrementCorrects = async () => {
-        if (!user) return;
-        try {
-            const userRef = doc(db, "userData", user.uid);
-            const userSnap = await getDoc(userRef);
-
-            if (userSnap.exists()) {
-                const userData = userSnap.data();
-                const correct =userData.correct;
-                const newCorrect = correct+1;
-                await updateDoc(userRef, {
-                    correct: newCorrect
-                });
-            } else {
-                console.error("Error finding user while attempting to update")
-            }
-
-        } catch (error) {
-            console.error("Error occured while  attempting to update user data");
-        }
-    }
-
-    const incrementIncorrects = async () => {
-        if (!user) return;
-        try {
-            const userRef = doc(db, "userData", user.uid);
-            const userSnap = await getDoc(userRef);
-
-            if (userSnap.exists()) {
-                const userData = userSnap.data();
-                const incorrect =userData.incorrect;
-                const newIncorrect = incorrect+1;
-                await updateDoc(userRef, {
-                    incorrect: newIncorrect
-                });
-            } else {
-                console.error("Error finding user while attempting to update")
-            }
-        } catch (error) {
-            console.error("Error finding user while attempting to update");
-        }
-    }
   
     const findOpening = async () => {
         try {

@@ -24,7 +24,7 @@
 }
 
 .flash-green > * {
-    outline: 5px solid var(--green);
+    outline: 5px solid var(--lightGreen);
 }
 
 .flash-red > * {
