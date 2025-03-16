@@ -26,7 +26,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<MainBody tab = { tab } setTab = { setTab } />}></Route>
-        <Route path="/more" element={<More />}></Route>
+        <Route path="/about" element={<More />}></Route>
         <Route path="/log-in" element={<LogIn login={true}/>}></Route>
         <Route path="/sign-up" element={<LogIn  login={false}/>}></Route>
         <Route path="/profile" element={<Profile />}></Route>

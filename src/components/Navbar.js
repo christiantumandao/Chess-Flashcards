@@ -31,6 +31,7 @@ const Navbar = (props) => {
             else if (relPath === "sign-up") relPath = "signup"
             else if (relPath === "log-in") relPath = "login"
             else if (relPath === "flashcards") relPath = "test"
+            else if (relPath === "about") relPath = "more"
 
             setTab(relPath);
         }
@@ -90,7 +91,7 @@ const Navbar = (props) => {
 
 
                 <button
-                    onClick = { () => { nav("/more"); setTab('more'); setShowMobileNav(false); }}
+                    onClick = { () => { nav("/about"); setTab('more'); setShowMobileNav(false); }}
                     className={(tab === "more") ? "selected-tab" : ""} 
                 >
                     <BsThreeDots />
@@ -167,7 +168,7 @@ const Navbar = (props) => {
 
 
                     <button
-                        onClick = { () => { nav("/more"); setTab('more'); setShowMobileNav(false); }}
+                        onClick = { () => { nav("/about"); setTab('more'); setShowMobileNav(false); }}
                         className={(tab === "more") ? "selected-tab" : ""} 
                     >
                         <BsThreeDots />

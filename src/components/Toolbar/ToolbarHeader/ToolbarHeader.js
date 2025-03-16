@@ -7,7 +7,7 @@ import { doc, setDoc } from "@firebase/firestore";
 import { formatMoveHistory, parseName, shuffleCards } from "../../../util/helper";
 
 import { CgAddR, CgCheckR } from "react-icons/cg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsCaretDown } from "react-icons/bs";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
@@ -34,7 +34,9 @@ const ToolbarHeader = (props) => {
             addOpeningsToFolder,
             handleFreestyle,
             freestyle,
-            handleSkip
+            handleSkip,
+            editFolderMode,
+            editFlashcardsMode
 
     } = props;
 
@@ -174,16 +176,16 @@ const ToolbarHeader = (props) => {
                     (testMode || freestyle) ? 
                         <>
                             <div className="playing-as">
-                                <p>Playing as: </p>
+                                <p>Playing as:</p>
                                 { 
                                     (color === "white" ) ?
-                                        <span>{"  "}White</span>
+                                        <span>White</span>
 
                                     : (color === "black") ?
-                                        <span className="black">{"  "}Black</span>
+                                        <span className="black">Black</span>
 
                                     :
-                                        <span className="both">{"  "}Both</span>
+                                        <span className="both">Both</span>
                                 }
                             </div>
 
@@ -197,12 +199,14 @@ const ToolbarHeader = (props) => {
                                     </button> : null
                             }
                             <button 
-                                className="exit-test" 
+                                className="exit-test red-btn" 
                                 onClick = { () => onFinishFlashcards(false)}>
                                     Exit
                             </button>
 
                         </>
+                    :
+                    (editFlashcardsMode || editFolderMode) ? null
                     :
                         <>
                             <select                 
@@ -219,23 +223,30 @@ const ToolbarHeader = (props) => {
                                 onClick={ handleBegin }>
                                     Begin
                             </button>
-            
+
+                            <div className="freestyle-container">
+
+                                <div className="tooltip-container">
+                                    <FaRegQuestionCircle />
+                                    <div className="tooltip">
+                                        <Link to="/about">Read more</Link>
+                                    </div>
+                                </div>
                                 <button 
-                                className = "shuffle-button"
+                                className = ""
                                 onClick = { () => handleFreestyle() }>
                                     Freestyle
 
                                 </button>
+                            </div>
+
+                            <button onClick ={ ()=> shuffleCards(flashcards, setFlashcards) } className="shuffle-button">
+                                Shuffle
+                            </button>
             
                     
                         </>
                     
-                }
-                {
-                    (testMode || freestyle) ? null : 
-                    <button onClick ={ ()=> shuffleCards(flashcards, setFlashcards) } className="shuffle-button">
-                        Shuffle
-                    </button>
                 }
             </div> 
         )
@@ -255,7 +266,7 @@ const ToolbarHeader = (props) => {
                 }
 
             <div className="toolbar-description">
-                { (freestyle) ? null : (currOpening) ? parseName(currOpening) : (game.fen() !== startingFen) ? parseMoveHistory() : null }
+                { (freestyle) ? "Freestyle Aracde" : (currOpening) ? parseName(currOpening) : (game.fen() !== startingFen) ? parseMoveHistory() : null }
 
                 {
                     (freestyle) ? null :
@@ -267,9 +278,9 @@ const ToolbarHeader = (props) => {
                         </button> 
                     : 
                     (game.fen() !== startingFen) ?
-                        <button className="is-added-btn" disabled>
+                        <button className="tooltip-container" disabled>
                             <CgCheckR />
-                            <div className="is-added-tooltip">
+                            <div className="tooltip">
                                 Opening is added
                             </div>
                         </button> : null

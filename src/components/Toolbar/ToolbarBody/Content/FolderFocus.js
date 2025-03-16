@@ -29,7 +29,7 @@ const FolderFocus = (props) => {
     
     useEffect(()=>{
         setShowSignInMsg(false);
-        
+
         return ()=>{
             setShowSignInMsg(false);
         }
@@ -78,7 +78,7 @@ const FolderFocus = (props) => {
                     setFolders = { setFolders }
                     autoPlayOpening = { autoPlayOpening }
                     flashcardIdx = { flashcardIdx }
-                    showDelete = { editFolderMode }
+                    editFlashcard = { editFolderMode }
                     toolbarTab = { toolbarTab }
                     currentFolder = { currentFolder }
                     setCurrentFolder = { setCurrentFolder }
@@ -105,7 +105,7 @@ const FolderFocus = (props) => {
                     setFolders = { setFolders }
                     autoPlayOpening = { autoPlayOpening }
                     flashcardIdx = { flashcardIdx }
-                    showDelete = { true }
+                    editFlashcard = { true }
                     toolbarTab = { toolbarTab }
                     currentFolder = { currentFolder }
                     setCurrentFolder = { setCurrentFolder }

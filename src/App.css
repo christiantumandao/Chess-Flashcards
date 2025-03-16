@@ -154,6 +154,44 @@ input:focus {
 
 }
 
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 200;
+  
+  height: auto;
+  width: auto;
+  max-width: none;
+  text-align: center;
+
+  padding: 6px;
+  border-radius: 3px;
+
+  font-size: 12px;
+  white-space: nowrap;
+  color: white;
+
+  background-color: var(--darkGreen);
+  opacity: .4;
+  box-shadow: var(--defaultShadow);
+
+  transform: translate(-50%, 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+
+}
+
+.tooltip-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 @media (max-width: 1495px) {
   div.small-modal-message,

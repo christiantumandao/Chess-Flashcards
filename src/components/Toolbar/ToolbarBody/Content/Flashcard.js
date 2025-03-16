@@ -18,20 +18,20 @@ const Flashcard = (props) => {
             idx, 
             autoPlayOpening,
             deleteFlashcard, 
-            showDelete,
+            editFlashcard,
             currentFolder, setCurrentFolder,
             setFolders,
             folders,
             toolbarTab } = props;
 
     const [user] = useAuthState(auth);
-    const [editFlashcard, setEditFlashcard] = useState(false);
+    const [editName, setEditName] = useState(false);
     const [newName, setNewName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(()=>{
         setNewName("");
-    },[editFlashcard])
+    },[editName])
 
     const handleDeleteFlashcard = async (e) => {
         e.stopPropagation();
@@ -80,11 +80,11 @@ const Flashcard = (props) => {
     }
 
     const getFlashcardButtons = () => {
-        if (user) {
+        if (user && !editName && editFlashcard) {
         return (
             <button 
                 onClick = { (e)=> {
-                    setEditFlashcard(true); 
+                    setEditName(true); 
                     e.stopPropagation()
                 }}
                 className={(isLoading) ? "hidden" : "flashcard-button-container edit-flashcard-button"}>
@@ -125,9 +125,8 @@ const Flashcard = (props) => {
             })
             setFolders(newFolders);
             setCurrentFolder(newFolder);
-            setEditFlashcard(false);
+            setEditName(false);
             setNewName("");
-            setEditFlashcard(false);
 
         } catch (e) {
             console.error(e);
@@ -149,7 +148,7 @@ const Flashcard = (props) => {
 
             setNewName("");
             setFlashcards(newFlashcards);
-            setEditFlashcard(false);     
+            setEditName(false);     
 
         } catch (e) {
             console.error(e);
@@ -162,7 +161,7 @@ const Flashcard = (props) => {
         return (
             <button 
                 onClick = { (e)=> { 
-                    setEditFlashcard(false); 
+                    setEditName(false); 
                     e.stopPropagation()
                 }}
                 className=  {(isLoading) ? "hidden" : "edit-flashcard-button"}>
@@ -187,20 +186,20 @@ const Flashcard = (props) => {
 
             <div className={ (isLoading) ? "hidden" : "flashcard-body" }>
             {
-                (!editFlashcard) ?  
+                (!editName) ?  
                     getFlashcardContent() :
                     getEditFlashcard()
             }
             </div>
 
             {
-                (editFlashcard) ?
+                (editName) ?
                     getEditFlashcardButton() :
                     getFlashcardButtons()
             }
 
             {
-                (showDelete) ? 
+                (editFlashcard) ? 
                    <button 
                     onClick = { handleDeleteFlashcard }
                     className={(isLoading) ? "hidden" : "red-btn delete-flashcard-btn flashcard-button-container"}>

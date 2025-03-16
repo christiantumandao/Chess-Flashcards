@@ -129,7 +129,7 @@ const ToolbarContent = (props) => {
                 />
                 
             :
-            (toolbarTab === "FolderFocus" && currentFolder && currPath.pathname === "/flashcards") ?
+            (toolbarTab === "FolderFocus" && currentFolder && currPath.pathname === "/flashcards" && !freestyle) ?
 
                 <FolderFocus 
                     currentFolder = { currentFolder }
@@ -152,6 +152,9 @@ const ToolbarContent = (props) => {
 
                 />
             :
+            (freestyle) ? 
+                showMoveHistory() 
+            :
             <div className="flashcards-container">
             {
                 // if in flashcard mode
@@ -168,7 +171,7 @@ const ToolbarContent = (props) => {
                             autoPlayOpening = { autoPlayOpening }
                             flashcardIdx = { flashcardIdx }
                             deleteFlashcard = { deleteFlashcardFromMain }
-                            showDelete = { editFlashcardsMode }
+                            editFlashcard = { editFlashcardsMode }
                             toolbarTab = { toolbarTab }
                             folders = { folders }
                             freestyle = { freestyle }
@@ -191,7 +194,7 @@ const ToolbarContent = (props) => {
                         <Flashcard
                             key = { flashcard.moves }
                             idx = { idx }
-                            showDelete = { false }
+                            editFlashcard = { false }
                             toolbarTab = { toolbarTab }
 
                             folders = { folders }

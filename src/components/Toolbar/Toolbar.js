@@ -154,6 +154,8 @@ const Toolbar = (props) => {
                     currOpening = { currOpening }
                     currPath = { currPath }
                     setSearchResults = { setSearchResults }
+                    editFlashcardsMode = { editFlashcardsMode }
+                    editFolderMode = { editFolderMode }
                     testMode = { testMode }
                     color = { color }
                     setColor = { setColor }
