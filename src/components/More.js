@@ -3,6 +3,9 @@ import "../styles/more.css";
 
 import { IoReorderThree } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
+import { TbBinaryTree } from "react-icons/tb";
+
+
 
 const More = () => {
     return (
@@ -50,6 +53,20 @@ const More = () => {
 
 
                     <article>
+                        <h3 className="trie-header">
+                            <TbBinaryTree />
+                            Trie-built flashcards (Freestyle)
+                        </h3>
+                        <p>
+                            User's flashcards will be compiled into a Trie-based data structure where "prefixes" are constructred from shared moves. 
+                            The user, playing as black or white, will be playing against a computer that will play a random move from one of the children of the current move-node.
+                            This will give users more freedom to choose the line of play while in the bounds of their repertoire.
+
+                        </p>
+                    </article>
+
+
+                    <article>
                         <h3>
                             <FaSearch />
                             Explorer
@@ -70,17 +87,6 @@ const More = () => {
 
 
                 <section className="tutorial-container">
-                    <article>
-                        <h3>
-                            Trie-based flashcards
-                        </h3>
-                        <p>
-                            User's flashcards will be compiled into a Trie-based data structure where prefixes are built on shared moves. 
-                            The user, playing as black or white, will be playing against a computer that will play a random move from one of the children of the current move-node.
-                            This will give users more freedom to choose the line of play while in the bounds of their repertoire.
-
-                        </p>
-                    </article>
 
                     <article>
                         <h3>Other</h3>

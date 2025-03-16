@@ -28,14 +28,16 @@ const FolderFocus = (props) => {
     const nav = useNavigate();  
     
     useEffect(()=>{
+        setShowSignInMsg(false);
+        
         return ()=>{
             setShowSignInMsg(false);
         }
-    },[]);
+    },[toolbarTab]);
 
     const getAddToFolderElement = () => {
         return (
-            (addOpeningsToFolder || editFolderMode || testMode) ? null :
+            (addOpeningsToFolder || editFolderMode || testMode || freestyle) ? null :
             <button 
                 onClick = { ()=> (user) ? setAddOpeningsToFolder(true) : setShowSignInMsg(true) }
                 className="add-folder-wrapper">

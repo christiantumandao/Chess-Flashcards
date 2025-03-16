@@ -9,9 +9,10 @@ import { formatMoveHistory, parseName, shuffleCards } from "../../../util/helper
 import { CgAddR, CgCheckR } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import { BsCaretDown } from "react-icons/bs";
+import { FaRegQuestionCircle } from "react-icons/fa";
+
 
 import TopHeaderExplore from "./TopHeaderExplore";
-import buildTrie from "../../../util/Trie";
 
 const ToolbarHeader = (props) => {
 
@@ -108,7 +109,7 @@ const ToolbarHeader = (props) => {
                         {
                             (modal === "sign-in") ? 
                                 <>
-                                    <button className= "small-modal-sign-in" onClick = { ()=> nav("/log-in") }>
+                                    <button className= "small-modal-sign-in green-btn" onClick = { ()=> nav("/log-in") }>
                                         Sign in
                                     </button>
                                     <button className= "small-modal-cancel" onClick = { ()=> setModal("") }>
@@ -190,13 +191,15 @@ const ToolbarHeader = (props) => {
                             onClick={ handleBegin }>
                                 Begin
                         </button>
+           
+                            <button 
+                            className = "shuffle-button"
+                            onClick = { () => handleFreestyle() }>
+                                Freestyle
 
-                        <button 
-                        className = "shuffle-button"
-                        onClick = { () => handleFreestyle() }>
-                            Freestyle
-
-                        </button>
+                            </button>
+        
+                
                     </>
                     
                 }

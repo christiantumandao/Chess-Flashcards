@@ -311,12 +311,13 @@ button.cancel-create-folder {
 }
 .add-folder-input-wrapper > div {
     font-weight: bolder;
+    font-size: 14px;
 }
 
 .add-folder-sign-in-msg {
     background-color: transparent;
     text-decoration: underline;
-    color: white;
+    color: var(--green);
     border: none;
     font-size: 14px;
     margin-top: 6px;
@@ -324,7 +325,7 @@ button.cancel-create-folder {
 }
 
 .add-folder-sign-in-msg:hover {
-    color: gray;
+    color: var(--lightGreen);
 }
 
 .add-folder-buttons button.create-folder:hover {

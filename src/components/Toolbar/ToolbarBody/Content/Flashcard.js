@@ -50,7 +50,7 @@ const Flashcard = (props) => {
                     { (flashcard) ? parseName() : null}
                 </h4>
                 <p>
-                    {(testMode) ? null : flashcard.moves }
+                    {(testMode || freestyle) ? null : flashcard.moves }
                 </p>
             </>
         )
@@ -180,7 +180,7 @@ const Flashcard = (props) => {
         <div 
             className={(isLoading) ? "shimmer flashcard-wrapper" : (testMode && idx === flashcardIdx) ? "flashcard-wrapper flashcard-highlight" : "flashcard-wrapper"} 
             onClick ={ () => {
-                if (!testMode) autoPlayOpening(flashcard)
+                if (!testMode && !freestyle) autoPlayOpening(flashcard)
             }}>
           
             

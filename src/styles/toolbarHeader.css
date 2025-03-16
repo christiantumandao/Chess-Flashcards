@@ -52,6 +52,7 @@
 
 .toolbar-description > .add-opening-btn:hover {
     transform: scale(1.1);
+    color: var(--lightGreen);
 }
 
 .is-added-btn {
@@ -188,7 +189,7 @@ button.shuffle-button {
   }
   
   .small-modal-message {
-    font-size: 16px;
+    font-size: 14px;
     flex-grow: 1;
   }
   
@@ -201,24 +202,21 @@ button.shuffle-button {
   }
   
   .small-modal-buttons > button {
-    padding: .4rem;
-    font-size: 1rem;
+    padding: 5px;
+    font-size: 14px;
     border-radius: 3px;
-    border: none;
     width: auto;
     
     display: flex;
     flex-direction: center;
     align-items: center;
     color: white;
-    border: var(--border);
-    background-color: var(--eigen);
   }
   .small-modal-sign-in {
-    background-color: var(--darkGreen);
     margin-right: 6px;
   }
   .small-modal-buttons > .small-modal-cancel {
+    border: var(--border);
     background-color: var(--eigen);
   }
   
