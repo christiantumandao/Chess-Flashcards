@@ -38,14 +38,13 @@
 
 .search-container {
     width: 100%;
-    height: 38px;
+    height: var(--toolbarTopHeaderHeight);
 
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: stretch;
-    margin: 16px 0;
-    padding: 0 10px
+    padding: 10px
 
 }
 
@@ -78,7 +77,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 .search-btns > input,
 .search-btns > button,
-.search-btns > select {
+.search-select > select {
     background-color: transparent;
     border: none;
     padding: .5rem;
@@ -99,8 +98,39 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     flex-grow: 1;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-}   
-.search-container select:focus {
+} 
+
+.search-select {
+    height: 100%;
+    width: auto;
+
+    position: relative;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+    padding: 0;
+    margin-right: 0;
+}
+
+.search-select select {
+    padding: 8px;
+    padding-right: 27px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.search-select svg {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 12px;
+    color: white;
+}
+
+.search-select select:focus {
     outline: none;
 
 }
@@ -108,21 +138,6 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 .search-container button:hover,
 .search-container select:hover {
     background-color: var(--hoverHighlightGreen);
-    color: white;
-}
-
-.search-container select {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-
-    padding-right: 24px;
-    margin-right: 0;
-}
-
-.search-btns > svg {
-    font-size: 12px;
-    position: absolute;
-    right: 65px;
     color: white;
 }
 
@@ -140,7 +155,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 
 .toolbar-body-folder-highlight {
     /*background-color: #37323E;*/
-    background-color: rgb(69,69,69);
+    background-color: #444f60;
     -webkit-box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);
     -moz-box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);
     box-shadow: inset 0px 0px 30px 1px rgba(0,0,0,0.7);

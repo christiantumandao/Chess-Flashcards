@@ -1,5 +1,9 @@
 .flashcard-wrapper {
-    height: 90px;
+    height: auto;
+    min-height: 90px;
+    max-height: 180px;
+    overflow-y: hidden;
+    
     width: 100%;
     padding: 15px;
     margin: 15px 0;

@@ -23,11 +23,9 @@ function addFlashcardMoves(moves, head) {
 } 
 
 export default function buildTrie(flashcards) {
-    console.log("Building tree...");
+    //console.log("Building tree...");
     try {
-        console.log()
         const head = new Trie();
-        console.log(flashcards);
 
         flashcards.forEach((flashcards) => {
 
@@ -38,8 +36,6 @@ export default function buildTrie(flashcards) {
             // adding the sequence of mvoes in flashcard to trie from head
             addFlashcardMoves(parsedMoves, head);
         });
-
-        console.log(head);
 
         return head;
 

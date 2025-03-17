@@ -8,7 +8,11 @@
 :root {
   --navbarWidth: 200px;
   --toolbarFootHeight: auto;
-  --mobileTBFootHeight: 40px;
+  --mobileTBFootHeight: 50px;
+  --mobileNavIconHeight: 48px;
+
+  --toolbarTitleHeight: 48px;
+  --toolbarTopHeaderHeight: 58px;
 
   --btnRadius: 5px;
   --defaultRadius: 10px;
@@ -24,13 +28,14 @@
   --border: 1px solid rgba(68, 68, 74, .4); 
 
   --darkGrey: rgb(17, 17, 23);
-  --lightGrey: rgb(115,115,119);
-
   --eigen: #16161d;
+  --lightGrey: rgb(115,115,119);
 
   --darkGreen: #2b3b31;
   --green: #517058;
   --lightGreen: #799981;
+
+  --tan:  rgb(254,251,234);
 
   --red: rgba(255,0,0,.5);
   --lightRed: rgba(255,26,26,.6);
@@ -59,7 +64,6 @@ body {
 
 .App {
   max-height: 100vh;
-  overflow: scroll;
 }
 
 
@@ -200,12 +204,13 @@ input:focus {
   }
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1024px) {
   .navbar-wrapper {
     display: none;
   }
   div.navbar-icon {
-    display: block;
+    display: flex;
+    height: var(--mobileNavIconHeight)
   }
   .mainbody {
     margin: 0;
@@ -226,7 +231,7 @@ input:focus {
   }
   div.toolbar-wrapper {
     padding-top:10px;
-    height: calc(100vh - 40px) !important;
+    height: calc(100vh - 40px);
     margin-bottom: 20px;
   }
 
@@ -274,6 +279,7 @@ input:focus {
 
   div.toolbar-wrapper {
     width: 360px;
+    height: auto;
 
     padding: 0 20px; 
 
@@ -286,7 +292,7 @@ input:focus {
 }
 div.small-modal-message,
 div.small-modal-buttons > button {
-  font-size: 16px;
+  font-size: 14px;
 }
 div.game-wrapper {
     height: auto;
@@ -317,21 +323,29 @@ div.toolbar-body {
 }
 
 @media (max-width: 425px) {
+  .App {
+    height: auto;
+  }
+  html {
+    background-color: var(--eigen);
+    overscroll-behavior: none;
+  }
 
   div.navbar-icon {
-    height: auto;
     margin: 0;
+    padding-left: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--darkGrey);
+    width: 100%;
+    box-shadow: var(--defaultShadow);
   }
 
   div.navbar-icon > button {
     background-color: transparent;
     width: auto;
     height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    margin: 10px;
     font-size: 28px;
   }
 
@@ -343,14 +357,21 @@ div.toolbar-body {
     padding: 0;
   }
   div > div.toolbar-wrapper {
+    height: auto;
+    max-height: none;
     padding: 0;
     margin: 0;
   }
   div.toolbar-container {
     border-radius: 0;
+    max-height: none;
+    height: 100%;
   }
   div.mainbody {
-    min-height: 0 !important;
+    height: auto;
+    min-height: none;
+    max-height: none;
+    margin-top: calc(var(--mobileNavIconHeight) + var(--toolbarTitleHeight) + var(--toolbarTopHeaderHeight));
   }
 
   h2.toolbar-title {
@@ -361,13 +382,13 @@ div.toolbar-body {
     order:1;
   }
 
-  div.search-container {
+  form.search-container {
     order: 2;
+    padding: 10px 15px;
     margin: 0;
-    margin-top: 15px;
   }
-  div.search-container > * {
-    height: 38px;
+  form.search-container > * {
+    height: 100%;
   }
   .search-container select {
     font-size: 14px;
@@ -387,20 +408,12 @@ div.toolbar-body {
   }
 
   div.toolbar-header > .toolbar-description {
-    order: 1;
+    order: 2;
   }
   div.toolbar-header > .selectcolor-container {
-    order: 2;
-    border-bottom: var(--border);
-    padding-bottom: 16px;
-    margin-bottom: 0;
+    order: 1;
+    border-top: var(--border);
   }
-  div.toolbar-body {
-
-    padding-top: 15px;
-    max-height: 70vh;
-  }
-
 
   div.movepair-container {
     height: 40px;
@@ -413,8 +426,8 @@ div.toolbar-body {
 
   div.toolbar-footer {
     margin: 0;
-    order: 1;
-    height: auto;
+    order: 2;
+    height: var(--mobileTBFootHeight);
   }
 
   div.buttons-container > button {
@@ -424,13 +437,96 @@ div.toolbar-body {
     margin: 10px 20px;
   }
 
+  div.buttons-container > button > svg:hover {
+    color: white;
+  }
+
   div.toolbar-body {
     order: 3;
+
+    height: 100%;
+    max-height: none;
+
+    padding-top: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-top: var(--border);
+    margin-bottom: 0;
+
+    flex-grow: 1;
+    overflow-y: scroll;
   }
 
   div.toolbar-header {
-    order:2;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: var(--mobileNavIconHeight);
+    width: 100%;
+    background-color: var(--eigen);
+    box-shadow: var(--defaultShadow);
+  }
+
+  div.flashcards-container {
+    height: 100%;
+  }
+
+  div.flashcard-wrapper:hover {
+    background-color: var(--darkGrey);
+  }
+
+  div.flashcard-wrapper:active {
+    background-color: var(--hoverHighlightDarkGrey);
+  }
+
+  .page.profile-wrapper {
   }
 
 
+  div.profile-blob {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  div.profile-wrapper > h1 {
+    width: 100%;
+    margin-top: calc(var(--mobileNavIconHeight) + 15px);
+  }
+
+  div.profile-blob:last-child {
+    padding-top: 0;
+  }
+
+  div.login-container {
+    background-color: transparent;
+  }
+
+  .login-info button.login-button:hover {
+    background-color: var(--green);
+  }
+
+  .login-info button.login-button:active {
+    background-color: var(--darkGreen);
+    border: 1px solid var(--lightGreen);
+  }
+
+  .sign-up-link > a:hover {
+    color: white;
+  }
+
+  .sign-up-link > a:active {
+    color: gray;
+  }
+}
+
+@media (max-width: 375px) {
+  div.selectcolor-container button,
+  div.selectcolor-container select {
+    font-size: 12px;
+  }
+
+  div.small-modal-message,
+  div.small-modal-buttons > button {
+    font-size: 12px;
+}
 }

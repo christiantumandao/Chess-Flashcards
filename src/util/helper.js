@@ -98,14 +98,13 @@ const shuffleCards = (flashcards, setFlashcards) => {
     const array = [...flashcards];
     let currentIndex = array.length,  randomIndex;
 
-    // While there remain elements to shuffle.
     while (currentIndex > 0) {
   
-      // Pick a remaining element.
+      // get random idx
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
   
-      // And swap it with the current element.
+      // swap idxs
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }

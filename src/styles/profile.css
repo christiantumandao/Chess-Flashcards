@@ -207,12 +207,12 @@
   }
   .modal-buttons > button {
     flex-grow: 1;
-    border-radius: var(--btnRadius);
-    border: none;
     padding: .5rem;
+    border-radius: var(--btnRadius);
+
     font-size: 1rem;
     font-weight: bolder;
-    border: 1px solid transparent;
+    color: white;
   }
   
   button.confirm {
@@ -223,13 +223,14 @@
     background-color: rgba(255,0,0,.3);
   }
   
-  button.delete {
-    background-color: gray;
+  div > button.cancel {
+    background-color: var(--darkGrey);
+    border: var(--border);
     margin-left: 5px;
   }
   
-  button.delete:hover {
-    background-color: rgba(255,255,255,.3);
+  button.cancel:hover {
+    background-color: var(--hoverHighlightDarkGrey);
     border: 1px solid gray;
   }
   

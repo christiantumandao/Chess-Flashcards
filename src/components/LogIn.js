@@ -69,7 +69,6 @@ const LogIn = (props) => {
             return;
         }
         setIsLoading(true);
-        console.log("usiong "+ email);
         await createUserWithEmailAndPassword(auth, email, password)
             .then( async (userCredential)=>{
                 const user = userCredential.user;

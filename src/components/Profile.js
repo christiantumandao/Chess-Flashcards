@@ -255,7 +255,7 @@ const Profile = () => {
                                     >
                                         Log out
                                     </button>
-                                    <button className="delete" onClick = { ()=>{
+                                    <button className="cancel" onClick = { ()=>{
                                         setLogout(false);
                                         setDel(false);
                                     
@@ -282,7 +282,7 @@ const Profile = () => {
                                         >
                                             Delete
                                         </button>
-                                        <button className="delete" onClick = { ()=>{
+                                        <button className="cancel" onClick = { ()=>{
                                             setLogout(false);
                                             setDel(false);
                                         }}>

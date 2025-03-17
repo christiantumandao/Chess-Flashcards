@@ -34,17 +34,20 @@ const TopHeaderExplore = (props) => {
             />
 
             <div className="search-btns">
-                <select
-                    value = { resultLimit }
-                    onChange = {(e) => setResultLimit(e.target.value)}
-                >
-                    <option value = {5}>5</option>
-                    <option value = {10}>10</option>
-                    <option value = {20}>20</option>
-                    <option value = {50}>50</option>
+                <div className="search-select">
+                    <select
+                        value = { resultLimit }
+                        onChange = {(e) => setResultLimit(e.target.value)}
+                    >
+                        <option value = {5}>5</option>
+                        <option value = {10}>10</option>
+                        <option value = {20}>20</option>
+                        <option value = {50}>50</option>
 
-                </select>
-                <BsCaretDown />
+                    </select>
+                    <BsCaretDown />
+                </div>
+                
                 <button
                     disabled = { searchQuery.length === 0 }
                     type="submit"

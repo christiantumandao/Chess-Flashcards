@@ -209,15 +209,17 @@ const ToolbarHeader = (props) => {
                     (editFlashcardsMode || editFolderMode) ? null
                     :
                         <>
-                            <select                 
-                                value = { color }
-                                onChange = { (e)=> setColor(e.target.value)}
-                                >
-                                <option value = "both">Both</option>
-                                <option value = "white">White</option>
-                                <option value = "black">Black</option>
-                            </select>
+                            <div className="select-element">
+                                <select                 
+                                    value = { color }
+                                    onChange = { (e)=> setColor(e.target.value)}
+                                    >
+                                    <option value = "both">Both</option>
+                                    <option value = "white">White</option>
+                                    <option value = "black">Black</option>
+                                </select>
                             <BsCaretDown />
+                            </div>
                             <button 
                                 className="begin-test" 
                                 onClick={ handleBegin }>

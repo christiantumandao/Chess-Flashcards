@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -23,6 +23,7 @@ const Navbar = (props) => {
     const currPath = useLocation();
     const [showMobileNav, setShowMobileNav] = useState(false);
 
+    const mobileNavRef= useRef(null);
 
     useEffect(()=>{
         if (currPath.pathname !== tab) {
@@ -38,6 +39,23 @@ const Navbar = (props) => {
     },[currPath, tab, setTab])
 
 
+    useEffect(()=> {
+
+        const handleOutsideClick = (e) => {
+            if (mobileNavRef.current && !mobileNavRef.current.contains(e.target)) {
+                setShowMobileNav(false);
+            }
+        }
+
+        if (showMobileNav) {
+            document.addEventListener("mousedown", handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        }
+
+    },[showMobileNav]);
 
     return (
         <>
@@ -48,7 +66,7 @@ const Navbar = (props) => {
             <nav>
                 <button
                     className={(tab === "explore") ? "selected-tab" : ""} 
-                    onClick = { () => { nav("/"); setTab("explore"); setShowMobileNav(false); }}
+                    onClick = { () => { nav("/"); setTab("explore"); }}
                 >
                     <FaSearch />
                     Explore
@@ -56,7 +74,7 @@ const Navbar = (props) => {
 
                 <button
                 className={(tab === "test") ? "selected-tab" : ""} 
-                onClick = { () => { nav("/flashcards"); setTab('test'); setShowMobileNav(false); }}
+                onClick = { () => { nav("/flashcards"); setTab('test'); }}
                 >
                     <PiCardsLight />
                     Flashcards
@@ -66,7 +84,7 @@ const Navbar = (props) => {
                     (user) ?
                         <button
                         className={(tab === "profile") ? "selected-tab" : ""} 
-                        onClick = { () => { nav("/profile"); setTab("profile"); setShowMobileNav(false); }}
+                        onClick = { () => { nav("/profile"); setTab("profile"); }}
                         >
                             <CgProfile />
                             Profile
@@ -75,13 +93,13 @@ const Navbar = (props) => {
                         <>
                         <button
                         className={(tab === "signup") ? "selected-tab" : ""} 
-                        onClick = { () => { nav("/sign-up"); setTab("signup"); setShowMobileNav(false); }}
+                        onClick = { () => { nav("/sign-up"); setTab("signup"); }}
                         >
                             Signup
                         </button>
                         <button
                         className={(tab === "login") ? "selected-tab" : ""} 
-                        onClick = { () => { nav("/log-in"); setTab('login'); setShowMobileNav(false); }}
+                        onClick = { () => { nav("/log-in"); setTab('login'); }}
                         >
                             Login
                         </button>
@@ -91,7 +109,7 @@ const Navbar = (props) => {
 
 
                 <button
-                    onClick = { () => { nav("/about"); setTab('more'); setShowMobileNav(false); }}
+                    onClick = { () => { nav("/about"); setTab('more');  }}
                     className={(tab === "more") ? "selected-tab" : ""} 
                 >
                     <BsThreeDots />
@@ -100,82 +118,81 @@ const Navbar = (props) => {
             </nav>
             
         </div>
-        <div className="navbar-icon">
+        
+        <div className={ (showMobileNav) ? "hidden navbar-icon" : "navbar-icon"}>
             <button onClick = { ()=> setShowMobileNav(true)}>
-                {
-                    (showMobileNav) ? null : <IoReorderThree />
-                }
-
+                <IoReorderThree />
             </button>
         </div>
+      
 
         {
             (showMobileNav) ? 
             <div className="mobilenav-wrapper">
-            <div className="mobilenav-container">
+                <div className="mobilenav-container" ref = { mobileNavRef }>
 
-                <button 
-                    className="navbar-exit"
-                    onClick = {()=>setShowMobileNav(false)}>
-                    <RxExit />
-                </button>
-
-                <h2>Chess Flashcards</h2>
-
-                <nav>
-                    <button
-                        className={(tab === "explore") ? "selected-tab" : ""} 
-                        onClick = { () => { nav("/"); setTab("explore"); setShowMobileNav(false); }}
-                    >
-                        <FaSearch />
-                        Explore
+                    <button 
+                        className="navbar-exit"
+                        onClick = {()=>setShowMobileNav(false)}>
+                        <RxExit />
                     </button>
 
-                    <button
-                    className={(tab === "test") ? "selected-tab" : ""} 
-                    onClick = { () => { nav("/flashcards"); setTab('test'); setShowMobileNav(false); }}
-                    >
-                        <PiCardsLight />
-                        Flashcards
-                    </button>
+                    <h2>Chess Flashcards</h2>
 
-                    {
-                        (user) ?
-                            <button
-                            className={(tab === "profile") ? "selected-tab" : ""} 
-                            onClick = { () => { nav("/profile"); setTab("profile"); setShowMobileNav(false); }}
-                            >
-                                <CgProfile />
-                                Profile
-                            </button>
-                            :
-                            <>
-                            <button
-                            className={(tab === "signup") ? "selected-tab" : ""} 
-                            onClick = { () => { nav("/sign-up"); setTab("signup"); setShowMobileNav(false); }}
-                            >
-                                Signup
-                            </button>
-                            <button
-                            className={(tab === "login") ? "selected-tab" : ""} 
-                            onClick = { () => { nav("/log-in"); setTab('login'); setShowMobileNav(false); }}
-                            >
-                                Login
-                            </button>
-                        </>
-                    }
+                    <nav>
+                        <button
+                            className={(tab === "explore") ? "selected-tab" : ""} 
+                            onClick = { () => { nav("/"); setTab("explore"); setShowMobileNav(false); }}
+                        >
+                            <FaSearch />
+                            Explore
+                        </button>
+
+                        <button
+                        className={(tab === "test") ? "selected-tab" : ""} 
+                        onClick = { () => { nav("/flashcards"); setTab('test'); setShowMobileNav(false); }}
+                        >
+                            <PiCardsLight />
+                            Flashcards
+                        </button>
+
+                        {
+                            (user) ?
+                                <button
+                                className={(tab === "profile") ? "selected-tab" : ""} 
+                                onClick = { () => { nav("/profile"); setTab("profile"); setShowMobileNav(false); }}
+                                >
+                                    <CgProfile />
+                                    Profile
+                                </button>
+                                :
+                                <>
+                                <button
+                                className={(tab === "signup") ? "selected-tab" : ""} 
+                                onClick = { () => { nav("/sign-up"); setTab("signup"); setShowMobileNav(false); }}
+                                >
+                                    Signup
+                                </button>
+                                <button
+                                className={(tab === "login") ? "selected-tab" : ""} 
+                                onClick = { () => { nav("/log-in"); setTab('login'); setShowMobileNav(false); }}
+                                >
+                                    Login
+                                </button>
+                            </>
+                        }
 
 
 
-                    <button
-                        onClick = { () => { nav("/about"); setTab('more'); setShowMobileNav(false); }}
-                        className={(tab === "more") ? "selected-tab" : ""} 
-                    >
-                        <BsThreeDots />
-                        More
-                    </button>
-                </nav>     
-            </div>
+                        <button
+                            onClick = { () => { nav("/about"); setTab('more'); setShowMobileNav(false); }}
+                            className={(tab === "more") ? "selected-tab" : ""} 
+                        >
+                            <BsThreeDots />
+                            More
+                        </button>
+                    </nav>     
+                </div>
             </div>
             : null
         }
